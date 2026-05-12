@@ -223,7 +223,15 @@ var selected=null;
 var activeFlows=[];
 var pendingTimers=[];
 var D=100;   // 虚线长度
-var SPD=0.10; // 单位/ms，越小越慢
+var SPD=0.18; // 单位/ms，越小越慢
+
+var providerColors={
+  L1:'#FEBB12',  // Solar
+  L2:'#4FBFC3',  // Battery
+  R1:'#4485E8',  // Grid
+  R2:'#FEBB12'   // Dual Power
+};
+var currentColor='#16AAAF';
 
 var flowMap={
   L1:[{g:'fg-top-l',d:'lr'},{g:'fg-mid-l',d:'rl'},{g:'fg-bot-l',d:'rl'},{g:'fg-top-r',d:'rl'},{g:'fg-mid-r',d:'rl'},{g:'fg-bot-r',d:'rl'}],
@@ -246,11 +254,22 @@ function getGrad(g,d){
   return 'flow-grad-'+parts[1]+(useRl?'-rl':'');
 }
 
+function updateGlowColor(hex){
+  var r=parseInt(hex.slice(1,3),16)/255;
+  var g=parseInt(hex.slice(3,5),16)/255;
+  var b=parseInt(hex.slice(5,7),16)/255;
+  var val='0 0 0 0 '+r+'  0 0 0 0 '+g+'  0 0 0 0 '+b+'  0 0 0 0.5 0';
+  var f1=document.getElementById('flow-glow');
+  var f2=document.getElementById('flow-glow-mid');
+  if(f1){var cm1=f1.querySelector('feColorMatrix');if(cm1)cm1.setAttribute('values',val);}
+  if(f2){var cm2=f2.querySelector('feColorMatrix');if(cm2)cm2.setAttribute('values',val);}
+}
+
 function setupPath(p){
   var grp=groups[p.g]; if(!grp) return null;
   var fl=grp.querySelector('.fl');
   grp.setAttribute('opacity','1');
-  fl.setAttribute('stroke','#16AAAF');
+  fl.setAttribute('stroke',currentColor);
   fl.setAttribute('stroke-opacity','0.6');
   fl.setAttribute('stroke-width','4');
   fl.setAttribute('filter','url(#'+(p.g.indexOf('mid')>-1?'flow-glow-mid':'flow-glow')+')');
@@ -277,6 +296,8 @@ function stopAllFlows(){
 function runCycle(paths,lens){
   activeFlows.forEach(function(f){ if(f.anim) f.anim.pause(); });
   activeFlows=[];
+  currentColor=providerColors[selected]||'#16AAAF';
+  updateGlowColor(currentColor);
 
   var pG=paths[0].g, L_p=lens[pG];
   var pTravel=Math.ceil((L_p+2*D)/SPD);
