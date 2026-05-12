@@ -31,6 +31,11 @@ svg{width:100%;height:100%;display:block}
   <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.086  0 0 0 0 0.667  0 0 0 0 0.686  0 0 0 0.5 0" result="glow"/>
   <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
 </filter>
+<filter id="flow-glow-mid" x="320" y="285" width="380" height="52" filterUnits="userSpaceOnUse">
+  <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+  <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.086  0 0 0 0 0.667  0 0 0 0 0.686  0 0 0 0.5 0" result="glow"/>
+  <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+</filter>
 <defs>
 <pattern id="pattern0_29_16747" patternContentUnits="objectBoundingBox" width="1" height="1">
 <use xlink:href="#image0_29_16747" transform="scale(0.00833333)"/>
@@ -100,7 +105,7 @@ svg{width:100%;height:100%;display:block}
   <stop offset="0%" stop-color="#16AAAF" stop-opacity="0"/>
   <stop offset="100%" stop-color="#16AAAF" stop-opacity="1"/>
 </linearGradient>
-<linearGradient id="flow-grad-mid" x1="339" y1="311" x2="678" y2="311" gradientUnits="userSpaceOnUse">
+<linearGradient id="flow-grad-mid" x1="339" y1="311" x2="510" y2="311" gradientUnits="userSpaceOnUse">
   <stop offset="0%" stop-color="#16AAAF" stop-opacity="0"/>
   <stop offset="100%" stop-color="#16AAAF" stop-opacity="1"/>
 </linearGradient>
@@ -112,7 +117,7 @@ svg{width:100%;height:100%;display:block}
   <stop offset="0%" stop-color="#16AAAF" stop-opacity="0"/>
   <stop offset="100%" stop-color="#16AAAF" stop-opacity="1"/>
 </linearGradient>
-<linearGradient id="flow-grad-mid-rl" x1="678" y1="311" x2="339" y2="311" gradientUnits="userSpaceOnUse">
+<linearGradient id="flow-grad-mid-rl" x1="678" y1="311" x2="512" y2="311" gradientUnits="userSpaceOnUse">
   <stop offset="0%" stop-color="#16AAAF" stop-opacity="0"/>
   <stop offset="100%" stop-color="#16AAAF" stop-opacity="1"/>
 </linearGradient>
@@ -186,12 +191,10 @@ svg{width:100%;height:100%;display:block}
   <path class="fl" fill="none" stroke="url(#flow-grad-top-rl)" stroke-width="4" stroke-linecap="round" d="M666.25 194.5H619.974C597.883 194.5 579.974 212.409 579.974 234.5V270.5C579.974 292.591 562.066 310.5 539.974 310.5H508"/>
 </g>
 <g id="fg-mid-l" opacity="0">
-  <path class="fl-glow" fill="none" stroke="#16AAAF" stroke-opacity="0.2" stroke-width="16" stroke-linecap="round" d="M339.25 310.5H509.5"/>
-  <path class="fl" fill="none" stroke="#16AAAF" stroke-width="6" stroke-linecap="round" d="M339.25 310.5H509.5"/>
+  <path class="fl" fill="none" stroke="url(#flow-grad-mid)" stroke-width="4" stroke-linecap="round" d="M339.25 310.5H509.5"/>
 </g>
 <g id="fg-mid-r" opacity="0">
-  <path class="fl-glow" fill="none" stroke="#16AAAF" stroke-opacity="0.2" stroke-width="16" stroke-linecap="round" d="M678.25 310.5H512"/>
-  <path class="fl" fill="none" stroke="#16AAAF" stroke-width="6" stroke-linecap="round" d="M678.25 310.5H512"/>
+  <path class="fl" fill="none" stroke="url(#flow-grad-mid-rl)" stroke-width="4" stroke-linecap="round" d="M678.25 310.5H512"/>
 </g>
 <g id="fg-bot-l" opacity="0">
   <path class="fl" fill="none" stroke="url(#flow-grad-bot)" stroke-width="4" stroke-linecap="round" d="M341.25 429.5H390.62C412.711 429.5 430.62 411.591 430.62 389.5V350.5C430.62 328.409 448.529 310.5 470.62 310.5H505.5"/>
@@ -247,17 +250,10 @@ function setupPath(p){
   var grp=groups[p.g]; if(!grp) return null;
   var fl=grp.querySelector('.fl');
   grp.setAttribute('opacity','1');
-  var parts=p.g.split('-');
-  if(parts[1]==='mid'){
-    fl.setAttribute('stroke','#16AAAF');
-    fl.setAttribute('stroke-width','6');
-    var glow=grp.querySelector('.fl-glow');
-    if(glow) glow.style.strokeDasharray=D+' 99999';
-  }else{
-    fl.setAttribute('stroke','url(#'+getGrad(p.g,p.d)+')');
-    fl.setAttribute('stroke-width','4');
-    fl.setAttribute('filter','url(#flow-glow)');
-  }
+  fl.setAttribute('stroke','#16AAAF');
+  fl.setAttribute('stroke-opacity','0.6');
+  fl.setAttribute('stroke-width','4');
+  fl.setAttribute('filter','url(#'+(p.g.indexOf('mid')>-1?'flow-glow-mid':'flow-glow')+')');
   fl.style.strokeDasharray=D+' 99999';
   return fl;
 }
@@ -272,17 +268,6 @@ function stopAllFlows(){
     f.el.removeAttribute('filter');
   });
   activeFlows=[];
-  // 清理 mid 路径发光层
-  ['fg-mid-l','fg-mid-r'].forEach(function(id){
-    var g=groups[id];
-    if(g){
-      var glow=g.querySelector('.fl-glow');
-      if(glow){
-        glow.style.strokeDashoffset='0';
-        glow.style.strokeDasharray='';
-      }
-    }
-  });
 }
 
 /* ── 单次动画周期 ──
@@ -308,12 +293,6 @@ function runCycle(paths,lens){
     targets:pFl,strokeDashoffset:-(L_p+D),
     duration:pTravel,easing:'linear'
   })});
-  // mid 路径同步动画发光层
-  var pGlow=groups[pG]?groups[pG].querySelector('.fl-glow'):null;
-  if(pGlow){
-    pGlow.style.strokeDashoffset=D;
-    anime({targets:pGlow,strokeDashoffset:-(L_p+D),duration:pTravel,easing:'linear'});
-  }
 
   // 各用电方
   for(var i=1;i<paths.length;i++){
@@ -326,12 +305,6 @@ function runCycle(paths,lens){
         targets:fl,strokeDashoffset:D,
         duration:cTravel,delay:cDelay,easing:'linear'
       })});
-      // mid 路径同步动画发光层
-      var cGlow=groups[cG]?groups[cG].querySelector('.fl-glow'):null;
-      if(cGlow){
-        cGlow.style.strokeDashoffset=-(L_c+D);
-        anime({targets:cGlow,strokeDashoffset:D,duration:cTravel,delay:cDelay,easing:'linear'});
-      }
     })(paths[i]);
   }
 
