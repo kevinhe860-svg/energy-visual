@@ -7,13 +7,25 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;background:#F5F5F5;display:flex;justify-content:center;align-items:center;overflow:auto}
+html,body{width:100%;height:100%;background:#F5F5F5;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:auto;padding:20px 0}
 .wrap{position:relative;width:1055px;height:560px}
 svg{width:100%;height:100%;display:block}
 .mod-hit{cursor:pointer}
 .mod-bg{transition:filter .25s ease}
 .hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.55);color:#fff;padding:6px 18px;border-radius:16px;font-size:12px;pointer-events:none;opacity:.75;font-family:-apple-system,BlinkMacSystemFont,sans-serif;white-space:nowrap}
 .fl{stroke-dasharray:200 60;stroke-dashoffset:0}
+.panel{width:500px;background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-top:12px;padding:16px 20px 12px;font-family:Poppins,sans-serif}
+.panel-title{font-size:14px;font-weight:600;color:rgba(0,0,0,.85);margin-bottom:10px}
+.s-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.s-row:last-child{margin-bottom:0}
+.s-label{width:80px;font-size:12px;color:#666;flex-shrink:0}
+.slider-wrap{position:relative;width:220px;display:inline-flex;align-items:center}
+.center-mark{position:absolute;left:50%;width:1px;height:12px;background:#999;pointer-events:none;z-index:1;border-radius:1px}
+.s-slider{width:100%;height:6px;-webkit-appearance:none;appearance:none;background:#E0E0E0;border-radius:3px;outline:none}
+.s-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#16AAAF;cursor:pointer;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.s-val{font-size:11px;color:#999;text-align:left;flex-shrink:0;white-space:nowrap}
+.s-input{width:44px;border:none;border-bottom:1px solid #ddd;font-size:13px;font-weight:600;color:#000;text-align:center;outline:none;font-family:Poppins,sans-serif;padding:0 2px;background:transparent}
+.s-input:focus{border-bottom-color:#16AAAF}
 </style>
 </head>
 <body>
@@ -199,7 +211,7 @@ svg{width:100%;height:100%;display:block}
 <rect class="mod-bg" data-module="R2" x="670" y="260" width="211" height="80" rx="8" fill="white" pointer-events="none"/><rect x="678" y="270" width="60" height="60" fill="url(#pattern4_29_16747)"/>
 <text x="748" y="284" font-family="Poppins,sans-serif" font-size="12" fill="#16AAAF">Dual Power</text>
 <text x="748" y="307" font-family="Poppins,sans-serif" font-size="16" font-weight="700" fill="rgba(0,0,0,0.85)">3.9kW</text>
-<text x="801" y="307" font-family="Poppins,sans-serif" font-size="10" fill="rgba(0,0,0,0.25)">(PV Surplus)</text>
+<text id="pv-surplus" x="788" y="307" font-family="Poppins,sans-serif" font-size="10" fill="rgba(0,0,0,0.25)" opacity="0">(PV Surplus)</text>
 <text x="748" y="327" font-family="Poppins,sans-serif" font-size="10" fill="rgba(0,0,0,0.25)">Real: 4.1kW</text>
 </g>
 <g class="card" data-card="R3">
@@ -222,6 +234,15 @@ svg{width:100%;height:100%;display:block}
 <path d="M493.594 309.308C493.594 308.634 493.847 308.387 494.53 308.387H508.853C510.171 308.387 509.904 307.756 509.779 307.466C509.453 306.696 508.93 306.025 508.262 305.521C507.594 305.016 506.805 304.696 505.974 304.592C505.974 304.592 505.342 304.592 505.342 303.691L505.298 299.98C505.298 299.305 505.552 299.059 506.234 299.059C507.911 299.185 509.54 299.671 511.012 300.483C513.506 301.866 515.067 304.005 515.905 306.694C516.468 308.538 516.653 310.478 516.449 312.395C516.45 312.497 516.43 312.598 516.391 312.691C516.353 312.785 516.295 312.87 516.223 312.941C516.15 313.013 516.064 313.068 515.969 313.106C515.875 313.143 515.773 313.161 515.672 313.158C515.537 313.158 515.401 313.158 515.266 313.158H501.443C500.767 313.158 500.507 313.404 500.507 314.082C500.507 315.793 502.991 316.886 504.863 317.119C506.577 317.353 508.317 316.933 509.735 315.941C510.455 315.455 510.651 315.493 511.147 316.194C511.846 317.184 512.543 318.174 513.239 319.163C513.634 319.73 513.577 320.051 513.029 320.459C510.543 322.322 507.446 323.186 504.352 322.881C501.048 322.601 498.27 321.245 496.179 318.681C494.087 316.117 493.212 313.033 493.536 309.683C493.56 309.437 493.594 309.194 493.631 308.951" fill="white"/>
 </svg>
 
+</div>
+<div class="panel">
+<div class="panel-title">数据控制</div>
+<div class="s-row"><span class="s-label">Solar</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-L1" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-L1"><input class="s-input" type="number" id="si-L1" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-L1">0.0</span></small></span></div>
+<div class="s-row"><span class="s-label">Battery</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-L2" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-L2"><input class="s-input" type="number" id="si-L2" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-L2">0.0</span></small></span></div>
+<div class="s-row"><span class="s-label">Vehicle</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-L3" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-L3"><input class="s-input" type="number" id="si-L3" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-L3">0.0</span></small></span></div>
+<div class="s-row"><span class="s-label">Grid</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-R1" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-R1"><input class="s-input" type="number" id="si-R1" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-R1">0.0</span></small></span></div>
+<div class="s-row"><span class="s-label">Dual Power</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-R2" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-R2"><input class="s-input" type="number" id="si-R2" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-R2">0.0</span></small></span></div>
+<div class="s-row"><span class="s-label">KeepON Load</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-R3" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-R3"><input class="s-input" type="number" id="si-R3" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-R3">0.0</span></small></span></div>
 </div>
 <div class="hint" id="hint">点击设备模块查看电流流向</div>
 <script>
@@ -248,11 +269,26 @@ var providerColors={
 var currentColor='#16AAAF';
 
 var consumerFlows={
+  L2:[
+    {prov:'L1',pPath:{g:'fg-top-l',d:'lr'},cPath:{g:'fg-mid-l',d:'rl'}},
+    {prov:'R1',pPath:{g:'fg-top-r',d:'lr'},cPath:{g:'fg-mid-l',d:'rl'}},
+    {prov:'R2',pPath:{g:'fg-mid-r',d:'lr'},cPath:{g:'fg-mid-l',d:'rl'}}
+  ],
   L3:[
     {prov:'L1',pPath:{g:'fg-top-l',d:'lr'},cPath:{g:'fg-bot-l',d:'rl'}},
     {prov:'L2',pPath:{g:'fg-mid-l',d:'lr'},cPath:{g:'fg-bot-l',d:'rl'}},
     {prov:'R1',pPath:{g:'fg-top-r',d:'lr'},cPath:{g:'fg-bot-l',d:'rl'}},
     {prov:'R2',pPath:{g:'fg-mid-r',d:'lr'},cPath:{g:'fg-bot-l',d:'rl'}}
+  ],
+  R1:[
+    {prov:'L1',pPath:{g:'fg-top-l',d:'lr'},cPath:{g:'fg-top-r',d:'rl'}},
+    {prov:'L2',pPath:{g:'fg-mid-l',d:'lr'},cPath:{g:'fg-top-r',d:'rl'}},
+    {prov:'R2',pPath:{g:'fg-mid-r',d:'lr'},cPath:{g:'fg-top-r',d:'rl'}}
+  ],
+  R2:[
+    {prov:'L1',pPath:{g:'fg-top-l',d:'lr'},cPath:{g:'fg-mid-r',d:'rl'}},
+    {prov:'L2',pPath:{g:'fg-mid-l',d:'lr'},cPath:{g:'fg-mid-r',d:'rl'}},
+    {prov:'R1',pPath:{g:'fg-top-r',d:'lr'},cPath:{g:'fg-mid-r',d:'rl'}}
   ],
   R3:[
     {prov:'L1',pPath:{g:'fg-top-l',d:'lr'},cPath:{g:'fg-bot-r',d:'rl'}},
@@ -343,8 +379,12 @@ function getGlowFilterId(hex,isMid){
 }
 
 function runConsumerCycle(mid){
+  if(moduleData[mid]===0) return;
   var flows=consumerFlows[mid];
   if(!flows||!flows.length) return;
+  // 过滤掉数值为0或负数的供电方（供电方必须为正数）
+  flows=flows.filter(function(f){return moduleData[f.prov]>0;});
+  if(!flows.length) return;
   activeFlows.forEach(function(f){if(f.anim)f.anim.pause();});
   activeFlows=[];
   clonedEls.forEach(function(el){if(el.parentNode)el.parentNode.removeChild(el);});
@@ -416,7 +456,7 @@ function stopAllFlows(){
   activeFlows.forEach(function(f){
     if(f.anim) f.anim.pause();
     f.el.style.strokeDashoffset='0';
-    f.el.style.strokeDasharray='';
+    f.el.style.strokeDasharray='0 99999';
     f.el.removeAttribute('filter');
   });
   activeFlows=[];
@@ -429,6 +469,7 @@ function stopAllFlows(){
    用电方虚线在供电方到达中心时从中心滑向用电方，
    全部到达终点后暂停，再自动重播 */
 function runCycle(paths,lens){
+  if(!selected||moduleData[selected]===0) return;
   activeFlows.forEach(function(f){ if(f.anim) f.anim.pause(); });
   activeFlows=[];
   currentColor=providerColors[selected]||'#16AAAF';
@@ -481,26 +522,48 @@ function selectModule(mid){
   selected=mid;
   var bg=findBg(mid);
   if(bg) bg.setAttribute('filter','url(#shadow-active)');
+  restartFlow();
+}
 
-  if(consumerFlows[mid]){
+function isConsumerMode(mid){
+  if(mid==='L3'||mid==='R3') return true;
+  return moduleData[mid]<0;
+}
+
+function restartFlow(){
+  if(!selected) return;
+  stopAllFlows();
+  var mid=selected;
+
+  if(isConsumerMode(mid)){
+    var flows=consumerFlows[mid];
+    if(!flows||!flows.length){dimInactive([mid]);hint.textContent='';return;}
     var activeIds=[mid];
-    consumerFlows[mid].forEach(function(f){if(activeIds.indexOf(f.prov)===-1)activeIds.push(f.prov);});
+    flows.forEach(function(f){if(moduleData[f.prov]>0&&activeIds.indexOf(f.prov)===-1)activeIds.push(f.prov);});
     dimInactive(activeIds);
+    if(moduleData[mid]===0||activeIds.length<=1){hint.textContent='数值为0';return;}
     runConsumerCycle(mid);
     hint.textContent='电流流动中';
     return;
   }
 
   var paths=flowMap[mid];
-  if(!paths||!paths.length){hint.textContent='';return;}
+  if(!paths||!paths.length){dimInactive([mid]);hint.textContent='';return;}
 
+  // 过滤：只保留数值为负的用电方路径
+  var fp=[paths[0]];
+  for(var fi=1;fi<paths.length;fi++){
+    var tm=pathGroupToModule[paths[fi].g];
+    if(tm&&moduleData[tm]<0) fp.push(paths[fi]);
+  }
   var activeIds=[mid];
-  paths.forEach(function(p){var m=pathGroupToModule[p.g];if(m&&activeIds.indexOf(m)===-1)activeIds.push(m);});
+  fp.forEach(function(p){var m=pathGroupToModule[p.g];if(m&&activeIds.indexOf(m)===-1)activeIds.push(m);});
   dimInactive(activeIds);
 
+  if(moduleData[mid]===0||fp.length<=1){hint.textContent='数值为0';return;}
   var lens={};
-  paths.forEach(function(p){lens[p.g]=groups[p.g].querySelector('.fl').getTotalLength();});
-  runCycle(paths,lens);
+  fp.forEach(function(p){lens[p.g]=groups[p.g].querySelector('.fl').getTotalLength();});
+  runCycle(fp,lens);
   hint.textContent='电流流动中';
 }
 
@@ -527,6 +590,93 @@ for(var i=0;i<hitRects.length;i++){
     });
   })(hitRects[i]);
 }
+
+// ── 数据模型 & 滑块 ──
+var EFF=0.87;
+var moduleData={L1:0,L2:0,L3:0,R1:0,R2:0,R3:0};
+var displayTexts={},realTexts={};
+allModules.forEach(function(mid){
+  var card=document.querySelector('.card[data-card="'+mid+'"]');
+  if(!card) return;
+  var texts=card.querySelectorAll('text');
+  for(var i=0;i<texts.length;i++){
+    var t=texts[i].textContent;
+    if(t==='3.9kW') displayTexts[mid]=texts[i];
+    if(t==='Real: 4.1kW') realTexts[mid]=texts[i];
+  }
+});
+
+function updateCardText(mid){
+  var real=moduleData[mid];
+  var disp=parseFloat((real*EFF).toFixed(1));
+  if(displayTexts[mid]) displayTexts[mid].textContent=disp+'kW';
+  if(realTexts[mid]) realTexts[mid].textContent='Real: '+parseFloat(real.toFixed(1))+'kW';
+}
+var sliderRanges={L1:[0,216],L2:[-216,216],L3:[-216,0],R1:[-216,216],R2:[-216,216],R3:[-216,0]};
+function updatePvSurplus(){
+  var fakeR2=moduleData['R2']*EFF;
+  var el=document.getElementById('pv-surplus');
+  if(!el) return;
+  el.setAttribute('opacity',fakeR2>0?'1':'0');
+  if(fakeR2>0&&displayTexts['R2']){
+    var w=displayTexts['R2'].getComputedTextLength();
+    el.setAttribute('x',Math.round(748+w+8));
+  }
+}
+function updateSliderBg(sl,mid){
+  var v=parseFloat(sl.value);
+  var rng=432,zeroPct=50;
+  var valPct=((v+216)/rng)*100;
+  var range=sliderRanges[mid];
+  var aMin=((range[0]+216)/rng)*100;
+  var aMax=((range[1]+216)/rng)*100;
+  var fillL=Math.min(zeroPct,valPct),fillR=Math.max(zeroPct,valPct);
+  var p=[];
+  if(aMin>0){p.push('rgba(224,224,224,0.5) 0%','rgba(224,224,224,0.5) '+aMin+'%');}
+  if(fillL>aMin){p.push('#E0E0E0 '+aMin+'%','#E0E0E0 '+fillL+'%');}
+  p.push('#16AAAF '+fillL+'%','#16AAAF '+fillR+'%');
+  if(fillR<aMax){p.push('#E0E0E0 '+fillR+'%','#E0E0E0 '+aMax+'%');}
+  if(aMax<100){p.push('rgba(224,224,224,0.5) '+aMax+'%','rgba(224,224,224,0.5) 100%');}
+  sl.style.background='linear-gradient(to right,'+p.join(',')+')';
+}
+
+allModules.forEach(function(mid){
+  var slider=document.getElementById('sl-'+mid);
+  var numInput=document.getElementById('si-'+mid);
+  var realSpan=document.getElementById('sr-'+mid);
+  if(!slider||!numInput) return;
+  function syncFromReal(real,prevReal){
+    moduleData[mid]=real;
+    var disp=parseFloat((real*EFF).toFixed(1));
+    numInput.value=disp;
+    if(realSpan) realSpan.textContent=parseFloat(real.toFixed(1));
+    updateCardText(mid);
+    updateSliderBg(slider,mid);
+    updatePvSurplus();
+    if(selected&&prevReal*real<=0&&prevReal!==real){restartFlow();}
+  }
+  slider.addEventListener('input',function(){
+    var range=sliderRanges[mid];
+    var raw=Math.max(range[0],Math.min(range[1],parseInt(this.value)));
+    this.value=raw;
+    var real=parseFloat((raw/10).toFixed(1));
+    syncFromReal(real,moduleData[mid]);
+  });
+  numInput.addEventListener('change',function(){
+    var fake=parseFloat(this.value)||0;
+    var range=sliderRanges[mid];
+    var real=parseFloat((fake/EFF).toFixed(1));
+    real=Math.max(range[0]/10,Math.min(range[1]/10,real));
+    real=parseFloat(real.toFixed(1));
+    slider.value=Math.round(real*10);
+    syncFromReal(real,moduleData[mid]);
+  });
+  updateCardText(mid);
+  numInput.value='0.0';
+  if(realSpan) realSpan.textContent='0.0';
+  updateSliderBg(slider,mid);
+  updatePvSurplus();
+  });
 })();</script>
 </body>
 </html>
