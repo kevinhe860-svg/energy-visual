@@ -396,12 +396,13 @@ function runConsumerCycle(mid){
   var L_c=cFl.getTotalLength();
   var cTravel=Math.ceil((L_c+2*D)/SPD);
 
-  // 汇聚后的消费路径：单条 #794EAD
+  // 汇聚后的消费路径颜色：单供电方用供电方颜色，多供电方用紫色
+  var consumerColor=flows.length===1?providerColors[flows[0].prov]:'#794EAD';
   cGrp.setAttribute('opacity','1');
-  cFl.setAttribute('stroke','#794EAD');
+  cFl.setAttribute('stroke',consumerColor);
   cFl.setAttribute('stroke-opacity','0.6');
   cFl.setAttribute('stroke-width','4');
-  cFl.setAttribute('filter','url(#'+getGlowFilterId('#794EAD',cG.indexOf('mid')>-1)+')');
+  cFl.setAttribute('filter','url(#'+getGlowFilterId(consumerColor,cG.indexOf('mid')>-1)+')');
   cFl.style.strokeDasharray=D+' 99999';
   cFl.style.strokeDashoffset=-(L_c+D);
 
@@ -457,6 +458,7 @@ function stopAllFlows(){
     if(f.anim) f.anim.pause();
     f.el.style.strokeDashoffset='0';
     f.el.style.strokeDasharray='0 99999';
+    f.el.setAttribute('stroke','none');
     f.el.removeAttribute('filter');
   });
   activeFlows=[];
