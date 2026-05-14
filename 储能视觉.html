@@ -14,7 +14,7 @@ svg{width:100%;height:100%;display:block}
 .mod-bg{transition:filter .25s ease}
 .hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.55);color:#fff;padding:6px 18px;border-radius:16px;font-size:12px;pointer-events:none;opacity:.75;font-family:-apple-system,BlinkMacSystemFont,sans-serif;white-space:nowrap}
 .fl{stroke-dasharray:200 60;stroke-dashoffset:0}
-.panel{width:500px;background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-top:12px;padding:16px 20px 12px;font-family:Poppins,sans-serif}
+.panel{width:fit-content;min-width:460px;background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-top:12px;padding:16px 20px 12px;font-family:Poppins,sans-serif}
 .panel-title{font-size:14px;font-weight:600;color:rgba(0,0,0,.85);margin-bottom:10px}
 .s-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
 .s-row:last-child{margin-bottom:0}
@@ -23,8 +23,8 @@ svg{width:100%;height:100%;display:block}
 .center-mark{position:absolute;left:50%;width:1px;height:12px;background:#999;pointer-events:none;z-index:1;border-radius:1px}
 .s-slider{width:100%;height:6px;-webkit-appearance:none;appearance:none;background:#E0E0E0;border-radius:3px;outline:none}
 .s-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#16AAAF;cursor:pointer;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)}
-.s-val{font-size:11px;color:#999;text-align:left;flex-shrink:0;white-space:nowrap}
-.s-input{width:44px;border:none;border-bottom:1px solid #ddd;font-size:13px;font-weight:600;color:#000;text-align:center;outline:none;font-family:Poppins,sans-serif;padding:0 2px;background:transparent}
+.s-val{font-size:11px;color:#999;text-align:left;white-space:nowrap;min-width:120px}
+.s-input{width:52px;border:none;border-bottom:1px solid #ddd;font-size:13px;font-weight:600;color:#000;text-align:center;outline:none;font-family:Poppins,sans-serif;padding:0 2px;background:transparent}
 .s-input:focus{border-bottom-color:#16AAAF}
 </style>
 </head>
@@ -567,13 +567,83 @@ function restartFlow(){
   hint.textContent='电流流动中';
 }
 
+var modulePathGroup={'L1':'fg-top-l','L2':'fg-mid-l','L3':'fg-bot-l','R1':'fg-top-r','R2':'fg-mid-r','R3':'fg-bot-r'};
+function autoFlow(){
+  if(selected) return;
+  stopAllFlows();
+  restoreOpacity();
+  grpIds.forEach(function(id){groups[id].setAttribute('opacity','0');});
+
+  // 找出所有供电方（正数）和用电方（负数）
+  var providers=[],consumers=[];
+  allModules.forEach(function(mid){
+    if(moduleData[mid]>0&&flowMap[mid]&&flowMap[mid].length) providers.push(mid);
+    if(moduleData[mid]<0&&consumerFlows[mid]) consumers.push(mid);
+  });
+  if(!providers.length||!consumers.length){hint.textContent='点击设备模块查看电流流向';return;}
+
+  var activeIds=providers.concat(consumers);
+  dimInactive(activeIds);
+  hint.textContent='能量自动流向';
+
+  var maxPEnd=0,minArrival=Infinity;
+
+  // 每个供电方用自己的颜色流向中心
+  providers.forEach(function(provMid){
+    var color=providerColors[provMid];
+    if(!color) return;
+    var providerPath=flowMap[provMid][0];
+    var pGrp=groups[providerPath.g];
+    if(!pGrp) return;
+    var pFl=pGrp.querySelector('.fl');
+    pGrp.setAttribute('opacity','1');
+    pFl.setAttribute('stroke',color);
+    pFl.setAttribute('stroke-opacity','0.6');
+    pFl.setAttribute('stroke-width','4');
+    pFl.setAttribute('filter','url(#'+getGlowFilterId(color,providerPath.g.indexOf('mid')>-1)+')');
+    pFl.style.strokeDasharray=D+' 99999';
+    var L_p=pFl.getTotalLength();
+    var pTravel=Math.ceil((L_p+2*D)/SPD);
+    pFl.style.strokeDashoffset=D;
+    activeFlows.push({el:pFl,anim:anime({targets:pFl,strokeDashoffset:-(L_p+D),duration:pTravel,easing:'linear'})});
+    if(pTravel>maxPEnd) maxPEnd=pTravel;
+    var arrival=Math.max(0,(L_p-D)/SPD-40);
+    if(arrival<minArrival) minArrival=arrival;
+  });
+
+  // 用电方颜色：单供电方用供电方颜色，多供电方用紫色
+  var consumerColor=providers.length===1?providerColors[providers[0]]:'#794EAD';
+  var cDelay=Math.round(minArrival);
+  consumers.forEach(function(conMid){
+    var cG=modulePathGroup[conMid];
+    if(!cG) return;
+    var cGrp=groups[cG];
+    var cFl=cGrp.querySelector('.fl');
+    var L_c=cFl.getTotalLength();
+    var cTravel=Math.ceil((L_c+2*D)/SPD);
+    cGrp.setAttribute('opacity','1');
+    cFl.setAttribute('stroke',consumerColor);
+    cFl.setAttribute('stroke-opacity','0.6');
+    cFl.setAttribute('stroke-width','4');
+    cFl.setAttribute('filter','url(#'+getGlowFilterId(consumerColor,cG.indexOf('mid')>-1)+')');
+    cFl.style.strokeDasharray=D+' 99999';
+    cFl.style.strokeDashoffset=-(L_c+D);
+    activeFlows.push({el:cFl,anim:anime({targets:cFl,strokeDashoffset:D,duration:cTravel,delay:cDelay,easing:'linear'})});
+    var totalEnd=cDelay+cTravel;
+    if(totalEnd>maxPEnd) maxPEnd=totalEnd;
+  });
+
+  var tid=setTimeout(function(){autoFlow();},maxPEnd+10);
+  pendingTimers.push(tid);
+}
+
 function deselect(){
   stopAllFlows();
   if(selected){var bg=findBg(selected);if(bg)bg.removeAttribute('filter');}
   restoreOpacity();
   grpIds.forEach(function(id){groups[id].setAttribute('opacity','0');});
   selected=null;
-  hint.textContent='点击设备模块查看电流流向';
+  autoFlow();
 }
 
 for(var i=0;i<hitRects.length;i++){
@@ -653,7 +723,10 @@ allModules.forEach(function(mid){
     updateCardText(mid);
     updateSliderBg(slider,mid);
     updatePvSurplus();
-    if(selected&&prevReal*real<=0&&prevReal!==real){restartFlow();}
+    if(prevReal*real<=0&&prevReal!==real){
+      if(selected) restartFlow();
+      else autoFlow();
+    }
   }
   slider.addEventListener('input',function(){
     var range=sliderRanges[mid];
@@ -677,6 +750,7 @@ allModules.forEach(function(mid){
   updateSliderBg(slider,mid);
   updatePvSurplus();
   });
+  autoFlow();
 })();</script>
 </body>
 </html>
