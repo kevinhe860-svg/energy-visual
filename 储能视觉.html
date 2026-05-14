@@ -582,8 +582,7 @@ function autoFlow(){
   });
   if(!providers.length||!consumers.length){hint.textContent='点击设备模块查看电流流向';return;}
 
-  var activeIds=providers.concat(consumers);
-  dimInactive(activeIds);
+  restoreOpacity();
   hint.textContent='能量自动流向';
 
   var maxPEnd=0,minArrival=Infinity;
