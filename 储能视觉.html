@@ -18,7 +18,7 @@ svg{width:100%;height:100%;display:block}
 .panel-title{font-size:14px;font-weight:600;color:rgba(0,0,0,.85);margin-bottom:10px}
 .s-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
 .s-row:last-child{margin-bottom:0}
-.s-label{width:80px;font-size:12px;color:#666;flex-shrink:0}
+.s-label{width:80px;font-size:12px;color:#666;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .slider-wrap{position:relative;width:220px;display:inline-flex;align-items:center}
 .center-mark{position:absolute;left:50%;width:1px;height:12px;background:#999;pointer-events:none;z-index:1;border-radius:1px}
 .s-slider{width:100%;height:6px;-webkit-appearance:none;appearance:none;background:#E0E0E0;border-radius:3px;outline:none}
@@ -209,7 +209,7 @@ svg{width:100%;height:100%;display:block}
 </g>
 <g class="card" data-card="R2">
 <rect class="mod-bg" data-module="R2" x="670" y="260" width="211" height="80" rx="8" fill="white" pointer-events="none"/><rect x="678" y="270" width="60" height="60" fill="url(#pattern4_29_16747)"/>
-<text x="748" y="284" font-family="Poppins,sans-serif" font-size="12" fill="#16AAAF">Dual Power</text>
+<text id="card-label-R2" x="748" y="284" font-family="Poppins,sans-serif" font-size="12" fill="#16AAAF">Dual Power</text>
 <text x="748" y="307" font-family="Poppins,sans-serif" font-size="16" font-weight="700" fill="rgba(0,0,0,0.85)">3.9kW</text>
 <text id="pv-surplus" x="788" y="307" font-family="Poppins,sans-serif" font-size="10" fill="rgba(0,0,0,0.25)" opacity="0">(PV Surplus)</text>
 <text x="748" y="327" font-family="Poppins,sans-serif" font-size="10" fill="rgba(0,0,0,0.25)">Real: 4.1kW</text>
@@ -241,7 +241,7 @@ svg{width:100%;height:100%;display:block}
 <div class="s-row"><span class="s-label">Battery</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-L2" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-L2"><input class="s-input" type="number" id="si-L2" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-L2">0.0</span></small></span></div>
 <div class="s-row"><span class="s-label">Vehicle</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-L3" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-L3"><input class="s-input" type="number" id="si-L3" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-L3">0.0</span></small></span></div>
 <div class="s-row"><span class="s-label">Grid</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-R1" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-R1"><input class="s-input" type="number" id="si-R1" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-R1">0.0</span></small></span></div>
-<div class="s-row"><span class="s-label">Dual Power</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-R2" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-R2"><input class="s-input" type="number" id="si-R2" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-R2">0.0</span></small></span></div>
+<div class="s-row"><span class="s-label" id="sl-label-R2">Dual Power</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-R2" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-R2"><input class="s-input" type="number" id="si-R2" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-R2">0.0</span></small></span></div>
 <div class="s-row"><span class="s-label">KeepON Load</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-R3" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-R3"><input class="s-input" type="number" id="si-R3" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-R3">0.0</span></small></span></div>
 </div>
 <div class="hint" id="hint">点击设备模块查看电流流向</div>
@@ -682,6 +682,13 @@ function updateCardText(mid){
   var disp=parseFloat((real*EFF).toFixed(1));
   if(displayTexts[mid]) displayTexts[mid].textContent=disp+'kW';
   if(realTexts[mid]) realTexts[mid].textContent='Real: '+parseFloat(real.toFixed(1))+'kW';
+  if(mid==='R2'){
+    var label=disp>0?'Dual Power':'Additional Load';
+    var cl=document.getElementById('card-label-R2');
+    if(cl) cl.textContent=label;
+    var sl=document.getElementById('sl-label-R2');
+    if(sl) sl.textContent=label;
+  }
 }
 var sliderRanges={L1:[0,216],L2:[-216,216],L3:[-216,0],R1:[-216,216],R2:[-216,216],R3:[-216,0]};
 function updatePvSurplus(){
