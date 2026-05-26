@@ -154,11 +154,11 @@ svg{width:100%;height:100%;display:block}
 </g>
 <text x="790" y="118" font-family="Poppins,sans-serif" font-size="14" font-weight="400" fill="rgba(0,0,0,0.45)">Power Core 3.0</text>
 
-<path d="M341.25 194.5H390.636C412.727 194.5 430.636 212.409 430.636 234.5V270.5C430.636 292.591 448.544 310.5 470.636 310.5H505.5" stroke="url(#paint5_linear_3418_49115)" stroke-width="10"/>
+<path id="track-L1" d="M341.25 194.5H390.636C412.727 194.5 430.636 212.409 430.636 234.5V270.5C430.636 292.591 448.544 310.5 470.636 310.5H505.5" stroke="url(#paint5_linear_3418_49115)" stroke-width="10"/>
 <path d="M666.25 194.5H619.974C597.883 194.5 579.974 212.409 579.974 234.5V270.5C579.974 292.591 562.066 310.5 539.974 310.5H508" stroke="url(#paint4_linear_3418_49115)" stroke-width="10"/>
 <path d="M339.25 310.5H509.5" stroke="url(#paint3_linear_3418_49115)" stroke-width="10"/>
 <path d="M678.25 310.5H512" stroke="url(#paint2_linear_3418_49115)" stroke-width="10"/>
-<path d="M341.25 429.5H390.62C412.711 429.5 430.62 411.591 430.62 389.5V350.5C430.62 328.409 448.529 310.5 470.62 310.5H505.5" stroke="url(#paint1_linear_3418_49115)" stroke-width="10"/>
+<path id="track-L3" d="M341.25 429.5H390.62C412.711 429.5 430.62 411.591 430.62 389.5V350.5C430.62 328.409 448.529 310.5 470.62 310.5H505.5" stroke="url(#paint1_linear_3418_49115)" stroke-width="10"/>
 <path d="M666.25 429.5L619.99 429.5C597.899 429.5 579.99 411.587 579.99 389.495C579.99 376.196 579.99 363.804 579.99 350.505C579.99 328.413 562.081 310.5 539.99 310.5H507.5" stroke="url(#paint0_linear_3418_49115)" stroke-width="10"/>
 
 <g id="fg-top-l" opacity="0">
@@ -237,9 +237,9 @@ svg{width:100%;height:100%;display:block}
 </div>
 <div class="panel">
 <div class="panel-title">数据控制</div>
-<div class="s-row"><span class="s-label">Solar</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-L1" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-L1"><input class="s-input" type="number" id="si-L1" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-L1">0.0</span></small></span></div>
+<div class="s-row" id="srow-L1"><span class="s-label">Solar</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-L1" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-L1"><input class="s-input" type="number" id="si-L1" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-L1">0.0</span></small></span></div>
 <div class="s-row"><span class="s-label">Battery</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-L2" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-L2"><input class="s-input" type="number" id="si-L2" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-L2">0.0</span></small></span></div>
-<div class="s-row"><span class="s-label">Vehicle</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-L3" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-L3"><input class="s-input" type="number" id="si-L3" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-L3">0.0</span></small></span></div>
+<div class="s-row" id="srow-L3"><span class="s-label">Vehicle</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-L3" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-L3"><input class="s-input" type="number" id="si-L3" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-L3">0.0</span></small></span></div>
 <div class="s-row"><span class="s-label">Grid</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-R1" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-R1"><input class="s-input" type="number" id="si-R1" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-R1">0.0</span></small></span></div>
 <div class="s-row"><span class="s-label" id="sl-label-R2">Dual Power</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-R2" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-R2"><input class="s-input" type="number" id="si-R2" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-R2">0.0</span></small></span></div>
 <div class="s-row"><span class="s-label">KeepON Load</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-R3" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-R3"><input class="s-input" type="number" id="si-R3" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-R3">0.0</span></small></span></div>
@@ -383,7 +383,7 @@ function runConsumerCycle(mid){
   var flows=consumerFlows[mid];
   if(!flows||!flows.length) return;
   // 过滤掉数值为0或负数的供电方（供电方必须为正数）
-  flows=flows.filter(function(f){return moduleData[f.prov]>0;});
+  flows=flows.filter(function(f){return moduleData[f.prov]>0&&!(dualPowerMode&&(f.pPath.g==='fg-top-l'||f.pPath.g==='fg-bot-l'));});
   if(!flows.length) return;
   activeFlows.forEach(function(f){if(f.anim)f.anim.pause();});
   activeFlows=[];
@@ -441,6 +441,7 @@ function runConsumerCycle(mid){
 
 function setupPath(p){
   var grp=groups[p.g]; if(!grp) return null;
+  if(dualPowerMode&&(p.g==='fg-top-l'||p.g==='fg-bot-l')) return null;
   var fl=grp.querySelector('.fl');
   grp.setAttribute('opacity','1');
   fl.setAttribute('stroke',currentColor);
@@ -556,7 +557,7 @@ function restartFlow(){
   var fp=[paths[0]];
   for(var fi=1;fi<paths.length;fi++){
     var tm=pathGroupToModule[paths[fi].g];
-    if(tm&&moduleData[tm]<0) fp.push(paths[fi]);
+    if(tm&&moduleData[tm]<0&&!(dualPowerMode&&(paths[fi].g==='fg-top-l'||paths[fi].g==='fg-bot-l'))) fp.push(paths[fi]);
   }
   var activeIds=[mid];
   fp.forEach(function(p){var m=pathGroupToModule[p.g];if(m&&activeIds.indexOf(m)===-1)activeIds.push(m);});
@@ -594,6 +595,7 @@ function autoFlow(){
     var color=providerColors[provMid];
     if(!color) return;
     var providerPath=flowMap[provMid][0];
+    if(dualPowerMode&&(providerPath.g==='fg-top-l'||providerPath.g==='fg-bot-l')) return;
     var pGrp=groups[providerPath.g];
     if(!pGrp) return;
     var pFl=pGrp.querySelector('.fl');
@@ -618,6 +620,7 @@ function autoFlow(){
   consumers.forEach(function(conMid){
     var cG=modulePathGroup[conMid];
     if(!cG) return;
+    if(dualPowerMode&&(cG==='fg-top-l'||cG==='fg-bot-l')) return;
     var cGrp=groups[cG];
     var cFl=cGrp.querySelector('.fl');
     var L_c=cFl.getTotalLength();
@@ -683,14 +686,58 @@ function updateCardText(mid){
   if(displayTexts[mid]) displayTexts[mid].textContent=disp+'kW';
   if(realTexts[mid]) realTexts[mid].textContent='Real: '+parseFloat(real.toFixed(1))+'kW';
   if(mid==='R2'){
-    var label=disp>0?'Dual Power':'Additional Load';
+    var isDual=disp>0;
+    var label=isDual?'Dual Power':'Additional Load';
     var cl=document.getElementById('card-label-R2');
     if(cl) cl.textContent=label;
     var sl=document.getElementById('sl-label-R2');
     if(sl) sl.textContent=label;
+    if(dualPowerMode!==isDual) toggleDualPowerMode(isDual);
   }
 }
 var sliderRanges={L1:[0,216],L2:[-216,216],L3:[-216,0],R1:[-216,216],R2:[-216,216],R3:[-216,0]};
+var dualPowerMode=false;
+function toggleDualPowerMode(isDual){
+  dualPowerMode=isDual;
+  ['L1','L3'].forEach(function(mid){
+    var card=document.querySelector('.card[data-card="'+mid+'"]');
+    var hit=document.querySelector('.mod-hit[data-module="'+mid+'"]');
+    var srow=document.getElementById('srow-'+mid);
+    var pg=mid==='L1'?'fg-top-l':'fg-bot-l';
+    var grp=groups[pg];
+    if(isDual){
+      if(card) card.setAttribute('display','none');
+      if(hit) hit.setAttribute('display','none');
+      if(srow){srow.style.display='';srow.style.opacity='0.35';srow.style.pointerEvents='none';}
+      if(grp) grp.setAttribute('display','none');
+      var track=document.getElementById('track-'+mid);
+      if(track) track.setAttribute('display','none');
+      moduleData[mid]=0;
+      var numInput=document.getElementById('si-'+mid);
+      var slider=document.getElementById('sl-'+mid);
+      var realSpan=document.getElementById('sr-'+mid);
+      if(numInput) numInput.value='0.0';
+      if(slider) slider.value=0;
+      if(realSpan) realSpan.textContent='0.0';
+    }else{
+      if(card) card.removeAttribute('display');
+      if(hit) hit.removeAttribute('display');
+      if(srow){srow.style.opacity='';srow.style.pointerEvents='';}
+      if(grp) grp.removeAttribute('display');
+      var track=document.getElementById('track-'+mid);
+      if(track) track.removeAttribute('display');
+      updateCardText(mid);
+      var slider=document.getElementById('sl-'+mid);
+      var numInput=document.getElementById('si-'+mid);
+      var realSpan=document.getElementById('sr-'+mid);
+      if(slider){slider.value=0;updateSliderBg(slider,mid);}
+      if(numInput) numInput.value='0.0';
+      if(realSpan) realSpan.textContent='0.0';
+    }
+  });
+  if(selected==='L1'||selected==='L3') deselect();
+  if(!selected) autoFlow();
+}
 function updatePvSurplus(){
   var fakeR2=moduleData['R2']*EFF;
   var el=document.getElementById('pv-surplus');
