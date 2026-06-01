@@ -259,6 +259,8 @@ var activeFlows=[];
 var pendingTimers=[];
 var D=100;   // 虚线长度
 var SPD=0.18; // 单位/ms，越小越慢
+var RESTART_GAP=50;
+var EXIT_TIME=Math.round(D/SPD);
 
 var providerColors={
   L1:'#FEBB12',  // Solar
@@ -267,6 +269,7 @@ var providerColors={
   R2:'#FEBB12'   // Dual Power
 };
 var currentColor='#16AAAF';
+var flowSeq=0;
 
 var consumerFlows={
   L2:[
@@ -378,6 +381,157 @@ function getGlowFilterId(hex,isMid){
   return id;
 }
 
+function setMovingGradient(grad,tail,head,color){
+  grad.setAttribute('x1',tail.x);
+  grad.setAttribute('y1',tail.y);
+  grad.setAttribute('x2',head.x);
+  grad.setAttribute('y2',head.y);
+  grad.children[0].setAttribute('stop-color',color);
+  grad.children[1].setAttribute('stop-color',color);
+}
+
+function getTrailPoint(basePath,dist,forward){
+  var len=basePath.getTotalLength();
+  if(dist<0){
+    if(forward) return basePath.getPointAtLength(0);
+    var start=basePath.getPointAtLength(0);
+    var nearStart=basePath.getPointAtLength(Math.min(2,len));
+    var sx=start.x-nearStart.x;
+    var sy=start.y-nearStart.y;
+    var sl=Math.sqrt(sx*sx+sy*sy)||1;
+    return {x:start.x+(sx/sl)*(-dist),y:start.y+(sy/sl)*(-dist)};
+  }
+  if(dist>len){
+    if(!forward) return basePath.getPointAtLength(len);
+    var end=basePath.getPointAtLength(len);
+    var nearEnd=basePath.getPointAtLength(Math.max(0,len-2));
+    var ex=end.x-nearEnd.x;
+    var ey=end.y-nearEnd.y;
+    var el=Math.sqrt(ex*ex+ey*ey)||1;
+    return {x:end.x+(ex/el)*(dist-len),y:end.y+(ey/el)*(dist-len)};
+  }
+  return basePath.getPointAtLength(dist);
+}
+
+function buildTrailD(basePath,tailDist,headDist,forward){
+  var from=tailDist;
+  var to=headDist;
+  if(Math.abs(to-from)<0.5) return '';
+  var steps=18;
+  var d='';
+  for(var i=0;i<=steps;i++){
+    var t=i/steps;
+    var pos=from+(to-from)*t;
+    var pt=getTrailPoint(basePath,pos,forward);
+    d+=(i?'L':'M')+pt.x.toFixed(2)+' '+pt.y.toFixed(2);
+  }
+  return d;
+}
+
+function getPathOverlapLength(pathLen,tailDist,headDist){
+  var from=Math.max(0,Math.min(pathLen,tailDist));
+  var to=Math.max(0,Math.min(pathLen,headDist));
+  return Math.abs(to-from);
+}
+
+function startFlowTrail(basePath,color,isMid,initialOffset,targetOffset,duration,delay,timelineStart,headArrival,stopAtTarget){
+  var ns='http://www.w3.org/2000/svg';
+  var parent=basePath.parentNode;
+  var defs=document.querySelector('svg defs');
+  var len=basePath.getTotalLength();
+  var forward=targetOffset<initialOffset;
+  var grad=document.createElementNS(ns,'linearGradient');
+  var gradId='moving-flow-'+(++flowSeq);
+  grad.setAttribute('id',gradId);
+  grad.setAttribute('gradientUnits','userSpaceOnUse');
+  var tailStop=document.createElementNS(ns,'stop');
+  tailStop.setAttribute('offset','0%');
+  tailStop.setAttribute('stop-opacity','0');
+  var headStop=document.createElementNS(ns,'stop');
+  headStop.setAttribute('offset','100%');
+  headStop.setAttribute('stop-opacity','1');
+  grad.appendChild(tailStop);
+  grad.appendChild(headStop);
+  defs.appendChild(grad);
+
+  var trail=basePath.cloneNode(false);
+  trail.setAttribute('stroke','url(#'+gradId+')');
+  trail.setAttribute('stroke-opacity','1');
+  trail.setAttribute('stroke-width','4');
+  trail.setAttribute('stroke-linecap','round');
+  trail.setAttribute('stroke-linejoin','round');
+  trail.setAttribute('fill','none');
+  trail.setAttribute('filter','url(#'+getGlowFilterId(color,isMid)+')');
+  parent.appendChild(trail);
+  clonedEls.push(trail);
+  clonedEls.push(grad);
+
+  basePath.setAttribute('stroke','none');
+  basePath.removeAttribute('filter');
+
+  var started=false;
+  var rafId=null;
+  var startTime=null;
+  var flow={el:trail,stop:function(){if(rafId!==null) cancelAnimationFrame(rafId);}};
+  activeFlows.push(flow);
+
+  function render(now){
+    if(startTime===null) startTime=(timelineStart||now)+(delay||0);
+    if(now<startTime){
+      rafId=requestAnimationFrame(render);
+      return;
+    }
+    if(!started){started=true;trail.setAttribute('opacity','1');}
+    var elapsed=Math.min(duration,now-startTime);
+    var arrive=headArrival==null?duration*len/(len+D):headArrival;
+    var exitDur=Math.max(1,duration-arrive);
+    var head;
+    if(elapsed<=arrive){
+      var p=arrive<=0?1:elapsed/arrive;
+      head=forward?(len*p):(len-(len*p));
+    }else{
+      var e=(elapsed-arrive)/exitDur;
+      head=stopAtTarget?(forward?len:0):(forward?(len+D*e):(-D*e));
+    }
+    var tail;
+    if(stopAtTarget&&elapsed>arrive){
+      var exitP=(elapsed-arrive)/exitDur;
+      tail=forward?(len-D+(D*exitP)):(D-(D*exitP));
+    }else{
+      tail=forward?head-D:head+D;
+    }
+    if(getPathOverlapLength(len,tail,head)<2){
+      trail.setAttribute('opacity','0');
+      trail.setAttribute('d','');
+      if(elapsed<duration) rafId=requestAnimationFrame(render);
+      return;
+    }
+    trail.setAttribute('opacity','1');
+    var tailPt=getTrailPoint(basePath,tail,forward);
+    var headPt=getTrailPoint(basePath,head,forward);
+    setMovingGradient(grad,tailPt,headPt,color);
+    trail.setAttribute('d',buildTrailD(basePath,tail,head,forward));
+    if(elapsed<duration) rafId=requestAnimationFrame(render);
+    else{
+      trail.setAttribute('opacity','0');
+      trail.setAttribute('d','');
+    }
+  }
+  trail.setAttribute('opacity','0');
+  rafId=requestAnimationFrame(render);
+}
+
+function getSyncedArrival(lengths){
+  var arrival=0;
+  lengths.forEach(function(len){
+    if(len>0){
+      var t=len/SPD;
+      if(t>arrival) arrival=t;
+    }
+  });
+  return Math.round(arrival);
+}
+
 function runConsumerCycle(mid){
   if(moduleData[mid]===0) return;
   var flows=consumerFlows[mid];
@@ -394,48 +548,39 @@ function runConsumerCycle(mid){
   var cGrp=groups[cG];
   var cFl=cGrp.querySelector('.fl');
   var L_c=cFl.getTotalLength();
-  var cTravel=Math.ceil((L_c+2*D)/SPD);
 
   // 汇聚后的消费路径颜色：单供电方用供电方颜色，多供电方用紫色
   var consumerColor=flows.length===1?providerColors[flows[0].prov]:'#794EAD';
   cGrp.setAttribute('opacity','1');
-  cFl.setAttribute('stroke',consumerColor);
-  cFl.setAttribute('stroke-opacity','0.6');
-  cFl.setAttribute('stroke-width','4');
-  cFl.setAttribute('filter','url(#'+getGlowFilterId(consumerColor,cG.indexOf('mid')>-1)+')');
-  cFl.style.strokeDasharray=D+' 99999';
-  cFl.style.strokeDashoffset=-(L_c+D);
 
-  var maxPEnd=0;
-  var minArrival=Infinity;
+  var providerRuns=[];
   flows.forEach(function(flow){
     var color=providerColors[flow.prov];
     var pG=flow.pPath.g;
     var pGrp=groups[pG];
     if(!pGrp) return;
     var pFl=pGrp.querySelector('.fl');
-    pGrp.setAttribute('opacity','1');
-    pFl.setAttribute('stroke',color);
-    pFl.setAttribute('stroke-opacity','0.6');
-    pFl.setAttribute('stroke-width','4');
-    pFl.setAttribute('filter','url(#'+getGlowFilterId(color,pG.indexOf('mid')>-1)+')');
-    pFl.style.strokeDasharray=D+' 99999';
     var L_p=pFl.getTotalLength();
-    var pTravel=Math.ceil((L_p+2*D)/SPD);
-    pFl.style.strokeDashoffset=D;
-    activeFlows.push({el:pFl,anim:anime({targets:pFl,strokeDashoffset:-(L_p+D),duration:pTravel,easing:'linear'})});
+    providerRuns.push({color:color,g:pG,grp:pGrp,path:pFl,len:L_p});
+  });
+  var cDelay=getSyncedArrival(providerRuns.map(function(run){return run.len;}));
+  var timelineStart=performance.now();
+  var maxPEnd=0;
+  providerRuns.forEach(function(run){
+    run.grp.setAttribute('opacity','1');
+    var pTravel=cDelay+EXIT_TIME;
+    startFlowTrail(run.path,run.color,run.g.indexOf('mid')>-1,D,-(run.len+D),pTravel,0,timelineStart,cDelay,true);
     if(pTravel>maxPEnd) maxPEnd=pTravel;
-    var arrival=Math.max(0,(L_p-D)/SPD-40);
-    if(arrival<minArrival) minArrival=arrival;
   });
 
-  // 消费路径延迟 = 最快的供电方到达中心的时刻
-  var cDelay=Math.round(minArrival);
-  activeFlows.push({el:cFl,anim:anime({targets:cFl,strokeDashoffset:D,duration:cTravel,delay:cDelay,easing:'linear'})});
+  // 消费路径延迟 = 所有供电方线头都到达中心 icon 的时刻
+  var cArrival=Math.round(L_c/SPD);
+  var cTravel=cArrival+EXIT_TIME;
+  startFlowTrail(cFl,consumerColor,cG.indexOf('mid')>-1,-(L_c+D),D,cTravel,cDelay,timelineStart,cArrival);
 
   var totalEnd=cDelay+cTravel;
   if(maxPEnd>totalEnd) totalEnd=maxPEnd;
-  var tid=setTimeout(function(){runConsumerCycle(mid);},totalEnd+10);
+  var tid=setTimeout(function(){runConsumerCycle(mid);},totalEnd+RESTART_GAP);
   pendingTimers.push(tid);
 }
 
@@ -444,11 +589,8 @@ function setupPath(p){
   if(dualPowerMode&&(p.g==='fg-top-l'||p.g==='fg-bot-l')) return null;
   var fl=grp.querySelector('.fl');
   grp.setAttribute('opacity','1');
-  fl.setAttribute('stroke',currentColor);
-  fl.setAttribute('stroke-opacity','0.6');
-  fl.setAttribute('stroke-width','4');
-  fl.setAttribute('filter','url(#'+(p.g.indexOf('mid')>-1?'flow-glow-mid':'flow-glow')+')');
-  fl.style.strokeDasharray=D+' 99999';
+  fl.setAttribute('stroke','none');
+  fl.removeAttribute('filter');
   return fl;
 }
 
@@ -457,10 +599,13 @@ function stopAllFlows(){
   pendingTimers=[];
   activeFlows.forEach(function(f){
     if(f.anim) f.anim.pause();
-    f.el.style.strokeDashoffset='0';
-    f.el.style.strokeDasharray='0 99999';
-    f.el.setAttribute('stroke','none');
-    f.el.removeAttribute('filter');
+    if(f.stop) f.stop();
+    if(f.el){
+      f.el.style.strokeDashoffset='0';
+      f.el.style.strokeDasharray='0 99999';
+      f.el.setAttribute('stroke','none');
+      f.el.removeAttribute('filter');
+    }
   });
   activeFlows=[];
   clonedEls.forEach(function(el){if(el.parentNode)el.parentNode.removeChild(el);});
@@ -479,43 +624,37 @@ function runCycle(paths,lens){
   updateGlowColor(currentColor);
 
   var pG=paths[0].g, L_p=lens[pG];
-  var pTravel=Math.ceil((L_p+2*D)/SPD);
   // 供电方虚线前缘到达中心(路径终点)的时刻
-  var tCenter=L_p/SPD;
-  // 用电方统一的延迟 = 供电方到达中心时刻 - 用电方虚线尾部进入中心所需时间
-  // 加 60ms 重叠补偿，确保中心过渡无间隙
-  var cDelay=Math.max(0,Math.round((L_p-D)/SPD-60));
+  var tCenter=Math.round(L_p/SPD);
+  // 用电方统一的延迟 = 供电方线头到达中心 icon 的时刻
+  var cDelay=Math.round(tCenter);
+  var timelineStart=performance.now();
+  var pTravel=cDelay+EXIT_TIME;
 
   // 供电方
   var pFl=setupPath(paths[0]);
-  pFl.style.strokeDashoffset=D;
-  activeFlows.push({el:pFl,anim:anime({
-    targets:pFl,strokeDashoffset:-(L_p+D),
-    duration:pTravel,easing:'linear'
-  })});
+  startFlowTrail(pFl,currentColor,pG.indexOf('mid')>-1,D,-(L_p+D),pTravel,0,timelineStart,cDelay,true);
 
   // 各用电方
+  var consumerLens=[];
+  for(var ci=1;ci<paths.length;ci++) consumerLens.push(lens[paths[ci].g]);
+  var consumerArrival=getSyncedArrival(consumerLens);
+  var consumerTravel=consumerArrival+EXIT_TIME;
   for(var i=1;i<paths.length;i++){
     (function(p){
       var cG=p.g, L_c=lens[cG];
-      var cTravel=Math.ceil((L_c+2*D)/SPD);
       var fl=setupPath(p);
-      fl.style.strokeDashoffset=-(L_c+D);
-      activeFlows.push({el:fl,anim:anime({
-        targets:fl,strokeDashoffset:D,
-        duration:cTravel,delay:cDelay,easing:'linear'
-      })});
+      startFlowTrail(fl,currentColor,cG.indexOf('mid')>-1,-(L_c+D),D,consumerTravel,cDelay,timelineStart,consumerArrival);
     })(paths[i]);
   }
 
   // 周期时长 = 最大结束时间 + 暂停
   var maxEnd=pTravel;
   for(var j=1;j<paths.length;j++){
-    var L_c2=lens[paths[j].g];
-    var ct2=Math.ceil((L_c2+2*D)/SPD);
+    var ct2=consumerTravel;
     if(cDelay+ct2>maxEnd) maxEnd=cDelay+ct2;
   }
-  var tid=setTimeout(function(){runCycle(paths,lens);},maxEnd+10);
+  var tid=setTimeout(function(){runCycle(paths,lens);},maxEnd+RESTART_GAP);
   pendingTimers.push(tid);
 }
 
@@ -588,7 +727,7 @@ function autoFlow(){
   restoreOpacity();
   hint.textContent='能量自动流向';
 
-  var maxPEnd=0,minArrival=Infinity;
+  var providerRuns=[];
 
   // 每个供电方用自己的颜色流向中心
   providers.forEach(function(provMid){
@@ -599,24 +738,22 @@ function autoFlow(){
     var pGrp=groups[providerPath.g];
     if(!pGrp) return;
     var pFl=pGrp.querySelector('.fl');
-    pGrp.setAttribute('opacity','1');
-    pFl.setAttribute('stroke',color);
-    pFl.setAttribute('stroke-opacity','0.6');
-    pFl.setAttribute('stroke-width','4');
-    pFl.setAttribute('filter','url(#'+getGlowFilterId(color,providerPath.g.indexOf('mid')>-1)+')');
-    pFl.style.strokeDasharray=D+' 99999';
     var L_p=pFl.getTotalLength();
-    var pTravel=Math.ceil((L_p+2*D)/SPD);
-    pFl.style.strokeDashoffset=D;
-    activeFlows.push({el:pFl,anim:anime({targets:pFl,strokeDashoffset:-(L_p+D),duration:pTravel,easing:'linear'})});
+    providerRuns.push({color:color,g:providerPath.g,grp:pGrp,path:pFl,len:L_p});
+  });
+  var maxPEnd=0;
+  var cDelay=getSyncedArrival(providerRuns.map(function(run){return run.len;}));
+  var timelineStart=performance.now();
+  providerRuns.forEach(function(run){
+    run.grp.setAttribute('opacity','1');
+    var pTravel=cDelay+EXIT_TIME;
+    startFlowTrail(run.path,run.color,run.g.indexOf('mid')>-1,D,-(run.len+D),pTravel,0,timelineStart,cDelay,true);
     if(pTravel>maxPEnd) maxPEnd=pTravel;
-    var arrival=Math.max(0,(L_p-D)/SPD-40);
-    if(arrival<minArrival) minArrival=arrival;
   });
 
   // 用电方颜色：单供电方用供电方颜色，多供电方用紫色
   var consumerColor=providers.length===1?providerColors[providers[0]]:'#794EAD';
-  var cDelay=Math.round(minArrival);
+  var consumerRuns=[];
   consumers.forEach(function(conMid){
     var cG=modulePathGroup[conMid];
     if(!cG) return;
@@ -624,20 +761,21 @@ function autoFlow(){
     var cGrp=groups[cG];
     var cFl=cGrp.querySelector('.fl');
     var L_c=cFl.getTotalLength();
-    var cTravel=Math.ceil((L_c+2*D)/SPD);
+    consumerRuns.push({g:cG,grp:cGrp,path:cFl,len:L_c});
+  });
+  var consumerArrival=getSyncedArrival(consumerRuns.map(function(run){return run.len;}));
+  var consumerTravel=consumerArrival+EXIT_TIME;
+  consumerRuns.forEach(function(run){
+    var cG=run.g;
+    var cGrp=run.grp;
+    var cFl=run.path;
     cGrp.setAttribute('opacity','1');
-    cFl.setAttribute('stroke',consumerColor);
-    cFl.setAttribute('stroke-opacity','0.6');
-    cFl.setAttribute('stroke-width','4');
-    cFl.setAttribute('filter','url(#'+getGlowFilterId(consumerColor,cG.indexOf('mid')>-1)+')');
-    cFl.style.strokeDasharray=D+' 99999';
-    cFl.style.strokeDashoffset=-(L_c+D);
-    activeFlows.push({el:cFl,anim:anime({targets:cFl,strokeDashoffset:D,duration:cTravel,delay:cDelay,easing:'linear'})});
-    var totalEnd=cDelay+cTravel;
+    startFlowTrail(cFl,consumerColor,cG.indexOf('mid')>-1,-(run.len+D),D,consumerTravel,cDelay,timelineStart,consumerArrival);
+    var totalEnd=cDelay+consumerTravel;
     if(totalEnd>maxPEnd) maxPEnd=totalEnd;
   });
 
-  var tid=setTimeout(function(){autoFlow();},maxPEnd+10);
+  var tid=setTimeout(function(){autoFlow();},maxPEnd+RESTART_GAP);
   pendingTimers.push(tid);
 }
 
