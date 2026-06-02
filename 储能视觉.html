@@ -18,7 +18,7 @@ svg{width:100%;height:100%;display:block}
 .panel-title{font-size:14px;font-weight:600;color:rgba(0,0,0,.85);margin-bottom:10px}
 .s-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
 .s-row:last-child{margin-bottom:0}
-.s-label{width:80px;font-size:12px;color:#666;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s-label{width:108px;font-size:12px;color:#666;flex-shrink:0;white-space:nowrap}
 .slider-wrap{position:relative;width:220px;display:inline-flex;align-items:center}
 .center-mark{position:absolute;left:50%;width:1px;height:12px;background:#999;pointer-events:none;z-index:1;border-radius:1px}
 .s-slider{width:100%;height:6px;-webkit-appearance:none;appearance:none;background:#E0E0E0;border-radius:3px;outline:none}
@@ -26,6 +26,30 @@ svg{width:100%;height:100%;display:block}
 .s-val{font-size:11px;color:#999;text-align:left;white-space:nowrap;min-width:120px}
 .s-input{width:52px;border:none;border-bottom:1px solid #ddd;font-size:13px;font-weight:600;color:#000;text-align:center;outline:none;font-family:Poppins,sans-serif;padding:0 2px;background:transparent}
 .s-input:focus{border-bottom-color:#16AAAF}
+.solar-detail-btn{position:absolute;left:252px;top:154px;width:14px;height:14px;border:0;background:transparent;cursor:pointer;z-index:3;display:flex;align-items:center;justify-content:center}
+.solar-detail-btn:before{content:"";width:5px;height:5px;border-right:2px solid #16AAAF;border-bottom:2px solid #16AAAF;transform:rotate(-45deg);border-radius:1px}
+.solar-detail-btn:hover:before{border-color:#0D8F94}
+.solar-detail-btn.is-dimmed{opacity:.5}
+.inverter-detail-btn{position:absolute;left:483px;top:289px;width:44px;height:44px;border:0;background:transparent;border-radius:22px;cursor:pointer;z-index:4}
+.inverter-tooltip{position:absolute;left:441px;top:237px;width:129px;height:40px;background:#fff;border-radius:8px;box-shadow:0 9px 28px rgba(0,0,0,.05),0 6px 16px rgba(0,0,0,.08),0 3px 6px rgba(0,0,0,.12);z-index:5;display:none;align-items:center;justify-content:center;font-family:Poppins,sans-serif;font-size:14px;line-height:17px;font-weight:400;color:rgba(0,0,0,.85);pointer-events:none}
+.inverter-tooltip:after{content:"";position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:6px solid #fff}
+.inverter-detail-btn:hover+.inverter-tooltip{display:flex}
+.detail-overlay{position:absolute;left:149px;top:82px;width:757px;height:396px;background:rgba(0,0,0,.22);border-radius:8px;z-index:10;display:none;align-items:center;justify-content:center}
+.detail-overlay.is-open{display:flex}
+.solar-modal{width:240px;min-height:289px;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.15);padding:27px 20px 22px;font-family:Poppins,sans-serif;color:rgba(0,0,0,.85)}
+.solar-modal h2{font-size:14px;line-height:17px;font-weight:600;margin:0 0 23px}
+.solar-group{margin-bottom:21px}
+.solar-group:last-child{margin-bottom:0}
+.solar-group h3{font-size:12px;line-height:14px;font-weight:600;margin:0 0 13px}
+.solar-metric{display:flex;justify-content:space-between;align-items:center;font-size:10px;line-height:12px;color:rgba(0,0,0,.45);margin-bottom:9px}
+.solar-metric:last-child{margin-bottom:0}
+.inverter-modal{width:240px;min-height:289px;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.15);padding:27px 20px 22px;font-family:Poppins,sans-serif;color:rgba(0,0,0,.85);display:none}
+.inverter-modal h2{font-size:14px;line-height:17px;font-weight:600;margin:0 0 23px}
+.inverter-group{margin-bottom:21px}
+.inverter-group:last-child{margin-bottom:0}
+.inverter-group h3{font-size:12px;line-height:14px;font-weight:600;margin:0 0 13px}
+.inverter-metric{display:flex;justify-content:space-between;align-items:center;font-size:10px;line-height:12px;color:rgba(0,0,0,.45);margin-bottom:9px}
+.inverter-metric:last-child{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -181,7 +205,7 @@ svg{width:100%;height:100%;display:block}
 </g>
 <!-- 模块卡片内容（置顶） -->
 <g class="card" data-card="L1">
-<rect class="mod-bg" data-module="L1" x="169" y="142" width="174" height="80" rx="8" fill="white" pointer-events="none"/><text x="268" y="166" text-anchor="end" font-family="Poppins,sans-serif" font-size="12" fill="#16AAAF">Solar</text>
+<rect class="mod-bg" data-module="L1" x="169" y="142" width="174" height="80" rx="8" fill="white" pointer-events="none"/><text x="254" y="166" text-anchor="end" font-family="Poppins,sans-serif" font-size="12" fill="#16AAAF">Solar</text>
 <text x="268" y="189" text-anchor="end" font-family="Poppins,sans-serif" font-size="16" font-weight="700" fill="rgba(0,0,0,0.85)">3.9kW</text>
 <text x="268" y="209" text-anchor="end" font-family="Poppins,sans-serif" font-size="10" fill="rgba(0,0,0,0.25)">Real: 4.1kW</text>
 <rect x="273" y="152" width="60" height="60" fill="url(#pattern0_29_16747)"/>
@@ -234,6 +258,47 @@ svg{width:100%;height:100%;display:block}
 <path d="M493.594 309.308C493.594 308.634 493.847 308.387 494.53 308.387H508.853C510.171 308.387 509.904 307.756 509.779 307.466C509.453 306.696 508.93 306.025 508.262 305.521C507.594 305.016 506.805 304.696 505.974 304.592C505.974 304.592 505.342 304.592 505.342 303.691L505.298 299.98C505.298 299.305 505.552 299.059 506.234 299.059C507.911 299.185 509.54 299.671 511.012 300.483C513.506 301.866 515.067 304.005 515.905 306.694C516.468 308.538 516.653 310.478 516.449 312.395C516.45 312.497 516.43 312.598 516.391 312.691C516.353 312.785 516.295 312.87 516.223 312.941C516.15 313.013 516.064 313.068 515.969 313.106C515.875 313.143 515.773 313.161 515.672 313.158C515.537 313.158 515.401 313.158 515.266 313.158H501.443C500.767 313.158 500.507 313.404 500.507 314.082C500.507 315.793 502.991 316.886 504.863 317.119C506.577 317.353 508.317 316.933 509.735 315.941C510.455 315.455 510.651 315.493 511.147 316.194C511.846 317.184 512.543 318.174 513.239 319.163C513.634 319.73 513.577 320.051 513.029 320.459C510.543 322.322 507.446 323.186 504.352 322.881C501.048 322.601 498.27 321.245 496.179 318.681C494.087 316.117 493.212 313.033 493.536 309.683C493.56 309.437 493.594 309.194 493.631 308.951" fill="white"/>
 </svg>
 
+<button class="solar-detail-btn" id="solar-detail-btn" type="button" aria-label="Open Solar Array details"></button>
+<button class="inverter-detail-btn" id="inverter-detail-btn" type="button" aria-label="Open Inverter Details"></button>
+<div class="inverter-tooltip" id="inverter-tooltip">Inverter Details</div>
+<div class="detail-overlay" id="solar-detail-overlay">
+  <div class="solar-modal" id="solar-detail-modal" role="dialog" aria-modal="true" aria-labelledby="solar-detail-title">
+    <h2 id="solar-detail-title">Solar Array</h2>
+    <div class="solar-group">
+      <h3>Solar 1</h3>
+      <div class="solar-metric"><span>Voltage</span><span>373.1V</span></div>
+      <div class="solar-metric"><span>Current</span><span>1A</span></div>
+    </div>
+    <div class="solar-group">
+      <h3>Solar 2</h3>
+      <div class="solar-metric"><span>Voltage</span><span>373.1V</span></div>
+      <div class="solar-metric"><span>Current</span><span>1A</span></div>
+    </div>
+    <div class="solar-group">
+      <h3>Solar 3</h3>
+      <div class="solar-metric"><span>Voltage</span><span>373.1V</span></div>
+      <div class="solar-metric"><span>Current</span><span>1A</span></div>
+    </div>
+  </div>
+  <div class="inverter-modal" id="inverter-detail-modal" role="dialog" aria-modal="true" aria-labelledby="inverter-detail-title">
+    <h2 id="inverter-detail-title">Inverter Details</h2>
+    <div class="inverter-group">
+      <h3>AC 1</h3>
+      <div class="inverter-metric"><span>Voltage</span><span>373.1V</span></div>
+      <div class="inverter-metric"><span>Current</span><span>1A</span></div>
+    </div>
+    <div class="inverter-group">
+      <h3>AC 2</h3>
+      <div class="inverter-metric"><span>Voltage</span><span>373.1V</span></div>
+      <div class="inverter-metric"><span>Current</span><span>1A</span></div>
+    </div>
+    <div class="inverter-group">
+      <h3>AC 3</h3>
+      <div class="inverter-metric"><span>Voltage</span><span>373.1V</span></div>
+      <div class="inverter-metric"><span>Current</span><span>1A</span></div>
+    </div>
+  </div>
+</div>
 </div>
 <div class="panel">
 <div class="panel-title">数据控制</div>
@@ -254,6 +319,11 @@ grpIds.forEach(function(id){groups[id]=document.getElementById(id);});
 var bgRects=document.querySelectorAll('.mod-bg');
 var hitRects=document.querySelectorAll('.mod-hit');
 var hint=document.getElementById('hint');
+var solarDetailBtn=document.getElementById('solar-detail-btn');
+var inverterDetailBtn=document.getElementById('inverter-detail-btn');
+var solarDetailOverlay=document.getElementById('solar-detail-overlay');
+var solarDetailModal=document.getElementById('solar-detail-modal');
+var inverterDetailModal=document.getElementById('inverter-detail-modal');
 var selected=null;
 var activeFlows=[];
 var pendingTimers=[];
@@ -322,6 +392,7 @@ function dimInactive(activeIds){
     card.setAttribute('opacity',isActive?'1':'0.5');
     var bg=card.querySelector('.mod-bg');
     if(bg) bg.setAttribute('fill',isActive?'white':'#FAFAFA');
+    if(mid==='L1'&&solarDetailBtn) solarDetailBtn.classList.toggle('is-dimmed',!isActive);
   });
 }
 function restoreOpacity(){
@@ -332,6 +403,7 @@ function restoreOpacity(){
     var bg=card.querySelector('.mod-bg');
     if(bg) bg.setAttribute('fill','white');
   });
+  if(solarDetailBtn) solarDetailBtn.classList.remove('is-dimmed');
 }
 
 function findBg(mid){
@@ -788,6 +860,45 @@ function deselect(){
   autoFlow();
 }
 
+function showDetailModal(type){
+  if(!solarDetailOverlay) return;
+  solarDetailOverlay.classList.add('is-open');
+  if(solarDetailModal) solarDetailModal.style.display=type==='solar'?'block':'none';
+  if(inverterDetailModal) inverterDetailModal.style.display=type==='inverter'?'block':'none';
+}
+function openSolarDetail(){
+  showDetailModal('solar');
+}
+function openInverterDetail(){
+  showDetailModal('inverter');
+}
+function closeSolarDetail(){
+  if(solarDetailOverlay) solarDetailOverlay.classList.remove('is-open');
+  if(solarDetailModal) solarDetailModal.style.display='none';
+  if(inverterDetailModal) inverterDetailModal.style.display='none';
+}
+if(solarDetailBtn){
+  solarDetailBtn.addEventListener('click',function(e){
+    e.stopPropagation();
+    openSolarDetail();
+  });
+}
+if(inverterDetailBtn){
+  inverterDetailBtn.addEventListener('click',function(e){
+    e.stopPropagation();
+    openInverterDetail();
+  });
+}
+if(solarDetailOverlay){
+  solarDetailOverlay.addEventListener('click',function(){closeSolarDetail();});
+}
+if(solarDetailModal){
+  solarDetailModal.addEventListener('click',function(e){e.stopPropagation();});
+}
+if(inverterDetailModal){
+  inverterDetailModal.addEventListener('click',function(e){e.stopPropagation();});
+}
+
 for(var i=0;i<hitRects.length;i++){
   (function(hit){
     var mid=hit.getAttribute('data-module');
@@ -835,6 +946,19 @@ function updateCardText(mid){
 }
 var sliderRanges={L1:[0,216],L2:[-216,216],L3:[-216,0],R1:[-216,216],R2:[-216,216],R3:[-216,0]};
 var dualPowerMode=false;
+function resetModuleControl(mid){
+  moduleData[mid]=0;
+  var slider=document.getElementById('sl-'+mid);
+  var numInput=document.getElementById('si-'+mid);
+  var realSpan=document.getElementById('sr-'+mid);
+  if(slider){
+    slider.value=0;
+    updateSliderBg(slider,mid);
+  }
+  if(numInput) numInput.value='0.0';
+  if(realSpan) realSpan.textContent='0.0';
+  updateCardText(mid);
+}
 function toggleDualPowerMode(isDual){
   dualPowerMode=isDual;
   ['L1','L3'].forEach(function(mid){
@@ -846,31 +970,21 @@ function toggleDualPowerMode(isDual){
     if(isDual){
       if(card) card.setAttribute('display','none');
       if(hit) hit.setAttribute('display','none');
+      if(mid==='L1'&&solarDetailBtn){solarDetailBtn.style.display='none';closeSolarDetail();}
       if(srow){srow.style.display='';srow.style.opacity='0.35';srow.style.pointerEvents='none';}
       if(grp) grp.setAttribute('display','none');
       var track=document.getElementById('track-'+mid);
       if(track) track.setAttribute('display','none');
-      moduleData[mid]=0;
-      var numInput=document.getElementById('si-'+mid);
-      var slider=document.getElementById('sl-'+mid);
-      var realSpan=document.getElementById('sr-'+mid);
-      if(numInput) numInput.value='0.0';
-      if(slider) slider.value=0;
-      if(realSpan) realSpan.textContent='0.0';
+      resetModuleControl(mid);
     }else{
       if(card) card.removeAttribute('display');
       if(hit) hit.removeAttribute('display');
+      if(mid==='L1'&&solarDetailBtn) solarDetailBtn.style.display='';
       if(srow){srow.style.opacity='';srow.style.pointerEvents='';}
       if(grp) grp.removeAttribute('display');
       var track=document.getElementById('track-'+mid);
       if(track) track.removeAttribute('display');
-      updateCardText(mid);
-      var slider=document.getElementById('sl-'+mid);
-      var numInput=document.getElementById('si-'+mid);
-      var realSpan=document.getElementById('sr-'+mid);
-      if(slider){slider.value=0;updateSliderBg(slider,mid);}
-      if(numInput) numInput.value='0.0';
-      if(realSpan) realSpan.textContent='0.0';
+      resetModuleControl(mid);
     }
   });
   if(selected==='L1'||selected==='L3') deselect();
