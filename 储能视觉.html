@@ -653,6 +653,7 @@ function updateNarrowLayout(){
   setPathD('narrow-track-top-r',dTopR);
   setPathD('narrow-track-mid-r',dBotM);
   setPathD('narrow-track-bot-r',dBotR);
+  restoreSelectedCapsule();
 }
 
 function leftTopD(endX,bendX){
@@ -760,6 +761,7 @@ function updateResponsiveLayout(){
       if(track) track.setAttribute('display','none');
     });
   }
+  restoreSelectedCapsule();
 }
 
 var consumerFlows={
@@ -931,6 +933,12 @@ function resetBgCapsule(bg){
   bg.setAttribute('rx',bg.dataset.baseRx);
   bg.removeAttribute('fill-opacity');
   bg.removeAttribute('filter');
+}
+
+function restoreSelectedCapsule(){
+  if(!selected) return;
+  var bg=findBg(selected);
+  if(bg) setBgCapsule(bg,'shadow-active');
 }
 
 function dimInactive(activeIds){
