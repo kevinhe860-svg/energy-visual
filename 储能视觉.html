@@ -10,9 +10,9 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:100%;height:100%;background:#F5F5F5;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:auto;padding:20px 0}
-.wrap{position:relative;width:753px;height:390px}
+.wrap{position:relative;width:max(753px,calc(100vw - 40px));min-width:753px;height:390px}
 svg{width:100%;height:100%;display:block}
-#flow-canvas{position:absolute;left:0;top:0;width:753px;height:390px;pointer-events:none;z-index:1}
+#flow-canvas{position:absolute;left:0;top:0;width:100%;height:390px;pointer-events:none;z-index:1}
 .inverter-marquee{opacity:0;transition:opacity .22s ease;stroke-dasharray:none;animation:none}
 .inverter-marquee.is-active{opacity:1}
 .mod-hit{cursor:pointer}
@@ -40,7 +40,7 @@ svg{width:100%;height:100%;display:block}
 .inverter-detail-btn{position:absolute;left:384px;top:229.5px;width:13px;height:13px;border:0;background:transparent;border-radius:7px;cursor:pointer;z-index:4}
 .inverter-detail-btn:after{content:"";position:absolute;left:3px;top:3px;width:5px;height:5px;border-right:2px solid #16AAAF;border-bottom:2px solid #16AAAF;transform:rotate(-45deg);border-radius:1px}
 .inverter-detail-btn:hover:after{border-color:#0D8F94}
-.detail-overlay{position:absolute;left:0;top:0;width:753px;height:390px;background:rgba(0,0,0,.22);border-radius:8px;z-index:10;display:none;align-items:center;justify-content:center}
+.detail-overlay{position:absolute;left:0;top:0;width:100%;height:390px;background:rgba(0,0,0,.22);border-radius:8px;z-index:10;display:none;align-items:center;justify-content:center}
 .detail-overlay.is-open{display:flex}
 .solar-modal{width:240px;min-height:289px;background:#fff;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,.15);padding:27px 20px 22px;font-family:Poppins,sans-serif;color:rgba(0,0,0,.85)}
 .solar-modal h2{font-size:14px;line-height:17px;font-weight:600;margin:0 0 23px}
@@ -60,7 +60,7 @@ svg{width:100%;height:100%;display:block}
 </head>
 <body>
 <div class="wrap">
-<svg width="753" height="390" viewBox="0 0 1055 546.61" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg id="power-svg" width="753" height="390" viewBox="0 0 1055 546.61" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <defs>
 <filter id="shadow-hover" x="-20%" y="-20%" width="140%" height="140%">
   <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.10"/>
@@ -76,23 +76,23 @@ svg{width:100%;height:100%;display:block}
   <animateTransform attributeName="gradientTransform" type="rotate" from="0 513 285" to="360 513 285" dur="7s" repeatCount="indefinite"/>
 </linearGradient>
 </defs>
-<rect width="1055" height="546.61" rx="8" fill="white"/>
+<rect id="power-card-bg" width="1055" height="546.61" rx="8" fill="white"/>
 <text x="26" y="53" font-family="Poppins,sans-serif" font-size="22" font-weight="500" fill="rgba(0,0,0,0.85)">Realtime Power</text>
-<g transform="translate(873 36) scale(1.35)" opacity="0.6">
+<g id="power-core-icon" transform="translate(873 36) scale(1.35)" opacity="0.6">
 <path d="M7 13.5C7 13.776 7.224 14 7.5 14C7.776 14 8 13.776 8 13.5V12.977H7V13.5Z" fill="black" fill-opacity="0.45"/>
 <path d="M2.01 13.5C2.01 13.776 2.234 14 2.51 14C2.786 14 3.01 13.776 3.01 13.5V12.977H2.01V13.5Z" fill="black" fill-opacity="0.45"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M1.885 1.258C1.609 1.258 1.385 1.482 1.385 1.758V11.476C1.385 11.752 1.609 11.976 1.885 11.976H8.113C8.389 11.976 8.613 11.752 8.613 11.476V1.758C8.613 1.482 8.389 1.258 8.113 1.258H1.885ZM0.385 1.758C0.385 0.93 1.056 0.258 1.885 0.258H8.113C8.942 0.258 9.613 0.93 9.613 1.758V11.476C9.613 12.305 8.942 12.976 8.113 12.976H1.885C1.056 12.976 0.385 12.305 0.385 11.476V1.758Z" fill="black" fill-opacity="0.45"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M6.291 5.509C6.202 5.503 6.115 5.5 6.031 5.5H6.029C5.049 5.499 4.365 5.911 4.09 6.3C3.863 6.62 3.757 6.928 3.742 7.215C3.731 7.435 3.772 7.663 3.878 7.898C4.839 7.915 5.405 7.491 5.75 7.023C5.936 6.772 6.06 6.503 6.138 6.272C6.176 6.158 6.202 6.056 6.218 5.975C6.226 5.935 6.231 5.902 6.234 5.876C6.235 5.863 6.236 5.853 6.237 5.845L6.237 5.837V5.834C6.237 5.714 6.258 5.606 6.291 5.509ZM3.096 8.562C2.842 8.12 2.718 7.647 2.743 7.164C2.769 6.657 2.957 6.17 3.274 5.722C3.774 5.016 4.796 4.498 6.031 4.5C6.336 4.5 6.658 4.531 6.992 4.601C7.073 4.618 7.18 4.647 7.28 4.708C7.386 4.772 7.525 4.899 7.564 5.11C7.6 5.307 7.527 5.464 7.475 5.548C7.421 5.635 7.353 5.707 7.294 5.761C7.264 5.788 7.249 5.809 7.242 5.822C7.237 5.831 7.237 5.833 7.237 5.834C7.237 6.014 7.186 6.292 7.086 6.591C6.982 6.9 6.814 7.266 6.555 7.617C6.068 8.277 5.268 8.861 4.053 8.897C4.047 8.939 4.044 8.974 4.044 9C4.044 9.276 3.821 9.5 3.544 9.5C3.268 9.5 3.044 9.276 3.044 9C3.044 8.861 3.068 8.702 3.096 8.562Z" fill="black" fill-opacity="0.45"/>
 </g>
-<text x="894" y="51" font-family="Poppins,sans-serif" font-size="17" font-weight="400" fill="rgba(0,0,0,0.45)">Power Core 3.0</text>
+<text id="power-core-label" x="894" y="51" font-family="Poppins,sans-serif" font-size="17" font-weight="400" fill="rgba(0,0,0,0.45)">Power Core 3.0</text>
 
 <g id="power-content" transform="translate(0 10)">
-<path id="track-L1" d="M290.5 134H320C328.8 134 336 141.2 336 150V250C336 258.8 343.2 266 352 266H433" stroke="#F1F1F1" stroke-width="2"/>
-<path d="M727 134H698C689.2 134 682 141.2 682 150V250C682 258.8 674.8 266 666 266H593" stroke="#F1F1F1" stroke-width="2"/>
-<path d="M290.5 286H433" stroke="#F1F1F1" stroke-width="2"/>
-<path d="M727 286H593" stroke="#F1F1F1" stroke-width="2"/>
-<path id="track-L3" d="M290.5 438H320C328.8 438 336 430.8 336 422V322C336 313.2 343.2 306 352 306H433" stroke="#F1F1F1" stroke-width="2"/>
-<path d="M727 438H698C689.2 438 682 430.8 682 422V322C682 313.2 674.8 306 666 306H593" stroke="#F1F1F1" stroke-width="2"/>
+<path id="track-top-l" d="M290.5 134H320C328.8 134 336 141.2 336 150V250C336 258.8 343.2 266 352 266H433" stroke="#F1F1F1" stroke-width="2"/>
+<path id="track-top-r" d="M727 134H698C689.2 134 682 141.2 682 150V250C682 258.8 674.8 266 666 266H593" stroke="#F1F1F1" stroke-width="2"/>
+<path id="track-mid-l" d="M290.5 286H433" stroke="#F1F1F1" stroke-width="2"/>
+<path id="track-mid-r" d="M727 286H593" stroke="#F1F1F1" stroke-width="2"/>
+<path id="track-bot-l" d="M290.5 438H320C328.8 438 336 430.8 336 422V322C336 313.2 343.2 306 352 306H433" stroke="#F1F1F1" stroke-width="2"/>
+<path id="track-bot-r" d="M727 438H698C689.2 438 682 430.8 682 422V322C682 313.2 674.8 306 666 306H593" stroke="#F1F1F1" stroke-width="2"/>
 
 <g id="fg-top-l" opacity="0"><path class="fl" fill="none" stroke="none" stroke-width="4" stroke-linecap="round" d="M290.5 134H320C328.8 134 336 141.2 336 150V250C336 258.8 343.2 266 352 266H433"/></g>
 <g id="fg-top-r" opacity="0"><path class="fl" fill="none" stroke="none" stroke-width="4" stroke-linecap="round" d="M727 134H698C689.2 134 682 141.2 682 150V250C682 258.8 674.8 266 666 266H593"/></g>
@@ -129,7 +129,7 @@ svg{width:100%;height:100%;display:block}
 <circle class="icon-ring-overlay" data-ring="L3" cx="244" cy="438" r="42" fill="none" stroke="transparent" stroke-width="9"/>
 <image x="207.3" y="414.5" width="73.4" height="47.2" preserveAspectRatio="xMidYMid meet" xlink:href="icon/Vehicle.png"/>
 </g>
-<g class="card" data-card="R1">
+<g class="card responsive-right" data-card="R1">
 <rect class="mod-bg" data-module="R1" x="755" y="82" width="220" height="104" rx="8" fill="white" pointer-events="none"/>
 <circle class="icon-ring" cx="773" cy="134" r="42" fill="white" stroke="#000" stroke-opacity="0.02" stroke-width="9"/>
 <circle class="icon-ring-overlay" data-ring="R1" cx="773" cy="134" r="42" fill="none" stroke="transparent" stroke-width="9"/>
@@ -140,7 +140,7 @@ svg{width:100%;height:100%;display:block}
     <text x="827" y="147" font-family="Poppins,sans-serif" font-size="24" font-weight="500" fill="rgba(0,0,0,0.85)">3.9kW</text>
 <text x="827" y="173" font-family="Poppins,sans-serif" font-size="14" fill="rgba(0,0,0,0.25)">Real: 4.1kW</text>
 </g>
-<g class="card" data-card="R2">
+<g class="card responsive-right" data-card="R2">
 <rect class="mod-bg" data-module="R2" x="755" y="234" width="250" height="104" rx="8" fill="white" pointer-events="none"/>
 <circle class="icon-ring" cx="773" cy="286" r="42" fill="white" stroke="#000" stroke-opacity="0.02" stroke-width="9"/>
 <circle class="icon-ring-overlay" data-ring="R2" cx="773" cy="286" r="42" fill="none" stroke="transparent" stroke-width="9"/>
@@ -150,7 +150,7 @@ svg{width:100%;height:100%;display:block}
 <text id="pv-surplus" x="903" y="300" font-family="Poppins,sans-serif" font-size="14" fill="rgba(0,0,0,0.65)" opacity="0">(PV Surplus)</text>
 <text x="827" y="326" font-family="Poppins,sans-serif" font-size="14" fill="rgba(0,0,0,0.25)">Real: 4.1kW</text>
 </g>
-<g class="card" data-card="R3">
+<g class="card responsive-right" data-card="R3">
 <rect class="mod-bg" data-module="R3" x="755" y="386" width="276" height="104" rx="8" fill="white" pointer-events="none"/>
 <circle class="icon-ring" cx="773" cy="438" r="42" fill="white" stroke="#000" stroke-opacity="0.02" stroke-width="9"/>
 <circle class="icon-ring-overlay" data-ring="R3" cx="773" cy="438" r="42" fill="none" stroke="transparent" stroke-width="9"/>
@@ -165,14 +165,14 @@ svg{width:100%;height:100%;display:block}
 <rect class="mod-hit" data-module="L1" data-path="top" x="16.6" y="72.4" width="291.9" height="123.3" rx="61.7" fill="transparent" cursor="pointer"/>
 <rect class="mod-hit" data-module="L2" data-path="mid" x="16.6" y="224.4" width="291.9" height="123.3" rx="61.7" fill="transparent" cursor="pointer"/>
 <rect class="mod-hit" data-module="L3" data-path="bot" x="16.6" y="376.4" width="291.9" height="123.3" rx="61.7" fill="transparent" cursor="pointer"/>
-<rect class="mod-hit" data-module="R1" data-path="top" x="709.6" y="72.4" width="314.9" height="123.3" rx="61.7" fill="transparent" cursor="pointer"/>
-<rect class="mod-hit" data-module="R2" data-path="mid" x="709.6" y="224.4" width="314.9" height="123.3" rx="61.7" fill="transparent" cursor="pointer"/>
-<rect class="mod-hit" data-module="R3" data-path="bot" x="709.6" y="376.4" width="314.9" height="123.3" rx="61.7" fill="transparent" cursor="pointer"/>
+<rect class="mod-hit responsive-right" data-module="R1" data-path="top" x="709.6" y="72.4" width="314.9" height="123.3" rx="61.7" fill="transparent" cursor="pointer"/>
+<rect class="mod-hit responsive-right" data-module="R2" data-path="mid" x="709.6" y="224.4" width="314.9" height="123.3" rx="61.7" fill="transparent" cursor="pointer"/>
+<rect class="mod-hit responsive-right" data-module="R3" data-path="bot" x="709.6" y="376.4" width="314.9" height="123.3" rx="61.7" fill="transparent" cursor="pointer"/>
 
-<rect x="439" y="197" width="148" height="176" rx="26" fill="white" stroke="#000" stroke-opacity="0.02" stroke-width="12"/>
-<rect id="inverter-marquee" class="inverter-marquee" x="439" y="197" width="148" height="176" rx="26" fill="none" stroke="url(#inverter-marquee-grad)" stroke-width="12" stroke-linecap="round" pointer-events="none"/>
-<path transform="translate(513 266) scale(2.1) translate(-505 -276)" d="M493.594 274.308C493.594 273.634 493.847 273.387 494.53 273.387H508.853C510.171 273.387 509.904 272.756 509.779 272.466C509.453 271.696 508.93 271.025 508.262 270.521C507.594 270.016 506.805 269.696 505.974 269.592C505.974 269.592 505.342 269.592 505.342 268.691L505.298 264.98C505.298 264.305 505.552 264.059 506.234 264.059C507.911 264.185 509.54 264.671 511.012 265.483C513.506 266.866 515.067 269.005 515.905 271.694C516.468 273.538 516.653 275.478 516.449 277.395C516.45 277.497 516.43 277.598 516.391 277.691C516.353 277.785 516.295 277.87 516.223 277.941C516.15 278.013 516.064 278.068 515.969 278.106C515.875 278.143 515.773 278.161 515.672 278.158C515.537 278.158 515.401 278.158 515.266 278.158H501.443C500.767 278.158 500.507 278.404 500.507 279.082C500.507 280.793 502.991 281.886 504.863 282.119C506.577 282.353 508.317 281.933 509.735 280.941C510.455 280.455 510.651 280.493 511.147 281.194C511.846 282.184 512.543 283.174 513.239 284.163C513.634 284.73 513.577 285.051 513.029 285.459C510.543 287.322 507.446 288.186 504.352 287.881C501.048 287.601 498.27 286.245 496.179 283.681C494.087 281.117 493.212 278.033 493.536 274.683C493.56 274.437 493.594 274.194 493.631 273.951" fill="#16AAAF"/>
-<text x="507" y="327" text-anchor="middle" font-family="Poppins,sans-serif" font-size="18" fill="#16AAAF">Inverter</text>
+<rect id="inverter-card-bg" x="439" y="197" width="148" height="176" rx="26" fill="white" stroke="#000" stroke-opacity="0.02" stroke-width="14"/>
+<rect id="inverter-marquee" class="inverter-marquee" x="439" y="197" width="148" height="176" rx="26" fill="none" stroke="url(#inverter-marquee-grad)" stroke-width="14" stroke-linecap="round" pointer-events="none"/>
+<path id="inverter-icon" transform="translate(513 266) scale(2.1) translate(-505 -276)" d="M493.594 274.308C493.594 273.634 493.847 273.387 494.53 273.387H508.853C510.171 273.387 509.904 272.756 509.779 272.466C509.453 271.696 508.93 271.025 508.262 270.521C507.594 270.016 506.805 269.696 505.974 269.592C505.974 269.592 505.342 269.592 505.342 268.691L505.298 264.98C505.298 264.305 505.552 264.059 506.234 264.059C507.911 264.185 509.54 264.671 511.012 265.483C513.506 266.866 515.067 269.005 515.905 271.694C516.468 273.538 516.653 275.478 516.449 277.395C516.45 277.497 516.43 277.598 516.391 277.691C516.353 277.785 516.295 277.87 516.223 277.941C516.15 278.013 516.064 278.068 515.969 278.106C515.875 278.143 515.773 278.161 515.672 278.158C515.537 278.158 515.401 278.158 515.266 278.158H501.443C500.767 278.158 500.507 278.404 500.507 279.082C500.507 280.793 502.991 281.886 504.863 282.119C506.577 282.353 508.317 281.933 509.735 280.941C510.455 280.455 510.651 280.493 511.147 281.194C511.846 282.184 512.543 283.174 513.239 284.163C513.634 284.73 513.577 285.051 513.029 285.459C510.543 287.322 507.446 288.186 504.352 287.881C501.048 287.601 498.27 286.245 496.179 283.681C494.087 281.117 493.212 278.033 493.536 274.683C493.56 274.437 493.594 274.194 493.631 273.951" fill="#16AAAF"/>
+<text id="inverter-label" x="507" y="327" text-anchor="middle" font-family="Poppins,sans-serif" font-size="18" fill="#16AAAF">Inverter</text>
 </g>
 </svg>
 <canvas id="flow-canvas" width="753" height="390"></canvas>
@@ -237,9 +237,18 @@ grpIds.forEach(function(id){groups[id]=document.getElementById(id);});
 var bgRects=document.querySelectorAll('.mod-bg');
 var hitRects=document.querySelectorAll('.mod-hit');
 var iconRings=document.querySelectorAll('.icon-ring-overlay');
-var svgEl=document.querySelector('svg');
+var wrapEl=document.querySelector('.wrap');
+var svgEl=document.getElementById('power-svg');
 var flowCanvas=document.getElementById('flow-canvas');
 var flowCtx=flowCanvas?flowCanvas.getContext('2d'):null;
+var powerCardBg=document.getElementById('power-card-bg');
+var powerCoreIcon=document.getElementById('power-core-icon');
+var powerCoreLabel=document.getElementById('power-core-label');
+var rightResponsiveEls=document.querySelectorAll('.responsive-right');
+var inverterCardBg=document.getElementById('inverter-card-bg');
+var inverterIcon=document.getElementById('inverter-icon');
+var inverterLabel=document.getElementById('inverter-label');
+var inverterMarqueeGrad=document.getElementById('inverter-marquee-grad');
 var hint=document.getElementById('hint');
 var inverterMarquee=document.getElementById('inverter-marquee');
 var solarDetailBtn=document.getElementById('solar-detail-btn');
@@ -250,12 +259,19 @@ var inverterDetailModal=document.getElementById('inverter-detail-modal');
 var selected=null;
 var activeFlows=[];
 var pendingTimers=[];
+var resizeFlowTimer=null;
 var D=100;   // 虚线长度
 var SPD=0.18; // 单位/ms，越小越慢
 var RESTART_GAP=0;
 var EXIT_TIME=Math.round(D/SPD);
 var FLOW_LINE_WIDTH=4;
 var FLOW_CAP_INSET=FLOW_LINE_WIDTH/2;
+var BASE_CSS_W=753;
+var BASE_CSS_H=390;
+var BASE_VIEWBOX_W=1055;
+var BASE_VIEWBOX_H=546.61;
+var SVG_SCALE=BASE_CSS_H/BASE_VIEWBOX_H;
+var responsiveLayout={viewBoxW:BASE_VIEWBOX_W,deltaSvg:0,centerShift:0,rightShift:0};
 
 var providerColors={
   L1:'#FEBB12',  // Solar
@@ -265,6 +281,103 @@ var providerColors={
 };
 var fallbackRingColor='#16AAAF';
 var PATH_FLOW_ANIMATION_ENABLED=true;
+
+function fmtPathNum(value){
+  return Number(value.toFixed(2)).toString();
+}
+
+function setPathD(id,d){
+  var path=document.getElementById(id);
+  if(path&&path.tagName.toLowerCase()!=='path') path=path.querySelector('path');
+  if(path) path.setAttribute('d',d);
+}
+
+function leftTopD(endX,bendX){
+  return 'M290.5 134H'+fmtPathNum(bendX-16)+'C'+fmtPathNum(bendX-7.2)+' 134 '+fmtPathNum(bendX)+' 141.2 '+fmtPathNum(bendX)+' 150V250C'+fmtPathNum(bendX)+' 258.8 '+fmtPathNum(bendX+7.2)+' 266 '+fmtPathNum(bendX+16)+' 266H'+fmtPathNum(endX);
+}
+
+function leftMidD(endX){
+  return 'M290.5 286H'+fmtPathNum(endX);
+}
+
+function leftBotD(endX,bendX){
+  return 'M290.5 438H'+fmtPathNum(bendX-16)+'C'+fmtPathNum(bendX-7.2)+' 438 '+fmtPathNum(bendX)+' 430.8 '+fmtPathNum(bendX)+' 422V322C'+fmtPathNum(bendX)+' 313.2 '+fmtPathNum(bendX+7.2)+' 306 '+fmtPathNum(bendX+16)+' 306H'+fmtPathNum(endX);
+}
+
+function rightTopD(startX,endX,bendX){
+  return 'M'+fmtPathNum(startX)+' 134H'+fmtPathNum(bendX+16)+'C'+fmtPathNum(bendX+7.2)+' 134 '+fmtPathNum(bendX)+' 141.2 '+fmtPathNum(bendX)+' 150V250C'+fmtPathNum(bendX)+' 258.8 '+fmtPathNum(bendX-7.2)+' 266 '+fmtPathNum(bendX-16)+' 266H'+fmtPathNum(endX);
+}
+
+function rightMidD(startX,endX){
+  return 'M'+fmtPathNum(startX)+' 286H'+fmtPathNum(endX);
+}
+
+function rightBotD(startX,endX,bendX){
+  return 'M'+fmtPathNum(startX)+' 438H'+fmtPathNum(bendX+16)+'C'+fmtPathNum(bendX+7.2)+' 438 '+fmtPathNum(bendX)+' 430.8 '+fmtPathNum(bendX)+' 422V322C'+fmtPathNum(bendX)+' 313.2 '+fmtPathNum(bendX-7.2)+' 306 '+fmtPathNum(bendX-16)+' 306H'+fmtPathNum(endX);
+}
+
+function setInverterX(centerShift){
+  if(inverterCardBg) inverterCardBg.setAttribute('x',fmtPathNum(439+centerShift));
+  if(inverterMarquee) inverterMarquee.setAttribute('x',fmtPathNum(439+centerShift));
+  if(inverterIcon) inverterIcon.setAttribute('transform','translate('+fmtPathNum(513+centerShift)+' 266) scale(2.1) translate(-505 -276)');
+  if(inverterLabel) inverterLabel.setAttribute('x',fmtPathNum(507+centerShift));
+  if(inverterDetailBtn) inverterDetailBtn.style.left=(384+((wrapEl.getBoundingClientRect().width-BASE_CSS_W)/2))+'px';
+  if(inverterMarqueeGrad){
+    inverterMarqueeGrad.setAttribute('x1',fmtPathNum(451+centerShift));
+    inverterMarqueeGrad.setAttribute('x2',fmtPathNum(574+centerShift));
+    var rotate=inverterMarqueeGrad.querySelector('animateTransform');
+    if(rotate){
+      rotate.setAttribute('from','0 '+fmtPathNum(513+centerShift)+' 285');
+      rotate.setAttribute('to','360 '+fmtPathNum(513+centerShift)+' 285');
+    }
+  }
+}
+
+function updateResponsiveLayout(){
+  if(!wrapEl||!svgEl) return;
+  var cssW=Math.max(BASE_CSS_W,wrapEl.getBoundingClientRect().width||BASE_CSS_W);
+  var viewBoxW=cssW/SVG_SCALE;
+  var deltaSvg=Math.max(0,viewBoxW-BASE_VIEWBOX_W);
+  var centerShift=deltaSvg/2;
+  var rightShift=deltaSvg;
+  responsiveLayout={viewBoxW:viewBoxW,deltaSvg:deltaSvg,centerShift:centerShift,rightShift:rightShift};
+
+  svgEl.setAttribute('viewBox','0 0 '+fmtPathNum(viewBoxW)+' '+BASE_VIEWBOX_H);
+  svgEl.setAttribute('width',Math.round(cssW));
+  if(powerCardBg) powerCardBg.setAttribute('width',fmtPathNum(viewBoxW));
+  if(powerCoreIcon) powerCoreIcon.setAttribute('transform','translate('+fmtPathNum(873+rightShift)+' 36) scale(1.35)');
+  if(powerCoreLabel) powerCoreLabel.setAttribute('x',fmtPathNum(894+rightShift));
+
+  rightResponsiveEls.forEach(function(el){
+    el.setAttribute('transform','translate('+fmtPathNum(rightShift)+' 0)');
+  });
+
+  setInverterX(centerShift);
+
+  var leftEdge=433+centerShift;
+  var rightEdge=593+centerShift;
+  var rightStart=727+rightShift;
+  var leftBend=290.5+(leftEdge-290.5)/3;
+  var rightBend=rightStart-(rightStart-rightEdge)/3;
+  setPathD('track-top-l',leftTopD(leftEdge,leftBend));
+  setPathD('track-mid-l',leftMidD(leftEdge));
+  setPathD('track-bot-l',leftBotD(leftEdge,leftBend));
+  setPathD('track-top-r',rightTopD(rightStart,rightEdge,rightBend));
+  setPathD('track-mid-r',rightMidD(rightStart,rightEdge));
+  setPathD('track-bot-r',rightBotD(rightStart,rightEdge,rightBend));
+  setPathD('fg-top-l',leftTopD(leftEdge,leftBend));
+  setPathD('fg-mid-l',leftMidD(leftEdge));
+  setPathD('fg-bot-l',leftBotD(leftEdge,leftBend));
+  setPathD('fg-top-r',rightTopD(rightStart,rightEdge,rightBend));
+  setPathD('fg-mid-r',rightMidD(rightStart,rightEdge));
+  setPathD('fg-bot-r',rightBotD(rightStart,rightEdge,rightBend));
+  if(typeof dualPowerMode!=='undefined'&&dualPowerMode){
+    ['L1','L3'].forEach(function(mid){
+      var track=document.getElementById(hiddenDualTracks[mid]);
+      if(track) track.setAttribute('display','none');
+    });
+  }
+}
 
 var consumerFlows={
   L2:[
@@ -620,9 +733,24 @@ function resetFlowCanvas(){
   clearFlowCanvas();
 }
 
+function restartFlowsAfterResize(){
+  if(resizeFlowTimer!==null) clearTimeout(resizeFlowTimer);
+  resizeFlowTimer=setTimeout(function(){
+    resizeFlowTimer=null;
+    if(selected){
+      restartFlow();
+    }else{
+      autoFlow();
+    }
+  },50);
+}
+
 window.addEventListener('resize',function(){
+  updateResponsiveLayout();
   resizeFlowCanvas();
+  restartFlowsAfterResize();
 });
+updateResponsiveLayout();
 resizeFlowCanvas();
 
 function startFlowTrail(basePath,color,duration,delay,timelineStart,headArrival){
@@ -673,9 +801,11 @@ function getOutflowRange(path){
   var len=path.getTotalLength();
   var end=path.getPointAtLength(len);
   var nearEnd=path.getPointAtLength(Math.max(0,len-2));
-  var centerEdge=end.x>=nearEnd.x?433:593;
+  var leftCenterEdge=433+(responsiveLayout.centerShift||0);
+  var rightCenterEdge=593+(responsiveLayout.centerShift||0);
+  var centerEdge=end.x>=nearEnd.x?leftCenterEdge:rightCenterEdge;
   var pathGroup=path.parentNode&&path.parentNode.id;
-  if(pathGroup==='fg-bot-l') centerEdge=433;
+  if(pathGroup==='fg-bot-l') centerEdge=leftCenterEdge;
   var hidden=Math.abs(end.x-centerEdge);
   var startDist=Math.max(0,len-hidden);
   var endDist=0;
@@ -1076,6 +1206,7 @@ function updateCardText(mid){
 }
 var sliderRanges={L1:[0,216],L2:[-216,216],L3:[-216,0],R1:[-216,216],R2:[-216,216],R3:[-216,0]};
 var dualPowerMode=false;
+var hiddenDualTracks={L1:'track-top-l',L3:'track-bot-l'};
 function resetModuleControl(mid){
   moduleData[mid]=0;
   var slider=document.getElementById('sl-'+mid);
@@ -1103,7 +1234,7 @@ function toggleDualPowerMode(isDual){
       if(mid==='L1'&&solarDetailBtn){solarDetailBtn.style.display='none';closeSolarDetail();}
       if(srow){srow.style.display='';srow.style.opacity='0.35';srow.style.pointerEvents='none';}
       if(grp) grp.setAttribute('display','none');
-      var track=document.getElementById('track-'+mid);
+      var track=document.getElementById(hiddenDualTracks[mid]);
       if(track) track.setAttribute('display','none');
       resetModuleControl(mid);
     }else{
@@ -1112,7 +1243,7 @@ function toggleDualPowerMode(isDual){
       if(mid==='L1'&&solarDetailBtn) solarDetailBtn.style.display='';
       if(srow){srow.style.opacity='';srow.style.pointerEvents='';}
       if(grp) grp.removeAttribute('display');
-      var track=document.getElementById('track-'+mid);
+      var track=document.getElementById(hiddenDualTracks[mid]);
       if(track) track.removeAttribute('display');
       resetModuleControl(mid);
     }
