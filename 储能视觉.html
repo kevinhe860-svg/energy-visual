@@ -403,7 +403,7 @@ function setR2CardLabel(label){
   if(responsiveLayout.narrow){
     var parts=getCardParts('R2');
     if(parts){
-      var centerX=parseFloat(cl.getAttribute('x'))/NARROW_UNIT;
+      var centerX=(responsiveLayout.narrowModuleCenters&&responsiveLayout.narrowModuleCenters.R2)||parseFloat(cl.getAttribute('x'))/NARROW_UNIT;
       var isDual=label==='Dual Power';
       setTextPos(parts.texts[1],centerX,isDual?557:569,'middle');
       setTextPos(parts.texts[2],centerX,isDual?575:585,'middle');
@@ -450,6 +450,10 @@ function setNarrowModule(mid,cfg){
   if(!parts) return;
   parts.card.removeAttribute('transform');
   var centerX=cfg.icon[0];
+  if(responsiveLayout.narrow){
+    if(!responsiveLayout.narrowModuleCenters) responsiveLayout.narrowModuleCenters={};
+    responsiveLayout.narrowModuleCenters[mid]=centerX;
+  }
   setRectPos(parts.bg,cfg.bg[0],cfg.bg[1],cfg.bg[2],cfg.bg[3],8);
   parts.bg.setAttribute('fill-opacity','0');
   parts.bg.removeAttribute('filter');
@@ -520,9 +524,11 @@ function updateNarrowLayout(){
   var cssW=Math.max(NARROW_CSS_W,Math.min(BREAKPOINT_W-1,wrapEl.getBoundingClientRect().width||window.innerWidth||NARROW_CSS_W));
   var viewBoxW=cssW*NARROW_UNIT;
   var c1=cssW/6,c2=cssW/2,c3=cssW*5/6;
+  var midCol=dualPowerMode?c1:c2;
+  var r2Col=dualPowerMode?c1:c2;
   var cardXSvg=n(c2)-74;
   var cardCssX=cardXSvg/NARROW_UNIT;
-  responsiveLayout={viewBoxW:viewBoxW,deltaSvg:0,centerShift:0,rightShift:0,narrow:true,narrowCssW:cssW,narrowCols:{c1:c1,c2:c2,c3:c3},narrowCardCssX:cardCssX};
+  responsiveLayout={viewBoxW:viewBoxW,deltaSvg:0,centerShift:0,rightShift:0,narrow:true,narrowCssW:cssW,narrowCols:{c1:c1,c2:c2,c3:c3},narrowCardCssX:cardCssX,narrowModuleCenters:{}};
   svgEl.setAttribute('viewBox','0 0 '+fmtPathNum(viewBoxW)+' '+fmtPathNum(NARROW_VIEWBOX_H));
   svgEl.setAttribute('width',Math.round(cssW));
   svgEl.setAttribute('height',NARROW_CSS_H);
@@ -548,10 +554,10 @@ function updateNarrowLayout(){
   }
 
   setNarrowModule('L1',{bg:[c1-50,50,100,168],icon:[c1,174],textX:c1,hit:[c1-50,50,100,168]});
-  setNarrowModule('L2',{bg:[c2-50,50,100,168],icon:[c2,174],textX:c2,hit:[c2-50,50,100,168]});
+  setNarrowModule('L2',{bg:[midCol-50,50,100,168],icon:[midCol,174],textX:midCol,hit:[midCol-50,50,100,168]});
   setNarrowModule('L3',{bg:[c1-50,431,100,174],icon:[c1,477],textX:c1,hit:[c1-50,431,100,174]});
   setNarrowModule('R1',{bg:[c3-50,50,100,168],icon:[c3,174],hit:[c3-50,50,100,168]});
-  setNarrowModule('R2',{bg:[c2-50,431,100,174],icon:[c2,477],hit:[c2-50,431,100,174]});
+  setNarrowModule('R2',{bg:[r2Col-50,431,100,174],icon:[r2Col,477],hit:[r2Col-50,431,100,174]});
   setNarrowModule('R3',{bg:[c3-50,431,100,174],icon:[c3,477],hit:[c3-50,431,100,174]});
 
   var cardX=cardXSvg, cardY=n(266);
@@ -609,12 +615,30 @@ function updateNarrowLayout(){
       'C'+fmtPathNum(n(laneX-dir*5))+' '+fmtPathNum(n(418))+' '+fmtPathNum(n(laneX))+' '+fmtPathNum(n(411))+' '+fmtPathNum(n(laneX))+' '+fmtPathNum(n(404))+
       'V'+fmtPathNum(n(bottomY));
   }
+  function sidePathFromTop(startX,endX,endY){
+    var dir=startX<endX?1:-1;
+    return 'M'+fmtPathNum(n(startX))+' '+fmtPathNum(n(ringTopEdge))+
+      'V'+fmtPathNum(n(endY-16))+
+      'C'+fmtPathNum(n(startX))+' '+fmtPathNum(n(endY-7.2))+' '+fmtPathNum(n(startX+dir*7.2))+' '+fmtPathNum(n(endY))+' '+fmtPathNum(n(startX+dir*16))+' '+fmtPathNum(n(endY))+
+      'H'+fmtPathNum(n(endX));
+  }
+  function sidePathFromBottom(startX,endX,endY){
+    var dir=startX<endX?1:-1;
+    return 'M'+fmtPathNum(n(startX))+' '+fmtPathNum(n(ringBottomEdge))+
+      'V'+fmtPathNum(n(endY+16))+
+      'C'+fmtPathNum(n(startX))+' '+fmtPathNum(n(endY+7.2))+' '+fmtPathNum(n(startX+dir*7.2))+' '+fmtPathNum(n(endY))+' '+fmtPathNum(n(startX+dir*16))+' '+fmtPathNum(n(endY))+
+      'H'+fmtPathNum(n(endX));
+  }
+  var leftSide=(cardX-7)/NARROW_UNIT;
+  var rightSide=(cardX+148+7)/NARROW_UNIT;
+  var sideTopY=(cardY+69)/NARROW_UNIT;
+  var sideBottomY=(cardY+109)/NARROW_UNIT;
   var dTopL=topPath(c1,laneL);
-  var dTopM=topPath(c2,laneM);
-  var dTopR=topPath(c3,laneR);
+  var dTopM=dualPowerMode?sidePathFromTop(midCol,leftSide,sideTopY):topPath(midCol,laneM);
+  var dTopR=dualPowerMode?sidePathFromTop(c3,rightSide,sideTopY):topPath(c3,laneR);
   var dBotL=bottomPath(c1,laneL);
-  var dBotM=bottomPath(c2,laneM);
-  var dBotR=bottomPath(c3,laneR);
+  var dBotM=dualPowerMode?sidePathFromBottom(r2Col,leftSide,sideBottomY):bottomPath(r2Col,laneM);
+  var dBotR=dualPowerMode?sidePathFromBottom(c3,rightSide,sideBottomY):bottomPath(c3,laneR);
   setPathD('track-top-l',dTopL); setPathD('fg-top-l',dTopL);
   setPathD('track-mid-l',dTopM); setPathD('fg-mid-l',dTopM);
   setPathD('track-bot-l',dBotL); setPathD('fg-bot-l',dBotL);
@@ -1631,6 +1655,10 @@ function toggleDualPowerMode(isDual){
     }
   });
   if(selected==='L1'||selected==='L3') deselect();
+  if(window.innerWidth<BREAKPOINT_W){
+    updateNarrowLayout();
+    resizeFlowCanvas();
+  }
   if(!selected) autoFlow();
 }
 function updatePvSurplus(){
@@ -1639,8 +1667,9 @@ function updatePvSurplus(){
   if(!el) return;
   el.setAttribute('opacity',fakeR2>0?'1':'0');
   if(responsiveLayout.narrow){
-    var c2=responsiveLayout.narrowCols?responsiveLayout.narrowCols.c2:187.5;
-    el.setAttribute('x',fmtPathNum(n(c2)));
+    var centerX=(responsiveLayout.narrowModuleCenters&&responsiveLayout.narrowModuleCenters.R2)||
+      (responsiveLayout.narrowCols?responsiveLayout.narrowCols.c2:187.5);
+    el.setAttribute('x',fmtPathNum(n(centerX)));
     el.setAttribute('text-anchor','middle');
     return;
   }
