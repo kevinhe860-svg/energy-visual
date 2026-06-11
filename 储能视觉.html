@@ -33,9 +33,7 @@ svg{width:100%;height:100%;display:block}
 .s-val{font-size:11px;color:#999;text-align:left;white-space:nowrap;min-width:120px}
 .s-input{width:52px;border:none;border-bottom:1px solid #ddd;font-size:13px;font-weight:600;color:#000;text-align:center;outline:none;font-family:Poppins,sans-serif;padding:0 2px;background:transparent}
 .s-input:focus{border-bottom-color:#16AAAF}
-.solar-detail-btn{position:absolute;left:116px;top:74px;width:13px;height:13px;border:0;background:transparent;cursor:pointer;z-index:3;display:flex;align-items:center;justify-content:center}
-.solar-detail-btn:before{content:"";width:5px;height:5px;border-right:2px solid #16AAAF;border-bottom:2px solid #16AAAF;transform:rotate(-45deg);border-radius:1px}
-.solar-detail-btn:hover:before{border-color:#0D8F94}
+.solar-detail-btn{position:absolute;left:116px;top:74px;width:13px;height:13px;border:0;background:transparent;cursor:pointer;z-index:3}
 .solar-detail-btn.is-dimmed{opacity:.5}
 .inverter-detail-btn{position:absolute;left:384px;top:229.5px;width:13px;height:13px;border:0;background:transparent;border-radius:7px;cursor:pointer;z-index:4}
 .inverter-detail-btn:after{content:"";position:absolute;left:3px;top:3px;width:5px;height:5px;border-right:2px solid #16AAAF;border-bottom:2px solid #16AAAF;transform:rotate(-45deg);border-radius:1px}
@@ -56,6 +54,12 @@ svg{width:100%;height:100%;display:block}
 .inverter-group h3{font-size:12px;line-height:14px;font-weight:600;margin:0 0 13px}
 .inverter-metric{display:flex;justify-content:space-between;align-items:center;font-size:10px;line-height:12px;color:rgba(0,0,0,.45);margin-bottom:9px}
 .inverter-metric:last-child{margin-bottom:0}
+@media (max-width:752px){
+html,body{padding:20px 0}
+.wrap{width:clamp(375px,100vw,752px);min-width:375px;height:635px}
+#flow-canvas{height:635px}
+.detail-overlay{height:635px}
+}
 </style>
 </head>
 <body>
@@ -104,6 +108,7 @@ svg{width:100%;height:100%;display:block}
 <g class="card" data-card="L1">
 <rect class="mod-bg" data-module="L1" x="74" y="82" width="220" height="104" rx="8" fill="white" pointer-events="none"/>
 <text x="164" y="109" text-anchor="end" font-family="Poppins,sans-serif" font-size="18" font-weight="400" fill="#16AAAF">Solar</text>
+<path id="solar-arrow-icon" d="M0 0L5 5L0 10" transform="translate(172 97)" fill="none" stroke="#16AAAF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
     <text x="180" y="147" text-anchor="end" font-family="Poppins,sans-serif" font-size="24" font-weight="500" fill="rgba(0,0,0,0.85)">3.9kW</text>
 <text x="180" y="173" text-anchor="end" font-family="Poppins,sans-serif" font-size="14" fill="rgba(0,0,0,0.25)">Real: 4.1kW</text>
 <circle class="icon-ring" cx="244" cy="134" r="42" fill="white" stroke="#000" stroke-opacity="0.02" stroke-width="9"/>
@@ -173,6 +178,14 @@ svg{width:100%;height:100%;display:block}
 <rect id="inverter-marquee" class="inverter-marquee" x="439" y="197" width="148" height="176" rx="26" fill="none" stroke="url(#inverter-marquee-grad)" stroke-width="14" stroke-linecap="round" pointer-events="none"/>
 <path id="inverter-icon" transform="translate(513 266) scale(2.1) translate(-505 -276)" d="M493.594 274.308C493.594 273.634 493.847 273.387 494.53 273.387H508.853C510.171 273.387 509.904 272.756 509.779 272.466C509.453 271.696 508.93 271.025 508.262 270.521C507.594 270.016 506.805 269.696 505.974 269.592C505.974 269.592 505.342 269.592 505.342 268.691L505.298 264.98C505.298 264.305 505.552 264.059 506.234 264.059C507.911 264.185 509.54 264.671 511.012 265.483C513.506 266.866 515.067 269.005 515.905 271.694C516.468 273.538 516.653 275.478 516.449 277.395C516.45 277.497 516.43 277.598 516.391 277.691C516.353 277.785 516.295 277.87 516.223 277.941C516.15 278.013 516.064 278.068 515.969 278.106C515.875 278.143 515.773 278.161 515.672 278.158C515.537 278.158 515.401 278.158 515.266 278.158H501.443C500.767 278.158 500.507 278.404 500.507 279.082C500.507 280.793 502.991 281.886 504.863 282.119C506.577 282.353 508.317 281.933 509.735 280.941C510.455 280.455 510.651 280.493 511.147 281.194C511.846 282.184 512.543 283.174 513.239 284.163C513.634 284.73 513.577 285.051 513.029 285.459C510.543 287.322 507.446 288.186 504.352 287.881C501.048 287.601 498.27 286.245 496.179 283.681C494.087 281.117 493.212 278.033 493.536 274.683C493.56 274.437 493.594 274.194 493.631 273.951" fill="#16AAAF"/>
 <text id="inverter-label" x="507" y="327" text-anchor="middle" font-family="Poppins,sans-serif" font-size="18" fill="#16AAAF">Inverter</text>
+<g id="narrow-track-overlay" display="none" pointer-events="none">
+<path id="narrow-track-top-l" fill="none" stroke="#F1F1F1" stroke-width="2"/>
+<path id="narrow-track-mid-l" fill="none" stroke="#F1F1F1" stroke-width="2"/>
+<path id="narrow-track-bot-l" fill="none" stroke="#F1F1F1" stroke-width="2"/>
+<path id="narrow-track-top-r" fill="none" stroke="#F1F1F1" stroke-width="2"/>
+<path id="narrow-track-mid-r" fill="none" stroke="#F1F1F1" stroke-width="2"/>
+<path id="narrow-track-bot-r" fill="none" stroke="#F1F1F1" stroke-width="2"/>
+</g>
 </g>
 </svg>
 <canvas id="flow-canvas" width="753" height="390"></canvas>
@@ -251,6 +264,7 @@ var inverterLabel=document.getElementById('inverter-label');
 var inverterMarqueeGrad=document.getElementById('inverter-marquee-grad');
 var hint=document.getElementById('hint');
 var inverterMarquee=document.getElementById('inverter-marquee');
+var solarArrowIcon=document.getElementById('solar-arrow-icon');
 var solarDetailBtn=document.getElementById('solar-detail-btn');
 var inverterDetailBtn=document.getElementById('inverter-detail-btn');
 var solarDetailOverlay=document.getElementById('solar-detail-overlay');
@@ -271,7 +285,22 @@ var BASE_CSS_H=390;
 var BASE_VIEWBOX_W=1055;
 var BASE_VIEWBOX_H=546.61;
 var SVG_SCALE=BASE_CSS_H/BASE_VIEWBOX_H;
+var BREAKPOINT_W=753;
+var NARROW_CSS_W=375;
+var NARROW_CSS_H=635;
+var NARROW_UNIT=BASE_VIEWBOX_W/BASE_CSS_W;
+var NARROW_VIEWBOX_W=NARROW_CSS_W*NARROW_UNIT;
+var NARROW_VIEWBOX_H=NARROW_CSS_H*NARROW_UNIT;
 var responsiveLayout={viewBoxW:BASE_VIEWBOX_W,deltaSvg:0,centerShift:0,rightShift:0};
+var layoutAttrs=['x','y','width','height','cx','cy','r','rx','d','transform','text-anchor','viewBox'];
+var layoutOriginals=[];
+document.querySelectorAll('#power-svg *').forEach(function(el){
+  var attrs={};
+  layoutAttrs.forEach(function(attr){
+    if(el.hasAttribute(attr)) attrs[attr]=el.getAttribute(attr);
+  });
+  layoutOriginals.push({el:el,attrs:attrs});
+});
 
 var providerColors={
   L1:'#FEBB12',  // Solar
@@ -290,6 +319,316 @@ function setPathD(id,d){
   var path=document.getElementById(id);
   if(path&&path.tagName.toLowerCase()!=='path') path=path.querySelector('path');
   if(path) path.setAttribute('d',d);
+}
+
+function restoreLayoutOriginals(){
+  layoutOriginals.forEach(function(item){
+    layoutAttrs.forEach(function(attr){
+      if(item.attrs[attr]==null) item.el.removeAttribute(attr);
+      else item.el.setAttribute(attr,item.attrs[attr]);
+    });
+  });
+}
+
+function n(value){
+  return value*NARROW_UNIT;
+}
+
+function setElAttrs(el,attrs){
+  if(!el) return;
+  Object.keys(attrs).forEach(function(key){
+    el.setAttribute(key,attrs[key]);
+  });
+}
+
+function getCardParts(mid){
+  var card=document.querySelector('.card[data-card="'+mid+'"]');
+  if(!card) return null;
+  return {
+    card:card,
+    bg:card.querySelector('.mod-bg'),
+    ring:card.querySelector('.icon-ring'),
+    ringOverlay:card.querySelector('.icon-ring-overlay'),
+    image:card.querySelector('image'),
+    texts:card.querySelectorAll('text'),
+    tagRect:card.querySelector('rect:not(.mod-bg)')
+  };
+}
+
+function setTextPos(text,x,y,anchor){
+  if(!text) return;
+  text.setAttribute('x',fmtPathNum(n(x)));
+  text.setAttribute('y',fmtPathNum(n(y)));
+  if(anchor) text.setAttribute('text-anchor',anchor);
+  else text.removeAttribute('text-anchor');
+}
+
+function setSolarArrowSvg(x,y){
+  if(!solarArrowIcon) return;
+  solarArrowIcon.setAttribute('transform','translate('+fmtPathNum(n(x))+' '+fmtPathNum(n(y))+')');
+}
+
+function alignSolarArrowSvgToLabel(){
+  if(!solarArrowIcon||!responsiveLayout.narrow) return;
+  var parts=getCardParts('L1');
+  if(!parts||!parts.texts[0]) return;
+  var box=parts.texts[0].getBBox();
+  var gap=8;
+  solarArrowIcon.setAttribute('transform','translate('+fmtPathNum(box.x+box.width+gap)+' '+fmtPathNum(box.y+(box.height-10)/2)+')');
+}
+
+function setR2CardLabel(label){
+  var cl=document.getElementById('card-label-R2');
+  if(!cl) return;
+  if(responsiveLayout.narrow){
+    cl.setAttribute('y',fmtPathNum(n(531)));
+  }
+  while(cl.firstChild) cl.removeChild(cl.firstChild);
+  if(responsiveLayout.narrow&&label==='Additional Load'){
+    var ns='http://www.w3.org/2000/svg';
+    var x=cl.getAttribute('x');
+    var first=document.createElementNS(ns,'tspan');
+    first.setAttribute('x',x);
+    first.setAttribute('dy','0');
+    first.textContent='Additional';
+    var second=document.createElementNS(ns,'tspan');
+    second.setAttribute('x',x);
+    second.setAttribute('dy','18');
+    second.textContent='Load';
+    cl.appendChild(first);
+    cl.appendChild(second);
+  }else{
+    cl.textContent=label;
+  }
+  if(responsiveLayout.narrow){
+    var parts=getCardParts('R2');
+    if(parts){
+      var centerX=parseFloat(cl.getAttribute('x'))/NARROW_UNIT;
+      var isDual=label==='Dual Power';
+      setTextPos(parts.texts[1],centerX,isDual?557:569,'middle');
+      setTextPos(parts.texts[2],centerX,isDual?575:585,'middle');
+      setTextPos(parts.texts[3],centerX,isDual?595:588,'middle');
+    }
+  }
+}
+
+function setRectPos(rect,x,y,w,h,rx){
+  if(!rect) return;
+  rect.setAttribute('x',fmtPathNum(n(x)));
+  rect.setAttribute('y',fmtPathNum(n(y)));
+  if(w!=null) rect.setAttribute('width',fmtPathNum(n(w)));
+  if(h!=null) rect.setAttribute('height',fmtPathNum(n(h)));
+  if(rx!=null) rect.setAttribute('rx',fmtPathNum(n(rx)));
+}
+
+function setImageCenter(image,cx,cy){
+  if(!image) return;
+  var w=parseFloat(image.getAttribute('width'));
+  var h=parseFloat(image.getAttribute('height'));
+  image.setAttribute('x',fmtPathNum(n(cx)-w/2));
+  image.setAttribute('y',fmtPathNum(n(cy)-h/2));
+}
+
+function setRingCenter(parts,cx,cy){
+  [parts.ring,parts.ringOverlay].forEach(function(circle){
+    if(circle){
+      circle.setAttribute('cx',fmtPathNum(n(cx)));
+      circle.setAttribute('cy',fmtPathNum(n(cy)));
+    }
+  });
+}
+
+function setHitBox(mid,x,y,w,h){
+  var hit=document.querySelector('.mod-hit[data-module="'+mid+'"]');
+  if(!hit) return;
+  setRectPos(hit,x,y,w,h,h/2);
+  hit.removeAttribute('transform');
+}
+
+function setNarrowModule(mid,cfg){
+  var parts=getCardParts(mid);
+  if(!parts) return;
+  parts.card.removeAttribute('transform');
+  var centerX=cfg.icon[0];
+  setRectPos(parts.bg,cfg.bg[0],cfg.bg[1],cfg.bg[2],cfg.bg[3],8);
+  parts.bg.setAttribute('fill-opacity','0');
+  parts.bg.removeAttribute('filter');
+  parts.bg.dataset.narrowX=fmtPathNum(n(cfg.bg[0]));
+  parts.bg.dataset.narrowY=fmtPathNum(n(cfg.bg[1]));
+  parts.bg.dataset.narrowW=fmtPathNum(n(cfg.bg[2]));
+  parts.bg.dataset.narrowH=fmtPathNum(n(cfg.bg[3]));
+  parts.bg.dataset.narrowRx=fmtPathNum(n(8));
+  parts.bg.dataset.narrowCapsuleRx=fmtPathNum(n(cfg.bg[2]/2));
+  setRingCenter(parts,cfg.icon[0],cfg.icon[1]);
+  setImageCenter(parts.image,cfg.icon[0],cfg.icon[1]);
+  if(mid==='L3'){
+    setTextPos(parts.texts[1],centerX,531,'middle');
+    setRectPos(parts.tagRect,centerX-19,537,38,15,3);
+    setTextPos(parts.texts[0],centerX,548,'middle');
+    setTextPos(parts.texts[2],centerX,569,'middle');
+    setTextPos(parts.texts[3],centerX,588,'middle');
+  }else if(mid==='R1'){
+    setTextPos(parts.texts[0],centerX,74,'middle');
+    setRectPos(parts.tagRect,centerX-27,83,54,15,3);
+    setTextPos(parts.texts[1],centerX,94,'middle');
+    setTextPos(parts.texts[2],centerX,114,'middle');
+    setTextPos(parts.texts[3],centerX,133,'middle');
+  }else if(mid==='R3'){
+    setTextPos(parts.texts[0],centerX,531,'middle');
+    setRectPos(parts.tagRect,centerX-19,537,38,15,3);
+    setTextPos(parts.texts[1],centerX,548,'middle');
+    setTextPos(parts.texts[2],centerX,569,'middle');
+    setTextPos(parts.texts[3],centerX,588,'middle');
+  }else if(mid==='R2'){
+    var r2Label=parts.texts[0].textContent==='Dual Power'?'Dual Power':'Additional Load';
+    var isDualR2=r2Label==='Dual Power';
+    setTextPos(parts.texts[0],centerX,531,'middle');
+    setR2CardLabel(r2Label);
+  }else{
+    setTextPos(parts.texts[0],mid==='L1'?centerX-6:centerX,90,'middle');
+    if(mid==='L1'){
+      alignSolarArrowSvgToLabel();
+      requestAnimationFrame(alignSolarArrowSvgToLabel);
+      if(document.fonts&&document.fonts.ready) document.fonts.ready.then(alignSolarArrowSvgToLabel);
+    }
+    setTextPos(parts.texts[1],centerX,116,'middle');
+    setTextPos(parts.texts[2],centerX,133,'middle');
+  }
+  setHitBox(mid,cfg.hit[0],cfg.hit[1],cfg.hit[2],cfg.hit[3]);
+}
+
+function narrowPath(points){
+  return points.map(function(item){
+    if(typeof item==='string') return item;
+    return fmtPathNum(n(item[0]))+' '+fmtPathNum(n(item[1]));
+  }).join('');
+}
+
+function alignSolarDetailButtonToLabel(){
+  if(!solarDetailBtn||!wrapEl) return;
+  var target=solarArrowIcon;
+  if(!target) return;
+  var labelRect=target.getBoundingClientRect();
+  var wrapRect=wrapEl.getBoundingClientRect();
+  if(!labelRect.width||!labelRect.height) return;
+  solarDetailBtn.style.left=fmtPathNum(labelRect.left-wrapRect.left-4)+'px';
+  solarDetailBtn.style.top=fmtPathNum(labelRect.top-wrapRect.top-3)+'px';
+}
+
+function updateNarrowLayout(){
+  restoreLayoutOriginals();
+  var cssW=Math.max(NARROW_CSS_W,Math.min(BREAKPOINT_W-1,wrapEl.getBoundingClientRect().width||window.innerWidth||NARROW_CSS_W));
+  var viewBoxW=cssW*NARROW_UNIT;
+  var c1=cssW/6,c2=cssW/2,c3=cssW*5/6;
+  var cardXSvg=n(c2)-74;
+  var cardCssX=cardXSvg/NARROW_UNIT;
+  responsiveLayout={viewBoxW:viewBoxW,deltaSvg:0,centerShift:0,rightShift:0,narrow:true,narrowCssW:cssW,narrowCols:{c1:c1,c2:c2,c3:c3},narrowCardCssX:cardCssX};
+  svgEl.setAttribute('viewBox','0 0 '+fmtPathNum(viewBoxW)+' '+fmtPathNum(NARROW_VIEWBOX_H));
+  svgEl.setAttribute('width',Math.round(cssW));
+  svgEl.setAttribute('height',NARROW_CSS_H);
+  if(flowCanvas){
+    flowCanvas.style.height=NARROW_CSS_H+'px';
+  }
+  if(powerCardBg){
+    powerCardBg.setAttribute('width',fmtPathNum(viewBoxW));
+    powerCardBg.setAttribute('height',fmtPathNum(NARROW_VIEWBOX_H));
+  }
+  var titleText=null;
+  svgEl.querySelectorAll('text').forEach(function(text){
+    if(text.textContent==='Realtime Power') titleText=text;
+  });
+  if(titleText){
+    titleText.setAttribute('x',fmtPathNum(n(10)));
+    titleText.setAttribute('y',fmtPathNum(n(38)));
+  }
+  if(powerCoreIcon) powerCoreIcon.setAttribute('transform','translate('+fmtPathNum(n(cssW-123))+' '+fmtPathNum(n(26))+') scale(1.35)');
+  if(powerCoreLabel){
+    powerCoreLabel.setAttribute('x',fmtPathNum(n(cssW-107)));
+    powerCoreLabel.setAttribute('y',fmtPathNum(n(36)));
+  }
+
+  setNarrowModule('L1',{bg:[c1-50,50,100,168],icon:[c1,174],textX:c1,hit:[c1-50,50,100,168]});
+  setNarrowModule('L2',{bg:[c2-50,50,100,168],icon:[c2,174],textX:c2,hit:[c2-50,50,100,168]});
+  setNarrowModule('L3',{bg:[c1-50,431,100,174],icon:[c1,477],textX:c1,hit:[c1-50,431,100,174]});
+  setNarrowModule('R1',{bg:[c3-50,50,100,168],icon:[c3,174],hit:[c3-50,50,100,168]});
+  setNarrowModule('R2',{bg:[c2-50,431,100,174],icon:[c2,477],hit:[c2-50,431,100,174]});
+  setNarrowModule('R3',{bg:[c3-50,431,100,174],icon:[c3,477],hit:[c3-50,431,100,174]});
+
+  var cardX=cardXSvg, cardY=n(266);
+  if(inverterCardBg) setElAttrs(inverterCardBg,{x:fmtPathNum(cardX),y:fmtPathNum(cardY)});
+  if(inverterMarquee) setElAttrs(inverterMarquee,{x:fmtPathNum(cardX),y:fmtPathNum(cardY)});
+  var inverterIconX=cardX+74;
+  var inverterIconY=cardY+69;
+  var inverterTextX=cardX+68;
+  var inverterTextY=cardY+130;
+  if(inverterIcon) inverterIcon.setAttribute('transform','translate('+fmtPathNum(inverterIconX)+' '+fmtPathNum(inverterIconY)+') scale(2.1) translate(-505 -276)');
+  if(inverterLabel){
+    inverterLabel.setAttribute('x',fmtPathNum(inverterTextX));
+    inverterLabel.setAttribute('y',fmtPathNum(inverterTextY));
+  }
+  if(inverterMarqueeGrad){
+    inverterMarqueeGrad.setAttribute('x1',fmtPathNum(cardX+12));
+    inverterMarqueeGrad.setAttribute('x2',fmtPathNum(cardX+135));
+    inverterMarqueeGrad.setAttribute('y1',fmtPathNum(cardY+8));
+    inverterMarqueeGrad.setAttribute('y2',fmtPathNum(cardY+168));
+    var narrowRotate=inverterMarqueeGrad.querySelector('animateTransform');
+    if(narrowRotate){
+      narrowRotate.setAttribute('from','0 '+fmtPathNum(cardX+74)+' '+fmtPathNum(cardY+88));
+      narrowRotate.setAttribute('to','360 '+fmtPathNum(cardX+74)+' '+fmtPathNum(cardY+88));
+    }
+  }
+  if(inverterDetailBtn){
+    inverterDetailBtn.style.left=(cardCssX+(384-(439/BASE_VIEWBOX_W*BASE_CSS_W)))+'px';
+    inverterDetailBtn.style.top=(266+(229.5-(197/BASE_VIEWBOX_W*BASE_CSS_W)))+'px';
+  }
+  if(solarDetailBtn){
+    alignSolarDetailButtonToLabel();
+    requestAnimationFrame(alignSolarDetailButtonToLabel);
+    if(document.fonts&&document.fonts.ready) document.fonts.ready.then(alignSolarDetailButtonToLabel);
+  }
+
+  var ringTopEdge=207,ringBottomEdge=444,topY=261,bottomY=397;
+  var laneL=c2-12,laneM=c2,laneR=c2+12;
+  function topPath(startX,laneX){
+    if(Math.abs(startX-laneX)<0.5) return 'M'+fmtPathNum(n(startX))+' '+fmtPathNum(n(ringTopEdge))+'V'+fmtPathNum(n(topY));
+    var dir=startX<laneX?1:-1;
+    return 'M'+fmtPathNum(n(startX))+' '+fmtPathNum(n(ringTopEdge))+
+      'V'+fmtPathNum(n(222))+
+      'C'+fmtPathNum(n(startX))+' '+fmtPathNum(n(231))+' '+fmtPathNum(n(startX+dir*6.5))+' '+fmtPathNum(n(238))+' '+fmtPathNum(n(startX+dir*15.5))+' '+fmtPathNum(n(238))+
+      'H'+fmtPathNum(n(laneX-dir*12))+
+      'C'+fmtPathNum(n(laneX-dir*5))+' '+fmtPathNum(n(238))+' '+fmtPathNum(n(laneX))+' '+fmtPathNum(n(245))+' '+fmtPathNum(n(laneX))+' '+fmtPathNum(n(252))+
+      'V'+fmtPathNum(n(topY));
+  }
+  function bottomPath(startX,laneX){
+    if(Math.abs(startX-laneX)<0.5) return 'M'+fmtPathNum(n(startX))+' '+fmtPathNum(n(ringBottomEdge))+'V'+fmtPathNum(n(bottomY));
+    var dir=startX<laneX?1:-1;
+    return 'M'+fmtPathNum(n(startX))+' '+fmtPathNum(n(ringBottomEdge))+
+      'V'+fmtPathNum(n(434))+
+      'C'+fmtPathNum(n(startX))+' '+fmtPathNum(n(425))+' '+fmtPathNum(n(startX+dir*6.5))+' '+fmtPathNum(n(418))+' '+fmtPathNum(n(startX+dir*15.5))+' '+fmtPathNum(n(418))+
+      'H'+fmtPathNum(n(laneX-dir*12))+
+      'C'+fmtPathNum(n(laneX-dir*5))+' '+fmtPathNum(n(418))+' '+fmtPathNum(n(laneX))+' '+fmtPathNum(n(411))+' '+fmtPathNum(n(laneX))+' '+fmtPathNum(n(404))+
+      'V'+fmtPathNum(n(bottomY));
+  }
+  var dTopL=topPath(c1,laneL);
+  var dTopM=topPath(c2,laneM);
+  var dTopR=topPath(c3,laneR);
+  var dBotL=bottomPath(c1,laneL);
+  var dBotM=bottomPath(c2,laneM);
+  var dBotR=bottomPath(c3,laneR);
+  setPathD('track-top-l',dTopL); setPathD('fg-top-l',dTopL);
+  setPathD('track-mid-l',dTopM); setPathD('fg-mid-l',dTopM);
+  setPathD('track-bot-l',dBotL); setPathD('fg-bot-l',dBotL);
+  setPathD('track-top-r',dTopR); setPathD('fg-top-r',dTopR);
+  setPathD('track-mid-r',dBotM); setPathD('fg-mid-r',dBotM);
+  setPathD('track-bot-r',dBotR); setPathD('fg-bot-r',dBotR);
+  var overlay=document.getElementById('narrow-track-overlay');
+  if(overlay) overlay.setAttribute('display','none');
+  setPathD('narrow-track-top-l',dTopL);
+  setPathD('narrow-track-mid-l',dTopM);
+  setPathD('narrow-track-bot-l',dBotL);
+  setPathD('narrow-track-top-r',dTopR);
+  setPathD('narrow-track-mid-r',dBotM);
+  setPathD('narrow-track-bot-r',dBotR);
 }
 
 function leftTopD(endX,bendX){
@@ -325,6 +664,8 @@ function setInverterX(centerShift){
   if(inverterMarqueeGrad){
     inverterMarqueeGrad.setAttribute('x1',fmtPathNum(451+centerShift));
     inverterMarqueeGrad.setAttribute('x2',fmtPathNum(574+centerShift));
+    inverterMarqueeGrad.setAttribute('y1','205');
+    inverterMarqueeGrad.setAttribute('y2','365');
     var rotate=inverterMarqueeGrad.querySelector('animateTransform');
     if(rotate){
       rotate.setAttribute('from','0 '+fmtPathNum(513+centerShift)+' 285');
@@ -335,12 +676,30 @@ function setInverterX(centerShift){
 
 function updateResponsiveLayout(){
   if(!wrapEl||!svgEl) return;
+  if(window.innerWidth<BREAKPOINT_W){
+    updateNarrowLayout();
+    return;
+  }
+  restoreLayoutOriginals();
+  var narrowOverlay=document.getElementById('narrow-track-overlay');
+  if(narrowOverlay) narrowOverlay.setAttribute('display','none');
+  if(flowCanvas) flowCanvas.style.height=BASE_CSS_H+'px';
+  if(solarArrowIcon) solarArrowIcon.setAttribute('transform','translate(172 97)');
+  if(solarDetailBtn){
+    alignSolarDetailButtonToLabel();
+    requestAnimationFrame(alignSolarDetailButtonToLabel);
+    if(document.fonts&&document.fonts.ready) document.fonts.ready.then(alignSolarDetailButtonToLabel);
+  }
+  if(inverterDetailBtn){
+    inverterDetailBtn.style.top='229.5px';
+  }
   var cssW=Math.max(BASE_CSS_W,wrapEl.getBoundingClientRect().width||BASE_CSS_W);
   var viewBoxW=cssW/SVG_SCALE;
   var deltaSvg=Math.max(0,viewBoxW-BASE_VIEWBOX_W);
   var centerShift=deltaSvg/2;
   var rightShift=deltaSvg;
   responsiveLayout={viewBoxW:viewBoxW,deltaSvg:deltaSvg,centerShift:centerShift,rightShift:rightShift};
+  setR2CardLabel(dualPowerMode?'Dual Power':'Additional Load');
 
   svgEl.setAttribute('viewBox','0 0 '+fmtPathNum(viewBoxW)+' '+BASE_VIEWBOX_H);
   svgEl.setAttribute('width',Math.round(cssW));
@@ -503,6 +862,17 @@ bgRects.forEach(function(bg){
 });
 
 function setBgCapsule(bg,filterId){
+  if(responsiveLayout.narrow){
+    bg.setAttribute('x',bg.dataset.narrowX);
+    bg.setAttribute('y',bg.dataset.narrowY);
+    bg.setAttribute('width',bg.dataset.narrowW);
+    bg.setAttribute('height',bg.dataset.narrowH);
+    bg.setAttribute('rx',bg.dataset.narrowCapsuleRx);
+    bg.setAttribute('fill-opacity','0.82');
+    bg.setAttribute('fill','white');
+    if(filterId) bg.setAttribute('filter','url(#'+filterId+')');
+    return;
+  }
   var x=parseFloat(bg.dataset.baseX);
   var y=parseFloat(bg.dataset.baseY);
   var w=parseFloat(bg.dataset.baseW);
@@ -520,6 +890,16 @@ function setBgCapsule(bg,filterId){
 }
 
 function resetBgCapsule(bg){
+  if(responsiveLayout.narrow){
+    bg.setAttribute('x',bg.dataset.narrowX);
+    bg.setAttribute('y',bg.dataset.narrowY);
+    bg.setAttribute('width',bg.dataset.narrowW);
+    bg.setAttribute('height',bg.dataset.narrowH);
+    bg.setAttribute('rx',bg.dataset.narrowRx);
+    bg.setAttribute('fill-opacity','0');
+    bg.removeAttribute('filter');
+    return;
+  }
   bg.setAttribute('x',bg.dataset.baseX);
   bg.setAttribute('y',bg.dataset.baseY);
   bg.setAttribute('width',bg.dataset.baseW);
@@ -799,6 +1179,9 @@ function getSyncedArrival(lengths){
 
 function getOutflowRange(path){
   var len=path.getTotalLength();
+  if(responsiveLayout.narrow){
+    return {startDist:len,endDist:0,visibleLen:len};
+  }
   var end=path.getPointAtLength(len);
   var nearEnd=path.getPointAtLength(Math.max(0,len-2));
   var leftCenterEdge=433+(responsiveLayout.centerShift||0);
@@ -1197,8 +1580,7 @@ function updateCardText(mid){
   if(mid==='R2'){
     var isDual=disp>0;
     var label=isDual?'Dual Power':'Additional Load';
-    var cl=document.getElementById('card-label-R2');
-    if(cl) cl.textContent=label;
+    setR2CardLabel(label);
     var sl=document.getElementById('sl-label-R2');
     if(sl) sl.textContent=label;
     if(dualPowerMode!==isDual) toggleDualPowerMode(isDual);
@@ -1256,6 +1638,13 @@ function updatePvSurplus(){
   var el=document.getElementById('pv-surplus');
   if(!el) return;
   el.setAttribute('opacity',fakeR2>0?'1':'0');
+  if(responsiveLayout.narrow){
+    var c2=responsiveLayout.narrowCols?responsiveLayout.narrowCols.c2:187.5;
+    el.setAttribute('x',fmtPathNum(n(c2)));
+    el.setAttribute('text-anchor','middle');
+    return;
+  }
+  el.removeAttribute('text-anchor');
   if(fakeR2>0&&displayTexts['R2']){
     var w=displayTexts['R2'].getComputedTextLength();
     el.setAttribute('x',Math.round(827+w+8));
