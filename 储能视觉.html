@@ -36,8 +36,6 @@ svg{width:100%;height:100%;display:block}
 .solar-detail-btn{position:absolute;left:116px;top:74px;width:13px;height:13px;border:0;background:transparent;cursor:pointer;z-index:3}
 .solar-detail-btn.is-dimmed{opacity:.5}
 .inverter-detail-btn{position:absolute;left:384px;top:229.5px;width:13px;height:13px;border:0;background:transparent;border-radius:7px;cursor:pointer;z-index:4}
-.inverter-detail-btn:after{content:"";position:absolute;left:3px;top:3px;width:5px;height:5px;border-right:2px solid #16AAAF;border-bottom:2px solid #16AAAF;transform:rotate(-45deg);border-radius:1px}
-.inverter-detail-btn:hover:after{border-color:#0D8F94}
 .detail-overlay{position:absolute;left:0;top:0;width:100%;height:390px;background:rgba(0,0,0,.22);border-radius:8px;z-index:10;display:none;align-items:center;justify-content:center}
 .detail-overlay.is-open{display:flex}
 .solar-modal{width:240px;min-height:289px;background:#fff;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,.15);padding:27px 20px 22px;font-family:Poppins,sans-serif;color:rgba(0,0,0,.85)}
@@ -107,7 +105,7 @@ html,body{padding:20px 0}
 
 <g class="card" data-card="L1">
 <rect class="mod-bg" data-module="L1" x="74" y="82" width="220" height="104" rx="8" fill="white" pointer-events="none"/>
-<text x="164" y="109" text-anchor="end" font-family="Poppins,sans-serif" font-size="18" font-weight="400" fill="#16AAAF">Solar</text>
+<text id="solar-label" x="164" y="109" text-anchor="end" font-family="Poppins,sans-serif" font-size="18" font-weight="400" fill="#16AAAF">Solar</text>
 <path id="solar-arrow-icon" d="M0 0L5 5L0 10" transform="translate(172 97)" fill="none" stroke="#16AAAF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
     <text x="180" y="147" text-anchor="end" font-family="Poppins,sans-serif" font-size="24" font-weight="500" fill="rgba(0,0,0,0.85)">3.9kW</text>
 <text x="180" y="173" text-anchor="end" font-family="Poppins,sans-serif" font-size="14" fill="rgba(0,0,0,0.25)">Real: 4.1kW</text>
@@ -178,6 +176,7 @@ html,body{padding:20px 0}
 <rect id="inverter-marquee" class="inverter-marquee" x="439" y="197" width="148" height="176" rx="26" fill="none" stroke="url(#inverter-marquee-grad)" stroke-width="14" stroke-linecap="round" pointer-events="none"/>
 <path id="inverter-icon" transform="translate(513 266) scale(2.1) translate(-505 -276)" d="M493.594 274.308C493.594 273.634 493.847 273.387 494.53 273.387H508.853C510.171 273.387 509.904 272.756 509.779 272.466C509.453 271.696 508.93 271.025 508.262 270.521C507.594 270.016 506.805 269.696 505.974 269.592C505.974 269.592 505.342 269.592 505.342 268.691L505.298 264.98C505.298 264.305 505.552 264.059 506.234 264.059C507.911 264.185 509.54 264.671 511.012 265.483C513.506 266.866 515.067 269.005 515.905 271.694C516.468 273.538 516.653 275.478 516.449 277.395C516.45 277.497 516.43 277.598 516.391 277.691C516.353 277.785 516.295 277.87 516.223 277.941C516.15 278.013 516.064 278.068 515.969 278.106C515.875 278.143 515.773 278.161 515.672 278.158C515.537 278.158 515.401 278.158 515.266 278.158H501.443C500.767 278.158 500.507 278.404 500.507 279.082C500.507 280.793 502.991 281.886 504.863 282.119C506.577 282.353 508.317 281.933 509.735 280.941C510.455 280.455 510.651 280.493 511.147 281.194C511.846 282.184 512.543 283.174 513.239 284.163C513.634 284.73 513.577 285.051 513.029 285.459C510.543 287.322 507.446 288.186 504.352 287.881C501.048 287.601 498.27 286.245 496.179 283.681C494.087 281.117 493.212 278.033 493.536 274.683C493.56 274.437 493.594 274.194 493.631 273.951" fill="#16AAAF"/>
 <text id="inverter-label" x="507" y="327" text-anchor="middle" font-family="Poppins,sans-serif" font-size="18" fill="#16AAAF">Inverter</text>
+<path id="inverter-arrow-icon" d="M0 0L5 5L0 10" transform="translate(552 316)" fill="none" stroke="#16AAAF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
 <g id="narrow-track-overlay" display="none" pointer-events="none">
 <path id="narrow-track-top-l" fill="none" stroke="#F1F1F1" stroke-width="2"/>
 <path id="narrow-track-mid-l" fill="none" stroke="#F1F1F1" stroke-width="2"/>
@@ -196,17 +195,17 @@ html,body{padding:20px 0}
   <div class="solar-modal" id="solar-detail-modal" role="dialog" aria-modal="true" aria-labelledby="solar-detail-title">
     <h2 id="solar-detail-title">Solar Array</h2>
     <div class="solar-group">
-      <h3>Solar 1</h3>
+      <h3>MPPT 1</h3>
       <div class="solar-metric"><span>Voltage</span><span>373.1V</span></div>
       <div class="solar-metric"><span>Current</span><span>1A</span></div>
     </div>
     <div class="solar-group">
-      <h3>Solar 2</h3>
+      <h3>MPPT 2</h3>
       <div class="solar-metric"><span>Voltage</span><span>373.1V</span></div>
       <div class="solar-metric"><span>Current</span><span>1A</span></div>
     </div>
     <div class="solar-group">
-      <h3>Solar 3</h3>
+      <h3>MPPT 3</h3>
       <div class="solar-metric"><span>Voltage</span><span>373.1V</span></div>
       <div class="solar-metric"><span>Current</span><span>1A</span></div>
     </div>
@@ -214,17 +213,17 @@ html,body{padding:20px 0}
   <div class="inverter-modal" id="inverter-detail-modal" role="dialog" aria-modal="true" aria-labelledby="inverter-detail-title">
     <h2 id="inverter-detail-title">Inverter Details</h2>
     <div class="inverter-group">
-      <h3>AC 1</h3>
+      <h3>L1</h3>
       <div class="inverter-metric"><span>Voltage</span><span>373.1V</span></div>
       <div class="inverter-metric"><span>Current</span><span>1A</span></div>
     </div>
     <div class="inverter-group">
-      <h3>AC 2</h3>
+      <h3>L2</h3>
       <div class="inverter-metric"><span>Voltage</span><span>373.1V</span></div>
       <div class="inverter-metric"><span>Current</span><span>1A</span></div>
     </div>
     <div class="inverter-group">
-      <h3>AC 3</h3>
+      <h3>L3</h3>
       <div class="inverter-metric"><span>Voltage</span><span>373.1V</span></div>
       <div class="inverter-metric"><span>Current</span><span>1A</span></div>
     </div>
@@ -260,11 +259,13 @@ var powerCoreLabel=document.getElementById('power-core-label');
 var rightResponsiveEls=document.querySelectorAll('.responsive-right');
 var inverterCardBg=document.getElementById('inverter-card-bg');
 var inverterIcon=document.getElementById('inverter-icon');
+var solarLabel=document.getElementById('solar-label');
 var inverterLabel=document.getElementById('inverter-label');
 var inverterMarqueeGrad=document.getElementById('inverter-marquee-grad');
 var hint=document.getElementById('hint');
 var inverterMarquee=document.getElementById('inverter-marquee');
 var solarArrowIcon=document.getElementById('solar-arrow-icon');
+var inverterArrowIcon=document.getElementById('inverter-arrow-icon');
 var solarDetailBtn=document.getElementById('solar-detail-btn');
 var inverterDetailBtn=document.getElementById('inverter-detail-btn');
 var solarDetailOverlay=document.getElementById('solar-detail-overlay');
@@ -375,6 +376,40 @@ function alignSolarArrowSvgToLabel(){
   var box=parts.texts[0].getBBox();
   var gap=8;
   solarArrowIcon.setAttribute('transform','translate('+fmtPathNum(box.x+box.width+gap)+' '+fmtPathNum(box.y+(box.height-10)/2)+')');
+}
+
+function alignInverterArrowSvgToLabel(){
+  if(!inverterArrowIcon||!inverterLabel) return;
+  var box=inverterLabel.getBBox();
+  var gap=8;
+  inverterArrowIcon.setAttribute('transform','translate('+fmtPathNum(box.x+box.width+gap)+' '+fmtPathNum(box.y+(box.height-10)/2)+')');
+}
+
+function alignInverterDetailButtonToArrow(){
+  if(!inverterDetailBtn||!wrapEl||!inverterArrowIcon) return;
+  var iconRect=inverterArrowIcon.getBoundingClientRect();
+  var textRect=inverterLabel?inverterLabel.getBoundingClientRect():null;
+  var wrapRect=wrapEl.getBoundingClientRect();
+  if(!iconRect.width||!iconRect.height||!textRect||!textRect.width||!textRect.height) return;
+  var left=Math.min(iconRect.left,textRect.left)-wrapRect.left-4;
+  var top=Math.min(iconRect.top,textRect.top)-wrapRect.top-3;
+  var right=Math.max(iconRect.right,textRect.right)-wrapRect.left+4;
+  var bottom=Math.max(iconRect.bottom,textRect.bottom)-wrapRect.top+3;
+  inverterDetailBtn.style.left=fmtPathNum(left)+'px';
+  inverterDetailBtn.style.top=fmtPathNum(top)+'px';
+  inverterDetailBtn.style.width=fmtPathNum(right-left)+'px';
+  inverterDetailBtn.style.height=fmtPathNum(bottom-top)+'px';
+}
+
+function alignInverterDetailGroup(){
+  alignInverterArrowSvgToLabel();
+  alignInverterDetailButtonToArrow();
+}
+
+function scheduleInverterDetailGroupAlign(){
+  alignInverterDetailGroup();
+  requestAnimationFrame(alignInverterDetailGroup);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(alignInverterDetailGroup);
 }
 
 function setR2CardLabel(label){
@@ -511,12 +546,20 @@ function narrowPath(points){
 function alignSolarDetailButtonToLabel(){
   if(!solarDetailBtn||!wrapEl) return;
   var target=solarArrowIcon;
-  if(!target) return;
-  var labelRect=target.getBoundingClientRect();
+  var label=solarLabel;
+  if(!target||!label) return;
+  var iconRect=target.getBoundingClientRect();
+  var textRect=label.getBoundingClientRect();
   var wrapRect=wrapEl.getBoundingClientRect();
-  if(!labelRect.width||!labelRect.height) return;
-  solarDetailBtn.style.left=fmtPathNum(labelRect.left-wrapRect.left-4)+'px';
-  solarDetailBtn.style.top=fmtPathNum(labelRect.top-wrapRect.top-3)+'px';
+  if(!iconRect.width||!iconRect.height||!textRect.width||!textRect.height) return;
+  var left=Math.min(iconRect.left,textRect.left)-wrapRect.left-4;
+  var top=Math.min(iconRect.top,textRect.top)-wrapRect.top-3;
+  var right=Math.max(iconRect.right,textRect.right)-wrapRect.left+4;
+  var bottom=Math.max(iconRect.bottom,textRect.bottom)-wrapRect.top+3;
+  solarDetailBtn.style.left=fmtPathNum(left)+'px';
+  solarDetailBtn.style.top=fmtPathNum(top)+'px';
+  solarDetailBtn.style.width=fmtPathNum(right-left)+'px';
+  solarDetailBtn.style.height=fmtPathNum(bottom-top)+'px';
 }
 
 function updateNarrowLayout(){
@@ -583,10 +626,7 @@ function updateNarrowLayout(){
       narrowRotate.setAttribute('to','360 '+fmtPathNum(cardX+74)+' '+fmtPathNum(cardY+88));
     }
   }
-  if(inverterDetailBtn){
-    inverterDetailBtn.style.left=(cardCssX+(384-(439/BASE_VIEWBOX_W*BASE_CSS_W)))+'px';
-    inverterDetailBtn.style.top=(266+(229.5-(197/BASE_VIEWBOX_W*BASE_CSS_W)))+'px';
-  }
+  scheduleInverterDetailGroupAlign();
   if(solarDetailBtn){
     alignSolarDetailButtonToLabel();
     requestAnimationFrame(alignSolarDetailButtonToLabel);
@@ -685,7 +725,7 @@ function setInverterX(centerShift){
   if(inverterMarquee) inverterMarquee.setAttribute('x',fmtPathNum(439+centerShift));
   if(inverterIcon) inverterIcon.setAttribute('transform','translate('+fmtPathNum(513+centerShift)+' 266) scale(2.1) translate(-505 -276)');
   if(inverterLabel) inverterLabel.setAttribute('x',fmtPathNum(507+centerShift));
-  if(inverterDetailBtn) inverterDetailBtn.style.left=(384+((wrapEl.getBoundingClientRect().width-BASE_CSS_W)/2))+'px';
+  scheduleInverterDetailGroupAlign();
   if(inverterMarqueeGrad){
     inverterMarqueeGrad.setAttribute('x1',fmtPathNum(451+centerShift));
     inverterMarqueeGrad.setAttribute('x2',fmtPathNum(574+centerShift));
@@ -714,9 +754,6 @@ function updateResponsiveLayout(){
     alignSolarDetailButtonToLabel();
     requestAnimationFrame(alignSolarDetailButtonToLabel);
     if(document.fonts&&document.fonts.ready) document.fonts.ready.then(alignSolarDetailButtonToLabel);
-  }
-  if(inverterDetailBtn){
-    inverterDetailBtn.style.top='229.5px';
   }
   var cssW=Math.max(BASE_CSS_W,wrapEl.getBoundingClientRect().width||BASE_CSS_W);
   var viewBoxW=cssW/SVG_SCALE;
@@ -1264,7 +1301,7 @@ function runConsumerCycle(mid){
   var cGrp=groups[cG];
   var cFl=cGrp.querySelector('.fl');
   // 汇聚后的消费路径颜色：单供电方用供电方颜色，多供电方用紫色
-  var consumerColor=flows.length===1?providerColors[flows[0].prov]:'#794EAD';
+  var consumerColor=flows.length===1?providerColors[flows[0].prov]:'#95509B';
   cGrp.setAttribute('opacity','1');
 
   var providerRuns=[];
@@ -1409,7 +1446,7 @@ function restartFlow(){
     });
     if(moduleData[mid]===0||activeIds.length<=1){dimInactive([mid]);hint.textContent='数值为0';return;}
     dimInactive(activeIds);
-    var selectedConsumerColor=activeIds.length===2?providerColors[activeIds[1]]:'#794EAD';
+    var selectedConsumerColor=activeIds.length===2?providerColors[activeIds[1]]:'#95509B';
     setRingBreath(activeIds,buildRingColors(activeIds,selectedConsumerColor,[mid]));
     runConsumerCycle(mid);
     hint.textContent='电流流动中';
@@ -1482,7 +1519,7 @@ function autoFlow(){
   });
 
   // 用电方颜色：单供电方用供电方颜色，多供电方用紫色
-  var consumerColor=providers.length===1?providerColors[providers[0]]:'#794EAD';
+  var consumerColor=providers.length===1?providerColors[providers[0]]:'#95509B';
   var autoActiveIds=[];
   providers.forEach(function(mid){if(autoActiveIds.indexOf(mid)===-1) autoActiveIds.push(mid);});
   consumers.forEach(function(mid){if(autoActiveIds.indexOf(mid)===-1) autoActiveIds.push(mid);});
