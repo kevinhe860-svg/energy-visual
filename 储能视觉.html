@@ -8,8 +8,44 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+:root{
+  /* Black/01 */
+  --color-black-01:rgba(0,0,0,.85);
+  /* Character/Title .85 */
+  --color-title-85:rgba(0,0,0,.85);
+  /* Black/02 */
+  --color-black-02:rgba(0,0,0,.45);
+  /* Black/03 */
+  --color-black-03:rgba(0,0,0,.25);
+  /* Black/05 */
+  --color-black-05:rgba(0,0,0,.06);
+  /* Brand/06 */
+  --color-brand-06:#16AAAF;
+  /* Danger/04 */
+  --color-danger-04:#F195A7;
+  /* Danger/01 */
+  --color-danger-01:#FDEEF1;
+  /* white/01 */
+  --color-white-01:#FFFFFF;
+  /* Neutral/13 */
+  --color-neutral-13:#000000;
+  /* Character/Disabled & Placeholder .25 */
+  --color-placeholder-25:rgba(0,0,0,.25);
+  --color-page-bg:#F5F5F5;
+  --color-control-border:#E2E2E2;
+  --color-control-text:rgba(0,0,0,.55);
+  --color-slider-track:#E0E0E0;
+  --color-slider-disabled:rgba(224,224,224,.5);
+  --color-input-underline:#DDDDDD;
+  --color-control-helper:#BBBBBB;
+  --font-poppins:Poppins,sans-serif;
+  --svg-font-h5-medium:22.43px;
+  --svg-font-body-regular:19.62px;
+  --svg-font-footnote-description:16.82px;
+  --svg-font-footnote-small:14.02px;
+}
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;background:#F5F5F5;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:auto;padding:20px 0}
+html,body{width:100%;height:100%;background:var(--color-page-bg);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:auto;padding:20px 0}
 .wrap{position:relative;width:min(1920px,max(753px,calc(100vw - 40px)));min-width:753px;height:390px}
 svg{width:100%;height:100%;display:block}
 #flow-canvas{position:absolute;left:0;top:0;width:100%;height:390px;pointer-events:none;z-index:1}
@@ -21,36 +57,40 @@ svg{width:100%;height:100%;display:block}
 .icon-ring-overlay{opacity:0;transition:opacity .22s ease}
 .icon-ring-overlay.is-breathing{opacity:1}
 .hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.55);color:#fff;padding:6px 18px;border-radius:16px;font-size:12px;pointer-events:none;opacity:.75;font-family:-apple-system,BlinkMacSystemFont,sans-serif;white-space:nowrap}
-.panel{width:fit-content;min-width:460px;background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-top:12px;padding:16px 20px 12px;font-family:Poppins,sans-serif}
-.panel-title{font-size:14px;font-weight:600;color:rgba(0,0,0,.85);margin-bottom:10px}
+.panel{width:fit-content;min-width:460px;background:var(--color-white-01);border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-top:12px;padding:16px 20px 12px;font-family:var(--font-poppins)}
+.panel-title{font-size:14px;font-weight:500;color:var(--color-black-01);margin-bottom:10px}
+.device-tabs{display:flex;gap:8px;margin-bottom:12px}
+.device-tab{border:1px solid var(--color-control-border);background:var(--color-white-01);color:var(--color-control-text);border-radius:999px;padding:5px 12px;font-family:var(--font-poppins);font-size:12px;line-height:16px;cursor:pointer;transition:background .18s ease,border-color .18s ease,color .18s ease}
+.device-tab.is-active{border-color:var(--color-brand-06);background:rgba(22,170,175,.08);color:var(--color-brand-06)}
 .s-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
 .s-row:last-child{margin-bottom:0}
-.s-label{width:108px;font-size:12px;color:#666;flex-shrink:0;white-space:nowrap}
+.s-label{width:108px;font-size:12px;color:var(--color-black-02);flex-shrink:0;white-space:nowrap}
 .slider-wrap{position:relative;width:220px;display:inline-flex;align-items:center}
 .center-mark{position:absolute;left:50%;width:1px;height:12px;background:#999;pointer-events:none;z-index:1;border-radius:1px}
-.s-slider{width:100%;height:6px;-webkit-appearance:none;appearance:none;background:#E0E0E0;border-radius:3px;outline:none}
-.s-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#16AAAF;cursor:pointer;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)}
-.s-val{font-size:11px;color:#999;text-align:left;white-space:nowrap;min-width:120px}
-.s-input{width:52px;border:none;border-bottom:1px solid #ddd;font-size:13px;font-weight:600;color:#000;text-align:center;outline:none;font-family:Poppins,sans-serif;padding:0 2px;background:transparent}
-.s-input:focus{border-bottom-color:#16AAAF}
+.s-slider{width:100%;height:6px;-webkit-appearance:none;appearance:none;background:var(--color-slider-track);border-radius:3px;outline:none}
+.s-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--color-brand-06);cursor:pointer;border:2px solid var(--color-white-01);box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.s-val{font-size:11px;color:var(--color-black-03);text-align:left;white-space:nowrap;min-width:120px}
+.s-input{width:52px;border:none;border-bottom:1px solid var(--color-input-underline);font-size:13px;font-weight:600;color:var(--color-title-85);text-align:center;outline:none;font-family:var(--font-poppins);padding:0 2px;background:transparent}
+.s-input:focus{border-bottom-color:var(--color-brand-06)}
+.s-real-meta{color:var(--color-control-helper);font-size:10px}
 .solar-detail-btn{position:absolute;left:116px;top:74px;width:13px;height:13px;border:0;background:transparent;cursor:pointer;z-index:3}
 .solar-detail-btn.is-dimmed{opacity:.5}
 .inverter-detail-btn{position:absolute;left:384px;top:229.5px;width:13px;height:13px;border:0;background:transparent;border-radius:7px;cursor:pointer;z-index:4}
 .detail-overlay{position:absolute;left:0;top:0;width:100%;height:390px;background:rgba(0,0,0,.22);border-radius:8px;z-index:10;display:none;align-items:center;justify-content:center}
 .detail-overlay.is-open{display:flex}
-.solar-modal{width:240px;min-height:289px;background:#fff;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,.15);padding:27px 20px 22px;font-family:Poppins,sans-serif;color:rgba(0,0,0,.85)}
-.solar-modal h2{font-size:14px;line-height:17px;font-weight:600;margin:0 0 23px}
+.solar-modal{width:240px;background:var(--color-white-01);border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,.15);padding:27px 20px 22px;font-family:var(--font-poppins);color:var(--color-black-01)}
+.solar-modal h2{font-size:14px;line-height:22px;font-weight:500;margin:0 0 23px}
 .solar-group{margin-bottom:21px}
 .solar-group:last-child{margin-bottom:0}
-.solar-group h3{font-size:12px;line-height:14px;font-weight:600;margin:0 0 13px}
-.solar-metric{display:flex;justify-content:space-between;align-items:center;font-size:10px;line-height:12px;color:rgba(0,0,0,.45);margin-bottom:9px}
+.solar-group h3{font-size:12px;line-height:20px;font-weight:400;margin:0 0 13px}
+.solar-metric{display:flex;justify-content:space-between;align-items:center;font-size:10px;line-height:12px;color:var(--color-black-02);margin-bottom:9px}
 .solar-metric:last-child{margin-bottom:0}
-.inverter-modal{width:240px;min-height:289px;background:#fff;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,.15);padding:27px 20px 22px;font-family:Poppins,sans-serif;color:rgba(0,0,0,.85);display:none}
-.inverter-modal h2{font-size:14px;line-height:17px;font-weight:600;margin:0 0 23px}
+.inverter-modal{width:240px;background:var(--color-white-01);border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,.15);padding:27px 20px 22px;font-family:var(--font-poppins);color:var(--color-black-01);display:none}
+.inverter-modal h2{font-size:14px;line-height:22px;font-weight:500;margin:0 0 23px}
 .inverter-group{margin-bottom:21px}
 .inverter-group:last-child{margin-bottom:0}
-.inverter-group h3{font-size:12px;line-height:14px;font-weight:600;margin:0 0 13px}
-.inverter-metric{display:flex;justify-content:space-between;align-items:center;font-size:10px;line-height:12px;color:rgba(0,0,0,.45);margin-bottom:9px}
+.inverter-group h3{font-size:12px;line-height:20px;font-weight:400;margin:0 0 13px}
+.inverter-metric{display:flex;justify-content:space-between;align-items:center;font-size:10px;line-height:12px;color:var(--color-black-02);margin-bottom:9px}
 .inverter-metric:last-child{margin-bottom:0}
 @media (max-width:752px){
 html,body{padding:20px 0}
@@ -78,23 +118,23 @@ html,body{padding:20px 0}
   <animateTransform attributeName="gradientTransform" type="rotate" from="0 513 285" to="360 513 285" dur="7s" repeatCount="indefinite"/>
 </linearGradient>
 </defs>
-<rect id="power-card-bg" width="1055" height="546.61" rx="8" fill="white"/>
-<text x="26" y="53" font-family="Poppins,sans-serif" font-size="22" font-weight="500" fill="rgba(0,0,0,0.85)">Realtime Power</text>
-<g id="power-core-icon" transform="translate(873 36) scale(1.35)" opacity="0.6">
-<path d="M7 13.5C7 13.776 7.224 14 7.5 14C7.776 14 8 13.776 8 13.5V12.977H7V13.5Z" fill="black" fill-opacity="0.45"/>
-<path d="M2.01 13.5C2.01 13.776 2.234 14 2.51 14C2.786 14 3.01 13.776 3.01 13.5V12.977H2.01V13.5Z" fill="black" fill-opacity="0.45"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M1.885 1.258C1.609 1.258 1.385 1.482 1.385 1.758V11.476C1.385 11.752 1.609 11.976 1.885 11.976H8.113C8.389 11.976 8.613 11.752 8.613 11.476V1.758C8.613 1.482 8.389 1.258 8.113 1.258H1.885ZM0.385 1.758C0.385 0.93 1.056 0.258 1.885 0.258H8.113C8.942 0.258 9.613 0.93 9.613 1.758V11.476C9.613 12.305 8.942 12.976 8.113 12.976H1.885C1.056 12.976 0.385 12.305 0.385 11.476V1.758Z" fill="black" fill-opacity="0.45"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M6.291 5.509C6.202 5.503 6.115 5.5 6.031 5.5H6.029C5.049 5.499 4.365 5.911 4.09 6.3C3.863 6.62 3.757 6.928 3.742 7.215C3.731 7.435 3.772 7.663 3.878 7.898C4.839 7.915 5.405 7.491 5.75 7.023C5.936 6.772 6.06 6.503 6.138 6.272C6.176 6.158 6.202 6.056 6.218 5.975C6.226 5.935 6.231 5.902 6.234 5.876C6.235 5.863 6.236 5.853 6.237 5.845L6.237 5.837V5.834C6.237 5.714 6.258 5.606 6.291 5.509ZM3.096 8.562C2.842 8.12 2.718 7.647 2.743 7.164C2.769 6.657 2.957 6.17 3.274 5.722C3.774 5.016 4.796 4.498 6.031 4.5C6.336 4.5 6.658 4.531 6.992 4.601C7.073 4.618 7.18 4.647 7.28 4.708C7.386 4.772 7.525 4.899 7.564 5.11C7.6 5.307 7.527 5.464 7.475 5.548C7.421 5.635 7.353 5.707 7.294 5.761C7.264 5.788 7.249 5.809 7.242 5.822C7.237 5.831 7.237 5.833 7.237 5.834C7.237 6.014 7.186 6.292 7.086 6.591C6.982 6.9 6.814 7.266 6.555 7.617C6.068 8.277 5.268 8.861 4.053 8.897C4.047 8.939 4.044 8.974 4.044 9C4.044 9.276 3.821 9.5 3.544 9.5C3.268 9.5 3.044 9.276 3.044 9C3.044 8.861 3.068 8.702 3.096 8.562Z" fill="black" fill-opacity="0.45"/>
+<rect id="power-card-bg" width="1055" height="546.61" rx="8" fill="var(--color-white-01)"/>
+<text x="26" y="53" font-family="Poppins,sans-serif" font-size="var(--svg-font-h5-medium)" font-weight="500" fill="var(--color-black-01)">Realtime Power</text>
+<g id="power-core-icon" transform="translate(873 36) scale(1.35)">
+<path d="M7 13.5C7 13.776 7.224 14 7.5 14C7.776 14 8 13.776 8 13.5V12.977H7V13.5Z" fill="var(--color-black-02)"/>
+<path d="M2.01 13.5C2.01 13.776 2.234 14 2.51 14C2.786 14 3.01 13.776 3.01 13.5V12.977H2.01V13.5Z" fill="var(--color-black-02)"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M1.885 1.258C1.609 1.258 1.385 1.482 1.385 1.758V11.476C1.385 11.752 1.609 11.976 1.885 11.976H8.113C8.389 11.976 8.613 11.752 8.613 11.476V1.758C8.613 1.482 8.389 1.258 8.113 1.258H1.885ZM0.385 1.758C0.385 0.93 1.056 0.258 1.885 0.258H8.113C8.942 0.258 9.613 0.93 9.613 1.758V11.476C9.613 12.305 8.942 12.976 8.113 12.976H1.885C1.056 12.976 0.385 12.305 0.385 11.476V1.758Z" fill="var(--color-black-02)"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M6.291 5.509C6.202 5.503 6.115 5.5 6.031 5.5H6.029C5.049 5.499 4.365 5.911 4.09 6.3C3.863 6.62 3.757 6.928 3.742 7.215C3.731 7.435 3.772 7.663 3.878 7.898C4.839 7.915 5.405 7.491 5.75 7.023C5.936 6.772 6.06 6.503 6.138 6.272C6.176 6.158 6.202 6.056 6.218 5.975C6.226 5.935 6.231 5.902 6.234 5.876C6.235 5.863 6.236 5.853 6.237 5.845L6.237 5.837V5.834C6.237 5.714 6.258 5.606 6.291 5.509ZM3.096 8.562C2.842 8.12 2.718 7.647 2.743 7.164C2.769 6.657 2.957 6.17 3.274 5.722C3.774 5.016 4.796 4.498 6.031 4.5C6.336 4.5 6.658 4.531 6.992 4.601C7.073 4.618 7.18 4.647 7.28 4.708C7.386 4.772 7.525 4.899 7.564 5.11C7.6 5.307 7.527 5.464 7.475 5.548C7.421 5.635 7.353 5.707 7.294 5.761C7.264 5.788 7.249 5.809 7.242 5.822C7.237 5.831 7.237 5.833 7.237 5.834C7.237 6.014 7.186 6.292 7.086 6.591C6.982 6.9 6.814 7.266 6.555 7.617C6.068 8.277 5.268 8.861 4.053 8.897C4.047 8.939 4.044 8.974 4.044 9C4.044 9.276 3.821 9.5 3.544 9.5C3.268 9.5 3.044 9.276 3.044 9C3.044 8.861 3.068 8.702 3.096 8.562Z" fill="var(--color-black-02)"/>
 </g>
-<text id="power-core-label" x="894" y="51" font-family="Poppins,sans-serif" font-size="17" font-weight="400" fill="rgba(0,0,0,0.45)">Power Core 3.0</text>
+<text id="power-core-label" x="894" y="51" font-family="Poppins,sans-serif" font-size="var(--svg-font-footnote-description)" font-weight="400" fill="var(--color-black-02)">Power Core</text>
 
 <g id="power-content" transform="translate(0 10)">
-<path id="track-top-l" d="M290.5 134H320C328.8 134 336 141.2 336 150V250C336 258.8 343.2 266 352 266H433" stroke="#F1F1F1" stroke-width="2"/>
-<path id="track-top-r" d="M727 134H698C689.2 134 682 141.2 682 150V250C682 258.8 674.8 266 666 266H593" stroke="#F1F1F1" stroke-width="2"/>
-<path id="track-mid-l" d="M290.5 286H433" stroke="#F1F1F1" stroke-width="2"/>
-<path id="track-mid-r" d="M727 286H593" stroke="#F1F1F1" stroke-width="2"/>
-<path id="track-bot-l" d="M290.5 438H320C328.8 438 336 430.8 336 422V322C336 313.2 343.2 306 352 306H433" stroke="#F1F1F1" stroke-width="2"/>
-<path id="track-bot-r" d="M727 438H698C689.2 438 682 430.8 682 422V322C682 313.2 674.8 306 666 306H593" stroke="#F1F1F1" stroke-width="2"/>
+<path id="track-top-l" d="M290.5 134H320C328.8 134 336 141.2 336 150V250C336 258.8 343.2 266 352 266H433" stroke="var(--color-black-05)" stroke-width="2"/>
+<path id="track-top-r" d="M727 134H698C689.2 134 682 141.2 682 150V250C682 258.8 674.8 266 666 266H593" stroke="var(--color-black-05)" stroke-width="2"/>
+<path id="track-mid-l" d="M290.5 286H433" stroke="var(--color-black-05)" stroke-width="2"/>
+<path id="track-mid-r" d="M727 286H593" stroke="var(--color-black-05)" stroke-width="2"/>
+<path id="track-bot-l" d="M290.5 438H320C328.8 438 336 430.8 336 422V322C336 313.2 343.2 306 352 306H433" stroke="var(--color-black-05)" stroke-width="2"/>
+<path id="track-bot-r" d="M727 438H698C689.2 438 682 430.8 682 422V322C682 313.2 674.8 306 666 306H593" stroke="var(--color-black-05)" stroke-width="2"/>
 
 <g id="fg-top-l" opacity="0"><path class="fl" fill="none" stroke="none" stroke-width="4" stroke-linecap="round" d="M290.5 134H320C328.8 134 336 141.2 336 150V250C336 258.8 343.2 266 352 266H433"/></g>
 <g id="fg-top-r" opacity="0"><path class="fl" fill="none" stroke="none" stroke-width="4" stroke-linecap="round" d="M727 134H698C689.2 134 682 141.2 682 150V250C682 258.8 674.8 266 666 266H593"/></g>
@@ -104,65 +144,65 @@ html,body{padding:20px 0}
 <g id="fg-bot-r" opacity="0"><path class="fl" fill="none" stroke="none" stroke-width="4" stroke-linecap="round" d="M727 438H698C689.2 438 682 430.8 682 422V322C682 313.2 674.8 306 666 306H593"/></g>
 
 <g class="card" data-card="L1">
-<rect class="mod-bg" data-module="L1" x="74" y="82" width="220" height="104" rx="8" fill="white" pointer-events="none"/>
-<text id="solar-label" x="164" y="109" text-anchor="end" font-family="Poppins,sans-serif" font-size="18" font-weight="400" fill="#16AAAF">Solar</text>
-<path id="solar-arrow-icon" d="M0 0L5 5L0 10" transform="translate(172 97)" fill="none" stroke="#16AAAF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
-    <text x="180" y="147" text-anchor="end" font-family="Poppins,sans-serif" font-size="24" font-weight="500" fill="rgba(0,0,0,0.85)">3.9kW</text>
-<text x="180" y="173" text-anchor="end" font-family="Poppins,sans-serif" font-size="14" fill="rgba(0,0,0,0.25)">Real: 4.1kW</text>
-<circle class="icon-ring" cx="244" cy="134" r="42" fill="white" stroke="#000" stroke-opacity="0.02" stroke-width="9"/>
+<rect class="mod-bg" data-module="L1" x="74" y="82" width="220" height="104" rx="8" fill="var(--color-white-01)" pointer-events="none"/>
+<text id="solar-label" x="164" y="109" text-anchor="end" font-family="Poppins,sans-serif" font-size="var(--svg-font-body-regular)" font-weight="400" fill="var(--color-brand-06)">Solar</text>
+<path id="solar-arrow-icon" d="M0 0L5 5L0 10" transform="translate(172 97)" fill="none" stroke="var(--color-brand-06)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+    <text x="180" y="147" text-anchor="end" font-family="Poppins,sans-serif" font-size="var(--svg-font-h5-medium)" font-weight="500" fill="var(--color-title-85)">3.9kW</text>
+<text x="180" y="173" text-anchor="end" font-family="Poppins,sans-serif" font-size="var(--svg-font-footnote-small)" fill="var(--color-black-03)">Real: 4.1kW</text>
+<circle class="icon-ring" cx="244" cy="134" r="42" fill="var(--color-white-01)" stroke="#000" stroke-opacity="0.02" stroke-width="9"/>
 <circle class="icon-ring-overlay" data-ring="L1" cx="244" cy="134" r="42" fill="none" stroke="transparent" stroke-width="9"/>
 <image x="212.5" y="106.1" width="62.9" height="56.9" preserveAspectRatio="xMidYMid meet" xlink:href="icon/Solar.png"/>
 </g>
 <g class="card" data-card="L2">
-<rect class="mod-bg" data-module="L2" x="74" y="234" width="220" height="104" rx="8" fill="white" pointer-events="none"/>
-<text x="180" y="262" text-anchor="end" font-family="Poppins,sans-serif" font-size="18" fill="#16AAAF">Battery</text>
-    <text x="180" y="300" text-anchor="end" font-family="Poppins,sans-serif" font-size="24" font-weight="500" fill="rgba(0,0,0,0.85)">3.9kW</text>
-<text x="180" y="326" text-anchor="end" font-family="Poppins,sans-serif" font-size="14" fill="rgba(0,0,0,0.25)">Real: 4.1kW</text>
-<circle class="icon-ring" cx="244" cy="286" r="42" fill="white" stroke="#000" stroke-opacity="0.02" stroke-width="9"/>
+<rect class="mod-bg" data-module="L2" x="74" y="234" width="220" height="104" rx="8" fill="var(--color-white-01)" pointer-events="none"/>
+<text x="180" y="262" text-anchor="end" font-family="Poppins,sans-serif" font-size="var(--svg-font-body-regular)" fill="var(--color-brand-06)">Battery</text>
+    <text x="180" y="300" text-anchor="end" font-family="Poppins,sans-serif" font-size="var(--svg-font-h5-medium)" font-weight="500" fill="var(--color-title-85)">3.9kW</text>
+<text x="180" y="326" text-anchor="end" font-family="Poppins,sans-serif" font-size="var(--svg-font-footnote-small)" fill="var(--color-black-03)">Real: 4.1kW</text>
+<circle class="icon-ring" cx="244" cy="286" r="42" fill="var(--color-white-01)" stroke="#000" stroke-opacity="0.02" stroke-width="9"/>
 <circle class="icon-ring-overlay" data-ring="L2" cx="244" cy="286" r="42" fill="none" stroke="transparent" stroke-width="9"/>
 <image x="223.8" y="253.8" width="40.5" height="63.5" preserveAspectRatio="xMidYMid meet" xlink:href="icon/Battery.png"/>
 </g>
 <g class="card" data-card="L3">
-<rect class="mod-bg" data-module="L3" x="36" y="386" width="258" height="104" rx="8" fill="white" pointer-events="none"/>
-<rect x="55" y="394" width="52" height="20" rx="4" fill="#FDEEF1"/><text x="60" y="409" font-family="Poppins,sans-serif" font-size="13" fill="#F195A7">AC Off</text>
-<text x="180" y="410" text-anchor="end" font-family="Poppins,sans-serif" font-size="18" fill="#16AAAF">Vehicle</text>
-    <text x="180" y="448" text-anchor="end" font-family="Poppins,sans-serif" font-size="24" font-weight="500" fill="rgba(0,0,0,0.85)">3.9kW</text>
-<text x="180" y="474" text-anchor="end" font-family="Poppins,sans-serif" font-size="14" fill="rgba(0,0,0,0.25)">Real: 4.1kW</text>
-<circle class="icon-ring" cx="244" cy="438" r="42" fill="white" stroke="#000" stroke-opacity="0.02" stroke-width="9"/>
+<rect class="mod-bg" data-module="L3" x="36" y="386" width="258" height="104" rx="8" fill="var(--color-white-01)" pointer-events="none"/>
+<rect x="55" y="394" width="52" height="20" rx="4" fill="var(--color-danger-01)"/><text x="60" y="409" font-family="Poppins,sans-serif" font-size="var(--svg-font-footnote-small)" fill="var(--color-danger-04)">AC Off</text>
+<text x="180" y="410" text-anchor="end" font-family="Poppins,sans-serif" font-size="var(--svg-font-body-regular)" fill="var(--color-brand-06)">Vehicle</text>
+    <text x="180" y="448" text-anchor="end" font-family="Poppins,sans-serif" font-size="var(--svg-font-h5-medium)" font-weight="500" fill="var(--color-title-85)">3.9kW</text>
+<text x="180" y="474" text-anchor="end" font-family="Poppins,sans-serif" font-size="var(--svg-font-footnote-small)" fill="var(--color-black-03)">Real: 4.1kW</text>
+<circle class="icon-ring" cx="244" cy="438" r="42" fill="var(--color-white-01)" stroke="#000" stroke-opacity="0.02" stroke-width="9"/>
 <circle class="icon-ring-overlay" data-ring="L3" cx="244" cy="438" r="42" fill="none" stroke="transparent" stroke-width="9"/>
 <image x="207.3" y="414.5" width="73.4" height="47.2" preserveAspectRatio="xMidYMid meet" xlink:href="icon/Vehicle.png"/>
 </g>
 <g class="card responsive-right" data-card="R1">
-<rect class="mod-bg" data-module="R1" x="755" y="82" width="220" height="104" rx="8" fill="white" pointer-events="none"/>
-<circle class="icon-ring" cx="773" cy="134" r="42" fill="white" stroke="#000" stroke-opacity="0.02" stroke-width="9"/>
+<rect class="mod-bg" data-module="R1" x="755" y="82" width="220" height="104" rx="8" fill="var(--color-white-01)" pointer-events="none"/>
+<circle class="icon-ring" cx="773" cy="134" r="42" fill="var(--color-white-01)" stroke="#000" stroke-opacity="0.02" stroke-width="9"/>
 <circle class="icon-ring-overlay" data-ring="R1" cx="773" cy="134" r="42" fill="none" stroke="transparent" stroke-width="9"/>
 <image x="744.5" y="100" width="57" height="68.1" preserveAspectRatio="xMidYMid meet" xlink:href="icon/Grid.png"/>
-<text x="827" y="109" font-family="Poppins,sans-serif" font-size="18" fill="#16AAAF">Grid</text>
-<rect x="871" y="91" width="73" height="22" rx="4" fill="#FDEEF1"/>
-<text x="877" y="107" font-family="Poppins,sans-serif" font-size="14" fill="#F195A7">No meter</text>
-    <text x="827" y="147" font-family="Poppins,sans-serif" font-size="24" font-weight="500" fill="rgba(0,0,0,0.85)">3.9kW</text>
-<text x="827" y="173" font-family="Poppins,sans-serif" font-size="14" fill="rgba(0,0,0,0.25)">Real: 4.1kW</text>
+<text x="827" y="109" font-family="Poppins,sans-serif" font-size="var(--svg-font-body-regular)" fill="var(--color-brand-06)">Grid</text>
+<rect x="871" y="91" width="73" height="22" rx="4" fill="var(--color-danger-01)"/>
+<text x="877" y="107" font-family="Poppins,sans-serif" font-size="var(--svg-font-footnote-small)" fill="var(--color-danger-04)">No meter</text>
+    <text x="827" y="147" font-family="Poppins,sans-serif" font-size="var(--svg-font-h5-medium)" font-weight="500" fill="var(--color-title-85)">3.9kW</text>
+<text x="827" y="173" font-family="Poppins,sans-serif" font-size="var(--svg-font-footnote-small)" fill="var(--color-black-03)">Real: 4.1kW</text>
 </g>
 <g class="card responsive-right" data-card="R2">
-<rect class="mod-bg" data-module="R2" x="755" y="234" width="250" height="104" rx="8" fill="white" pointer-events="none"/>
-<circle class="icon-ring" cx="773" cy="286" r="42" fill="white" stroke="#000" stroke-opacity="0.02" stroke-width="9"/>
+<rect class="mod-bg" data-module="R2" x="755" y="234" width="250" height="104" rx="8" fill="var(--color-white-01)" pointer-events="none"/>
+<circle class="icon-ring" cx="773" cy="286" r="42" fill="var(--color-white-01)" stroke="#000" stroke-opacity="0.02" stroke-width="9"/>
 <circle class="icon-ring-overlay" data-ring="R2" cx="773" cy="286" r="42" fill="none" stroke="transparent" stroke-width="9"/>
 <image x="739.9" y="256.6" width="66.2" height="59.8" preserveAspectRatio="xMidYMid meet" xlink:href="icon/Dual Power.png"/>
-<text id="card-label-R2" x="827" y="262" font-family="Poppins,sans-serif" font-size="18" fill="#16AAAF">Dual Power</text>
-    <text x="827" y="300" font-family="Poppins,sans-serif" font-size="24" font-weight="500" fill="rgba(0,0,0,0.85)">3.9kW</text>
-<text id="pv-surplus" x="903" y="300" font-family="Poppins,sans-serif" font-size="14" fill="rgba(0,0,0,0.65)" opacity="0">(PV Surplus)</text>
-<text x="827" y="326" font-family="Poppins,sans-serif" font-size="14" fill="rgba(0,0,0,0.25)">Real: 4.1kW</text>
+<text id="card-label-R2" x="827" y="262" font-family="Poppins,sans-serif" font-size="var(--svg-font-body-regular)" fill="var(--color-brand-06)">Dual Power</text>
+    <text x="827" y="300" font-family="Poppins,sans-serif" font-size="var(--svg-font-h5-medium)" font-weight="500" fill="var(--color-title-85)">3.9kW</text>
+<text id="pv-surplus" x="903" y="300" font-family="Poppins,sans-serif" font-size="var(--svg-font-footnote-description)" fill="var(--color-black-01)" opacity="0">(PV Surplus)</text>
+<text x="827" y="326" font-family="Poppins,sans-serif" font-size="var(--svg-font-footnote-small)" fill="var(--color-black-03)">Real: 4.1kW</text>
 </g>
 <g class="card responsive-right" data-card="R3">
-<rect class="mod-bg" data-module="R3" x="755" y="386" width="276" height="104" rx="8" fill="white" pointer-events="none"/>
-<circle class="icon-ring" cx="773" cy="438" r="42" fill="white" stroke="#000" stroke-opacity="0.02" stroke-width="9"/>
+<rect class="mod-bg" data-module="R3" x="755" y="386" width="276" height="104" rx="8" fill="var(--color-white-01)" pointer-events="none"/>
+<circle class="icon-ring" cx="773" cy="438" r="42" fill="var(--color-white-01)" stroke="#000" stroke-opacity="0.02" stroke-width="9"/>
 <circle class="icon-ring-overlay" data-ring="R3" cx="773" cy="438" r="42" fill="none" stroke="transparent" stroke-width="9"/>
 <image x="739.9" y="409.5" width="66.2" height="58" preserveAspectRatio="xMidYMid meet" xlink:href="icon/KeepON Load.png"/>
-<text x="827" y="410" font-family="Poppins,sans-serif" font-size="18" fill="#16AAAF">KeepON Load</text>
-<rect x="954" y="394" width="52" height="20" rx="4" fill="#FDEEF1"/>
-<text x="959" y="409" font-family="Poppins,sans-serif" font-size="13" fill="#F195A7">AC Off</text>
-    <text x="827" y="448" font-family="Poppins,sans-serif" font-size="24" font-weight="500" fill="rgba(0,0,0,0.85)">3.9kW</text>
-<text x="827" y="474" font-family="Poppins,sans-serif" font-size="14" fill="rgba(0,0,0,0.25)">Real: 4.1kW</text>
+<text x="827" y="410" font-family="Poppins,sans-serif" font-size="var(--svg-font-body-regular)" fill="var(--color-brand-06)">KeepON Load</text>
+<rect x="954" y="394" width="52" height="20" rx="4" fill="var(--color-danger-01)"/>
+<text x="959" y="409" font-family="Poppins,sans-serif" font-size="var(--svg-font-footnote-small)" fill="var(--color-danger-04)">AC Off</text>
+    <text x="827" y="448" font-family="Poppins,sans-serif" font-size="var(--svg-font-h5-medium)" font-weight="500" fill="var(--color-title-85)">3.9kW</text>
+<text x="827" y="474" font-family="Poppins,sans-serif" font-size="var(--svg-font-footnote-small)" fill="var(--color-black-03)">Real: 4.1kW</text>
 </g>
 
 <rect class="mod-hit" data-module="L1" data-path="top" x="16.6" y="72.4" width="291.9" height="123.3" rx="61.7" fill="transparent" cursor="pointer"/>
@@ -172,18 +212,18 @@ html,body{padding:20px 0}
 <rect class="mod-hit responsive-right" data-module="R2" data-path="mid" x="709.6" y="224.4" width="314.9" height="123.3" rx="61.7" fill="transparent" cursor="pointer"/>
 <rect class="mod-hit responsive-right" data-module="R3" data-path="bot" x="709.6" y="376.4" width="314.9" height="123.3" rx="61.7" fill="transparent" cursor="pointer"/>
 
-<rect id="inverter-card-bg" x="439" y="197" width="148" height="176" rx="26" fill="white" stroke="#000" stroke-opacity="0.02" stroke-width="14"/>
+<rect id="inverter-card-bg" x="439" y="197" width="148" height="176" rx="26" fill="var(--color-white-01)" stroke="#000" stroke-opacity="0.02" stroke-width="14"/>
 <rect id="inverter-marquee" class="inverter-marquee" x="439" y="197" width="148" height="176" rx="26" fill="none" stroke="url(#inverter-marquee-grad)" stroke-width="14" stroke-linecap="round" pointer-events="none"/>
-<path id="inverter-icon" transform="translate(513 266) scale(2.1) translate(-505 -276)" d="M493.594 274.308C493.594 273.634 493.847 273.387 494.53 273.387H508.853C510.171 273.387 509.904 272.756 509.779 272.466C509.453 271.696 508.93 271.025 508.262 270.521C507.594 270.016 506.805 269.696 505.974 269.592C505.974 269.592 505.342 269.592 505.342 268.691L505.298 264.98C505.298 264.305 505.552 264.059 506.234 264.059C507.911 264.185 509.54 264.671 511.012 265.483C513.506 266.866 515.067 269.005 515.905 271.694C516.468 273.538 516.653 275.478 516.449 277.395C516.45 277.497 516.43 277.598 516.391 277.691C516.353 277.785 516.295 277.87 516.223 277.941C516.15 278.013 516.064 278.068 515.969 278.106C515.875 278.143 515.773 278.161 515.672 278.158C515.537 278.158 515.401 278.158 515.266 278.158H501.443C500.767 278.158 500.507 278.404 500.507 279.082C500.507 280.793 502.991 281.886 504.863 282.119C506.577 282.353 508.317 281.933 509.735 280.941C510.455 280.455 510.651 280.493 511.147 281.194C511.846 282.184 512.543 283.174 513.239 284.163C513.634 284.73 513.577 285.051 513.029 285.459C510.543 287.322 507.446 288.186 504.352 287.881C501.048 287.601 498.27 286.245 496.179 283.681C494.087 281.117 493.212 278.033 493.536 274.683C493.56 274.437 493.594 274.194 493.631 273.951" fill="#16AAAF"/>
-<text id="inverter-label" x="507" y="327" text-anchor="middle" font-family="Poppins,sans-serif" font-size="18" fill="#16AAAF">Inverter</text>
-<path id="inverter-arrow-icon" d="M0 0L5 5L0 10" transform="translate(552 316)" fill="none" stroke="#16AAAF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+<path id="inverter-icon" transform="translate(513 266) scale(2.1) translate(-505 -276)" d="M493.594 274.308C493.594 273.634 493.847 273.387 494.53 273.387H508.853C510.171 273.387 509.904 272.756 509.779 272.466C509.453 271.696 508.93 271.025 508.262 270.521C507.594 270.016 506.805 269.696 505.974 269.592C505.974 269.592 505.342 269.592 505.342 268.691L505.298 264.98C505.298 264.305 505.552 264.059 506.234 264.059C507.911 264.185 509.54 264.671 511.012 265.483C513.506 266.866 515.067 269.005 515.905 271.694C516.468 273.538 516.653 275.478 516.449 277.395C516.45 277.497 516.43 277.598 516.391 277.691C516.353 277.785 516.295 277.87 516.223 277.941C516.15 278.013 516.064 278.068 515.969 278.106C515.875 278.143 515.773 278.161 515.672 278.158C515.537 278.158 515.401 278.158 515.266 278.158H501.443C500.767 278.158 500.507 278.404 500.507 279.082C500.507 280.793 502.991 281.886 504.863 282.119C506.577 282.353 508.317 281.933 509.735 280.941C510.455 280.455 510.651 280.493 511.147 281.194C511.846 282.184 512.543 283.174 513.239 284.163C513.634 284.73 513.577 285.051 513.029 285.459C510.543 287.322 507.446 288.186 504.352 287.881C501.048 287.601 498.27 286.245 496.179 283.681C494.087 281.117 493.212 278.033 493.536 274.683C493.56 274.437 493.594 274.194 493.631 273.951" fill="var(--color-brand-06)"/>
+<text id="inverter-label" x="507" y="327" text-anchor="middle" font-family="Poppins,sans-serif" font-size="var(--svg-font-body-regular)" fill="var(--color-brand-06)">Inverter</text>
+<path id="inverter-arrow-icon" d="M0 0L5 5L0 10" transform="translate(552 316)" fill="none" stroke="var(--color-brand-06)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
 <g id="narrow-track-overlay" display="none" pointer-events="none">
-<path id="narrow-track-top-l" fill="none" stroke="#F1F1F1" stroke-width="2"/>
-<path id="narrow-track-mid-l" fill="none" stroke="#F1F1F1" stroke-width="2"/>
-<path id="narrow-track-bot-l" fill="none" stroke="#F1F1F1" stroke-width="2"/>
-<path id="narrow-track-top-r" fill="none" stroke="#F1F1F1" stroke-width="2"/>
-<path id="narrow-track-mid-r" fill="none" stroke="#F1F1F1" stroke-width="2"/>
-<path id="narrow-track-bot-r" fill="none" stroke="#F1F1F1" stroke-width="2"/>
+<path id="narrow-track-top-l" fill="none" stroke="var(--color-black-05)" stroke-width="2"/>
+<path id="narrow-track-mid-l" fill="none" stroke="var(--color-black-05)" stroke-width="2"/>
+<path id="narrow-track-bot-l" fill="none" stroke="var(--color-black-05)" stroke-width="2"/>
+<path id="narrow-track-top-r" fill="none" stroke="var(--color-black-05)" stroke-width="2"/>
+<path id="narrow-track-mid-r" fill="none" stroke="var(--color-black-05)" stroke-width="2"/>
+<path id="narrow-track-bot-r" fill="none" stroke="var(--color-black-05)" stroke-width="2"/>
 </g>
 </g>
 </svg>
@@ -231,13 +271,18 @@ html,body{padding:20px 0}
 </div>
 </div>
 <div class="panel">
+<div class="device-tabs" id="device-tabs" role="group" aria-label="Device type">
+  <button class="device-tab is-active" type="button" data-device="core">Power Core</button>
+  <button class="device-tab" type="button" data-device="store">Power Store</button>
+  <button class="device-tab" type="button" data-device="sense">Power Sense</button>
+</div>
 <div class="panel-title">数据控制</div>
-<div class="s-row" id="srow-L1"><span class="s-label">Solar</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-L1" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-L1"><input class="s-input" type="number" id="si-L1" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-L1">0.0</span></small></span></div>
-<div class="s-row"><span class="s-label">Battery</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-L2" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-L2"><input class="s-input" type="number" id="si-L2" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-L2">0.0</span></small></span></div>
-<div class="s-row" id="srow-L3"><span class="s-label">Vehicle</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-L3" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-L3"><input class="s-input" type="number" id="si-L3" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-L3">0.0</span></small></span></div>
-<div class="s-row"><span class="s-label">Grid</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-R1" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-R1"><input class="s-input" type="number" id="si-R1" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-R1">0.0</span></small></span></div>
-<div class="s-row"><span class="s-label" id="sl-label-R2">Dual Power</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-R2" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-R2"><input class="s-input" type="number" id="si-R2" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-R2">0.0</span></small></span></div>
-<div class="s-row"><span class="s-label">KeepON Load</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-R3" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-R3"><input class="s-input" type="number" id="si-R3" value="0.0" step="0.1">kW <small style="color:#bbb;font-size:10px">/ <span id="sr-R3">0.0</span></small></span></div>
+<div class="s-row" id="srow-L1"><span class="s-label">Solar</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-L1" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-L1"><input class="s-input" type="number" id="si-L1" value="0.0" step="0.1">kW <small class="s-real-meta">/ <span id="sr-L1">0.0</span></small></span></div>
+<div class="s-row" id="srow-L2"><span class="s-label">Battery</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-L2" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-L2"><input class="s-input" type="number" id="si-L2" value="0.0" step="0.1">kW <small class="s-real-meta">/ <span id="sr-L2">0.0</span></small></span></div>
+<div class="s-row" id="srow-L3"><span class="s-label">Vehicle</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-L3" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-L3"><input class="s-input" type="number" id="si-L3" value="0.0" step="0.1">kW <small class="s-real-meta">/ <span id="sr-L3">0.0</span></small></span></div>
+<div class="s-row" id="srow-R1"><span class="s-label">Grid</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-R1" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-R1"><input class="s-input" type="number" id="si-R1" value="0.0" step="0.1">kW <small class="s-real-meta">/ <span id="sr-R1">0.0</span></small></span></div>
+<div class="s-row" id="srow-R2"><span class="s-label" id="sl-label-R2">Dual Power</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-R2" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-R2"><input class="s-input" type="number" id="si-R2" value="0.0" step="0.1">kW <small class="s-real-meta">/ <span id="sr-R2">0.0</span></small></span></div>
+<div class="s-row" id="srow-R3"><span class="s-label">KeepON Load</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-R3" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-R3"><input class="s-input" type="number" id="si-R3" value="0.0" step="0.1">kW <small class="s-real-meta">/ <span id="sr-R3">0.0</span></small></span></div>
 </div>
 <div class="hint" id="hint">点击设备模块查看电流流向</div>
 <script>
@@ -303,14 +348,72 @@ document.querySelectorAll('#power-svg *').forEach(function(el){
   layoutOriginals.push({el:el,attrs:attrs});
 });
 
-var providerColors={
-  L1:'#FEBB12',  // Solar
-  L2:'#4FBFC3',  // Battery
-  R1:'#4485E8',  // Grid
-  R2:'#FEBB12'   // Dual Power
+function tokenColor(name,fallback){
+  var value=getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return value||fallback;
+}
+var ringColors={
+  L1:'#F1B727',
+  L2:'#16AAAF',
+  L3:'#E16DC2',
+  R1:'#6499EA',
+  R2:'#F1B727',
+  R3:'#E16DC2'
 };
-var fallbackRingColor='#16AAAF';
+var providerColors={
+  L1:ringColors.L1,
+  L2:ringColors.L2,
+  R1:ringColors.R1,
+  R2:ringColors.R2
+};
+var designColors={
+  brand06:tokenColor('--color-brand-06','#16AAAF'),
+  white01:'var(--color-white-01)',
+  consumerMixed:'#E16DC2'
+};
+var fallbackRingColor=designColors.brand06;
 var PATH_FLOW_ANIMATION_ENABLED=true;
+var allModules=['L1','L2','L3','R1','R2','R3'];
+var pathGroupToModule={'fg-top-l':'L1','fg-mid-l':'L2','fg-bot-l':'L3','fg-top-r':'R1','fg-mid-r':'R2','fg-bot-r':'R3'};
+var modulePathGroup={'L1':'fg-top-l','L2':'fg-mid-l','L3':'fg-bot-l','R1':'fg-top-r','R2':'fg-mid-r','R3':'fg-bot-r'};
+var moduleTrackIds={'L1':'track-top-l','L2':'track-mid-l','L3':'track-bot-l','R1':'track-top-r','R2':'track-mid-r','R3':'track-bot-r'};
+var activeDevice='core';
+var deviceConfigs={
+  core:{
+    label:'Power Core',
+    supported:['L1','L2','L3','R1','R2','R3'],
+    r2Positive:false,
+    solarItems:['MPPT 1','MPPT 2','MPPT 3'],
+    inverterItems:['L1','L2','L3']
+  },
+  store:{
+    label:'Power Store',
+    supported:['L2','R1','R2','R3'],
+    r2Positive:true,
+    solarItems:[],
+    inverterItems:['L1','L2','L3']
+  },
+  sense:{
+    label:'Power Sense',
+    supported:['L1','L2','R1','R2','R3'],
+    r2Positive:true,
+    solarItems:['MPPT 1','MPPT 2'],
+    inverterItems:['L1']
+  }
+};
+
+function currentDeviceConfig(){
+  return deviceConfigs[activeDevice]||deviceConfigs.core;
+}
+
+function isModuleSupported(mid){
+  return currentDeviceConfig().supported.indexOf(mid)>-1;
+}
+
+function isPathAllowed(groupId){
+  var mid=pathGroupToModule[groupId];
+  return !mid||isModuleSupported(mid);
+}
 
 function fmtPathNum(value){
   return Number(value.toFixed(2)).toString();
@@ -567,8 +670,8 @@ function updateNarrowLayout(){
   var cssW=Math.max(NARROW_CSS_W,Math.min(BREAKPOINT_W-1,wrapEl.getBoundingClientRect().width||window.innerWidth||NARROW_CSS_W));
   var viewBoxW=cssW*NARROW_UNIT;
   var c1=cssW/6,c2=cssW/2,c3=cssW*5/6;
-  var midCol=dualPowerMode?c1:c2;
-  var r2Col=dualPowerMode?c1:c2;
+  var midCol=activeDevice==='store'?c1:c2;
+  var r2Col=(activeDevice==='store'||activeDevice==='sense'||dualPowerMode)?c1:c2;
   var cardXSvg=n(c2)-74;
   var cardCssX=cardXSvg/NARROW_UNIT;
   responsiveLayout={viewBoxW:viewBoxW,deltaSvg:0,centerShift:0,rightShift:0,narrow:true,narrowCssW:cssW,narrowCols:{c1:c1,c2:c2,c3:c3},narrowCardCssX:cardCssX,narrowModuleCenters:{}};
@@ -673,12 +776,15 @@ function updateNarrowLayout(){
   var rightSide=(cardX+148+7)/NARROW_UNIT;
   var sideTopY=(cardY+69)/NARROW_UNIT;
   var sideBottomY=(cardY+109)/NARROW_UNIT;
+  var useSideCenterPaths=false;
+  var topMidLane=activeDevice==='store'?laneL:laneM;
+  var bottomMidLane=(activeDevice==='store'||activeDevice==='sense')?laneL:laneM;
   var dTopL=topPath(c1,laneL);
-  var dTopM=dualPowerMode?sidePathFromTop(midCol,leftSide,sideTopY):topPath(midCol,laneM);
-  var dTopR=dualPowerMode?sidePathFromTop(c3,rightSide,sideTopY):topPath(c3,laneR);
+  var dTopM=useSideCenterPaths?sidePathFromTop(midCol,leftSide,sideTopY):topPath(midCol,topMidLane);
+  var dTopR=useSideCenterPaths?sidePathFromTop(c3,rightSide,sideTopY):topPath(c3,laneR);
   var dBotL=bottomPath(c1,laneL);
-  var dBotM=dualPowerMode?sidePathFromBottom(r2Col,leftSide,sideBottomY):bottomPath(r2Col,laneM);
-  var dBotR=dualPowerMode?sidePathFromBottom(c3,rightSide,sideBottomY):bottomPath(c3,laneR);
+  var dBotM=useSideCenterPaths?sidePathFromBottom(r2Col,leftSide,sideBottomY):bottomPath(r2Col,bottomMidLane);
+  var dBotR=useSideCenterPaths?sidePathFromBottom(c3,rightSide,sideBottomY):bottomPath(c3,laneR);
   setPathD('track-top-l',dTopL); setPathD('fg-top-l',dTopL);
   setPathD('track-mid-l',dTopM); setPathD('fg-mid-l',dTopM);
   setPathD('track-bot-l',dBotL); setPathD('fg-bot-l',dBotL);
@@ -693,6 +799,7 @@ function updateNarrowLayout(){
   setPathD('narrow-track-top-r',dTopR);
   setPathD('narrow-track-mid-r',dBotM);
   setPathD('narrow-track-bot-r',dBotR);
+  applyDeviceVisibility();
   restoreSelectedCapsule();
 }
 
@@ -736,6 +843,22 @@ function setInverterX(centerShift){
       rotate.setAttribute('from','0 '+fmtPathNum(513+centerShift)+' 285');
       rotate.setAttribute('to','360 '+fmtPathNum(513+centerShift)+' 285');
     }
+  }
+}
+
+function applyWideDeviceLayoutAdjustments(leftEdge,leftBend){
+  var moveBatteryToBottom=activeDevice==='sense';
+  var batteryCard=document.querySelector('.card[data-card="L2"]');
+  var batteryHit=document.querySelector('.mod-hit[data-module="L2"]');
+  if(moveBatteryToBottom){
+    if(batteryCard) batteryCard.setAttribute('transform','translate(0 152)');
+    if(batteryHit) batteryHit.setAttribute('transform','translate(0 152)');
+    var d=leftBotD(leftEdge,leftBend);
+    setPathD('track-mid-l',d);
+    setPathD('fg-mid-l',d);
+  }else{
+    if(batteryCard) batteryCard.removeAttribute('transform');
+    if(batteryHit) batteryHit.removeAttribute('transform');
   }
 }
 
@@ -792,12 +915,8 @@ function updateResponsiveLayout(){
   setPathD('fg-top-r',rightTopD(rightStart,rightEdge,rightBend));
   setPathD('fg-mid-r',rightMidD(rightStart,rightEdge));
   setPathD('fg-bot-r',rightBotD(rightStart,rightEdge,rightBend));
-  if(typeof dualPowerMode!=='undefined'&&dualPowerMode){
-    ['L1','L3'].forEach(function(mid){
-      var track=document.getElementById(hiddenDualTracks[mid]);
-      if(track) track.setAttribute('display','none');
-    });
-  }
+  applyWideDeviceLayoutAdjustments(leftEdge,leftBend);
+  applyDeviceVisibility();
   restoreSelectedCapsule();
 }
 
@@ -908,8 +1027,6 @@ var flowMap={
   R3:[]
 };
 
-var pathGroupToModule={'fg-top-l':'L1','fg-mid-l':'L2','fg-bot-l':'L3','fg-top-r':'R1','fg-mid-r':'R2','fg-bot-r':'R3'};
-var allModules=['L1','L2','L3','R1','R2','R3'];
 var CAPSULE_W=326.9;
 var CAPSULE_H=123.3;
 var CAPSULE_RX=CAPSULE_H/2;
@@ -932,7 +1049,7 @@ function setBgCapsule(bg,filterId){
     bg.setAttribute('height',bg.dataset.narrowH);
     bg.setAttribute('rx',bg.dataset.narrowCapsuleRx);
     bg.setAttribute('fill-opacity','0.82');
-    bg.setAttribute('fill','white');
+    bg.setAttribute('fill','var(--color-white-01)');
     if(filterId) bg.setAttribute('filter','url(#'+filterId+')');
     return;
   }
@@ -982,10 +1099,11 @@ function dimInactive(activeIds){
   allModules.forEach(function(mid){
     var card=document.querySelector('.card[data-card="'+mid+'"]');
     if(!card) return;
+    if(!isModuleSupported(mid)) return;
     var isActive=activeIds.indexOf(mid)>-1;
     card.setAttribute('opacity',isActive?'1':'0.5');
     var bg=card.querySelector('.mod-bg');
-    if(bg) bg.setAttribute('fill','white');
+    if(bg) bg.setAttribute('fill','var(--color-white-01)');
     if(mid==='L1'&&solarDetailBtn) solarDetailBtn.classList.toggle('is-dimmed',!isActive);
   });
 }
@@ -1003,9 +1121,10 @@ function restoreOpacity(){
   allModules.forEach(function(mid){
     var card=document.querySelector('.card[data-card="'+mid+'"]');
     if(!card) return;
+    if(!isModuleSupported(mid)) return;
     card.setAttribute('opacity','1');
     var bg=card.querySelector('.mod-bg');
-    if(bg) bg.setAttribute('fill','white');
+    if(bg) bg.setAttribute('fill',designColors.white01);
   });
   if(solarDetailBtn) solarDetailBtn.classList.remove('is-dimmed');
   stopRingBreath();
@@ -1284,11 +1403,12 @@ function startOutflowTrail(basePath,color,duration,delay,timelineStart,headArriv
 }
 
 function runConsumerCycle(mid){
+  if(!isModuleSupported(mid)) return;
   if(moduleData[mid]===0) return;
   var flows=consumerFlows[mid];
   if(!flows||!flows.length) return;
   // 过滤掉数值为0或负数的供电方（供电方必须为正数）
-  flows=flows.filter(function(f){return moduleData[f.prov]>0&&!(dualPowerMode&&(f.pPath.g==='fg-top-l'||f.pPath.g==='fg-bot-l'));});
+  flows=flows.filter(function(f){return isModuleSupported(f.prov)&&moduleData[f.prov]>0&&isPathAllowed(f.pPath.g)&&isPathAllowed(f.cPath.g);});
   if(!flows.length) return;
   setCenterBreath(true);
   activeFlows.forEach(function(f){if(f.stop)f.stop();});
@@ -1301,7 +1421,7 @@ function runConsumerCycle(mid){
   var cGrp=groups[cG];
   var cFl=cGrp.querySelector('.fl');
   // 汇聚后的消费路径颜色：单供电方用供电方颜色，多供电方用紫色
-  var consumerColor=flows.length===1?providerColors[flows[0].prov]:'#95509B';
+  var consumerColor=flows.length===1?providerColors[flows[0].prov]:designColors.consumerMixed;
   cGrp.setAttribute('opacity','1');
 
   var providerRuns=[];
@@ -1339,7 +1459,7 @@ function runConsumerCycle(mid){
 
 function setupPath(p){
   var grp=groups[p.g]; if(!grp) return null;
-  if(dualPowerMode&&(p.g==='fg-top-l'||p.g==='fg-bot-l')) return null;
+  if(!isPathAllowed(p.g)) return null;
   var fl=grp.querySelector('.fl');
   grp.setAttribute('opacity','1');
   fl.setAttribute('stroke','none');
@@ -1373,7 +1493,7 @@ function runCycle(paths,lens){
   resetFlowCanvas();
   clonedEls.forEach(function(el){if(el.parentNode)el.parentNode.removeChild(el);});
   clonedEls=[];
-  var currentColor=providerColors[selected]||'#16AAAF';
+  var currentColor=providerColors[selected]||designColors.brand06;
 
   var pG=paths[0].g, L_p=lens[pG];
   // 供电方虚线前缘到达中心(路径终点)的时刻
@@ -1417,6 +1537,7 @@ function runCycle(paths,lens){
 }
 
 function selectModule(mid){
+  if(!isModuleSupported(mid)) return;
   if(selected===mid){deselect();return;}
   deselect();
   selected=mid;
@@ -1434,6 +1555,7 @@ function isConsumerMode(mid){
 
 function restartFlow(){
   if(!selected) return;
+  if(!isModuleSupported(selected)){deselect();return;}
   stopAllFlows();
   var mid=selected;
 
@@ -1442,11 +1564,11 @@ function restartFlow(){
     if(!flows||!flows.length){dimInactive([mid]);hint.textContent='';return;}
     var activeIds=[mid];
     flows.forEach(function(f){
-      if(moduleData[f.prov]>0&&!(dualPowerMode&&(f.pPath.g==='fg-top-l'||f.pPath.g==='fg-bot-l'))&&activeIds.indexOf(f.prov)===-1) activeIds.push(f.prov);
+      if(isModuleSupported(f.prov)&&moduleData[f.prov]>0&&isPathAllowed(f.pPath.g)&&isPathAllowed(f.cPath.g)&&activeIds.indexOf(f.prov)===-1) activeIds.push(f.prov);
     });
     if(moduleData[mid]===0||activeIds.length<=1){dimInactive([mid]);hint.textContent='数值为0';return;}
     dimInactive(activeIds);
-    var selectedConsumerColor=activeIds.length===2?providerColors[activeIds[1]]:'#95509B';
+    var selectedConsumerColor=activeIds.length===2?providerColors[activeIds[1]]:designColors.consumerMixed;
     setRingBreath(activeIds,buildRingColors(activeIds,selectedConsumerColor,[mid]));
     runConsumerCycle(mid);
     hint.textContent='电流流动中';
@@ -1460,7 +1582,7 @@ function restartFlow(){
   var fp=[paths[0]];
   for(var fi=1;fi<paths.length;fi++){
     var tm=pathGroupToModule[paths[fi].g];
-    if(tm&&moduleData[tm]<0&&!(dualPowerMode&&(paths[fi].g==='fg-top-l'||paths[fi].g==='fg-bot-l'))) fp.push(paths[fi]);
+    if(tm&&isModuleSupported(tm)&&moduleData[tm]<0&&isPathAllowed(paths[fi].g)) fp.push(paths[fi]);
   }
   if(moduleData[mid]===0||fp.length<=1){dimInactive([mid]);hint.textContent='数值为0';return;}
   var activeIds=[mid];
@@ -1474,7 +1596,6 @@ function restartFlow(){
   hint.textContent='电流流动中';
 }
 
-var modulePathGroup={'L1':'fg-top-l','L2':'fg-mid-l','L3':'fg-bot-l','R1':'fg-top-r','R2':'fg-mid-r','R3':'fg-bot-r'};
 function autoFlow(){
   if(selected) return;
   stopAllFlows();
@@ -1484,6 +1605,7 @@ function autoFlow(){
   // 找出所有供电方（正数）和用电方（负数）
   var providers=[],consumers=[];
   allModules.forEach(function(mid){
+    if(!isModuleSupported(mid)) return;
     if(moduleData[mid]>0&&flowMap[mid]&&flowMap[mid].length) providers.push(mid);
     if(moduleData[mid]<0&&consumerFlows[mid]) consumers.push(mid);
   });
@@ -1499,7 +1621,7 @@ function autoFlow(){
     var color=providerColors[provMid];
     if(!color) return;
     var providerPath=flowMap[provMid][0];
-    if(dualPowerMode&&(providerPath.g==='fg-top-l'||providerPath.g==='fg-bot-l')) return;
+    if(!isPathAllowed(providerPath.g)) return;
     var pGrp=groups[providerPath.g];
     if(!pGrp) return;
     var pFl=pGrp.querySelector('.fl');
@@ -1519,7 +1641,7 @@ function autoFlow(){
   });
 
   // 用电方颜色：单供电方用供电方颜色，多供电方用紫色
-  var consumerColor=providers.length===1?providerColors[providers[0]]:'#95509B';
+  var consumerColor=providers.length===1?providerColors[providers[0]]:designColors.consumerMixed;
   var autoActiveIds=[];
   providers.forEach(function(mid){if(autoActiveIds.indexOf(mid)===-1) autoActiveIds.push(mid);});
   consumers.forEach(function(mid){if(autoActiveIds.indexOf(mid)===-1) autoActiveIds.push(mid);});
@@ -1528,7 +1650,7 @@ function autoFlow(){
   consumers.forEach(function(conMid){
     var cG=modulePathGroup[conMid];
     if(!cG) return;
-    if(dualPowerMode&&(cG==='fg-top-l'||cG==='fg-bot-l')) return;
+    if(!isPathAllowed(cG)) return;
     var cGrp=groups[cG];
     var cFl=cGrp.querySelector('.fl');
     consumerRuns.push({g:cG,grp:cGrp,path:cFl});
@@ -1647,7 +1769,7 @@ function updateCardText(mid){
   if(displayTexts[mid]) displayTexts[mid].textContent=disp+'kW';
   if(realTexts[mid]) realTexts[mid].textContent='Real: '+parseFloat(real.toFixed(1))+'kW';
   if(mid==='R2'){
-    var isDual=disp>0;
+    var isDual=currentDeviceConfig().r2Positive&&disp>0;
     var label=isDual?'Dual Power':'Additional Load';
     setR2CardLabel(label);
     var sl=document.getElementById('sl-label-R2');
@@ -1655,9 +1777,90 @@ function updateCardText(mid){
     if(dualPowerMode!==isDual) toggleDualPowerMode(isDual);
   }
 }
-var sliderRanges={L1:[0,216],L2:[-216,216],L3:[-216,0],R1:[-216,216],R2:[-216,216],R3:[-216,0]};
+var sliderRanges={L1:[0,216],L2:[-216,216],L3:[-216,0],R1:[-216,216],R2:[-216,0],R3:[-216,0]};
 var dualPowerMode=false;
 var hiddenDualTracks={L1:'track-top-l',L3:'track-bot-l'};
+function renderDetailGroups(container,className,items){
+  if(!container) return;
+  var title=container.querySelector('h2');
+  var titleHtml=title?title.outerHTML:'';
+  container.innerHTML=titleHtml;
+  items.forEach(function(label){
+    var group=document.createElement('div');
+    group.className=className+'-group';
+    group.innerHTML='<h3>'+label+'</h3><div class="'+className+'-metric"><span>Voltage</span><span>373.1V</span></div><div class="'+className+'-metric"><span>Current</span><span>1A</span></div>';
+    container.appendChild(group);
+  });
+}
+
+function updateDetailModals(){
+  var cfg=currentDeviceConfig();
+  renderDetailGroups(solarDetailModal,'solar',cfg.solarItems);
+  renderDetailGroups(inverterDetailModal,'inverter',cfg.inverterItems);
+}
+
+function setRowVisible(mid,visible){
+  var row=document.getElementById('srow-'+mid);
+  if(row) row.style.display=visible?'':'none';
+}
+
+function setModuleVisible(mid,visible){
+  var card=document.querySelector('.card[data-card="'+mid+'"]');
+  var hit=document.querySelector('.mod-hit[data-module="'+mid+'"]');
+  var track=document.getElementById(moduleTrackIds[mid]);
+  var group=document.getElementById(modulePathGroup[mid]);
+  if(card) visible?card.removeAttribute('display'):card.setAttribute('display','none');
+  if(hit) visible?hit.removeAttribute('display'):hit.setAttribute('display','none');
+  if(track) visible?track.removeAttribute('display'):track.setAttribute('display','none');
+  if(group) visible?group.removeAttribute('display'):group.setAttribute('display','none');
+}
+
+function refreshSliderRanges(){
+  var r2Range=currentDeviceConfig().r2Positive?[-216,216]:[-216,0];
+  sliderRanges={L1:[0,216],L2:[-216,216],L3:[-216,0],R1:[-216,216],R2:r2Range,R3:[-216,0]};
+  allModules.forEach(function(mid){
+    var slider=document.getElementById('sl-'+mid);
+    if(!slider) return;
+    slider.min=-216;
+    slider.max=216;
+    if(parseFloat(slider.value)<sliderRanges[mid][0]||parseFloat(slider.value)>sliderRanges[mid][1]){
+      resetModuleControl(mid);
+    }
+    updateSliderBg(slider,mid);
+  });
+}
+
+function applyDeviceVisibility(){
+  var cfg=currentDeviceConfig();
+  if(powerCoreLabel) powerCoreLabel.textContent=cfg.label;
+  allModules.forEach(function(mid){
+    var visible=isModuleSupported(mid);
+    setModuleVisible(mid,visible);
+    setRowVisible(mid,visible);
+    if(!visible) resetModuleControl(mid);
+  });
+  if(solarDetailBtn){
+    solarDetailBtn.style.display=isModuleSupported('L1')?'':'none';
+    if(!isModuleSupported('L1')) closeSolarDetail();
+  }
+  if(selected&&!isModuleSupported(selected)) deselect();
+}
+
+function applyDeviceType(deviceKey){
+  if(!deviceConfigs[deviceKey]||activeDevice===deviceKey) return;
+  activeDevice=deviceKey;
+  document.querySelectorAll('.device-tab').forEach(function(btn){
+    btn.classList.toggle('is-active',btn.getAttribute('data-device')===deviceKey);
+  });
+  refreshSliderRanges();
+  updateDetailModals();
+  updateCardText('R2');
+  applyDeviceVisibility();
+  updateResponsiveLayout();
+  resizeFlowCanvas();
+  if(selected) restartFlow();
+  else autoFlow();
+}
 function resetModuleControl(mid){
   moduleData[mid]=0;
   var slider=document.getElementById('sl-'+mid);
@@ -1673,33 +1876,7 @@ function resetModuleControl(mid){
 }
 function toggleDualPowerMode(isDual){
   dualPowerMode=isDual;
-  ['L1','L3'].forEach(function(mid){
-    var card=document.querySelector('.card[data-card="'+mid+'"]');
-    var hit=document.querySelector('.mod-hit[data-module="'+mid+'"]');
-    var srow=document.getElementById('srow-'+mid);
-    var pg=mid==='L1'?'fg-top-l':'fg-bot-l';
-    var grp=groups[pg];
-    if(isDual){
-      if(card) card.setAttribute('display','none');
-      if(hit) hit.setAttribute('display','none');
-      if(mid==='L1'&&solarDetailBtn){solarDetailBtn.style.display='none';closeSolarDetail();}
-      if(srow){srow.style.display='';srow.style.opacity='0.35';srow.style.pointerEvents='none';}
-      if(grp) grp.setAttribute('display','none');
-      var track=document.getElementById(hiddenDualTracks[mid]);
-      if(track) track.setAttribute('display','none');
-      resetModuleControl(mid);
-    }else{
-      if(card) card.removeAttribute('display');
-      if(hit) hit.removeAttribute('display');
-      if(mid==='L1'&&solarDetailBtn) solarDetailBtn.style.display='';
-      if(srow){srow.style.opacity='';srow.style.pointerEvents='';}
-      if(grp) grp.removeAttribute('display');
-      var track=document.getElementById(hiddenDualTracks[mid]);
-      if(track) track.removeAttribute('display');
-      resetModuleControl(mid);
-    }
-  });
-  if(selected==='L1'||selected==='L3') deselect();
+  applyDeviceVisibility();
   if(window.innerWidth<BREAKPOINT_W){
     updateNarrowLayout();
     resizeFlowCanvas();
@@ -1710,7 +1887,7 @@ function updatePvSurplus(){
   var fakeR2=moduleData['R2']*EFF;
   var el=document.getElementById('pv-surplus');
   if(!el) return;
-  el.setAttribute('opacity',fakeR2>0?'1':'0');
+  el.setAttribute('opacity',(currentDeviceConfig().r2Positive&&fakeR2>0)?'1':'0');
   if(responsiveLayout.narrow){
     var centerX=(responsiveLayout.narrowModuleCenters&&responsiveLayout.narrowModuleCenters.R2)||
       (responsiveLayout.narrowCols?responsiveLayout.narrowCols.c2:187.5);
@@ -1733,11 +1910,11 @@ function updateSliderBg(sl,mid){
   var aMax=((range[1]+216)/rng)*100;
   var fillL=Math.min(zeroPct,valPct),fillR=Math.max(zeroPct,valPct);
   var p=[];
-  if(aMin>0){p.push('rgba(224,224,224,0.5) 0%','rgba(224,224,224,0.5) '+aMin+'%');}
-  if(fillL>aMin){p.push('#E0E0E0 '+aMin+'%','#E0E0E0 '+fillL+'%');}
-  p.push('#16AAAF '+fillL+'%','#16AAAF '+fillR+'%');
-  if(fillR<aMax){p.push('#E0E0E0 '+fillR+'%','#E0E0E0 '+aMax+'%');}
-  if(aMax<100){p.push('rgba(224,224,224,0.5) '+aMax+'%','rgba(224,224,224,0.5) 100%');}
+  if(aMin>0){p.push('var(--color-slider-disabled) 0%','var(--color-slider-disabled) '+aMin+'%');}
+  if(fillL>aMin){p.push('var(--color-slider-track) '+aMin+'%','var(--color-slider-track) '+fillL+'%');}
+  p.push('var(--color-brand-06) '+fillL+'%','var(--color-brand-06) '+fillR+'%');
+  if(fillR<aMax){p.push('var(--color-slider-track) '+fillR+'%','var(--color-slider-track) '+aMax+'%');}
+  if(aMax<100){p.push('var(--color-slider-disabled) '+aMax+'%','var(--color-slider-disabled) 100%');}
   sl.style.background='linear-gradient(to right,'+p.join(',')+')';
 }
 
@@ -1781,6 +1958,15 @@ allModules.forEach(function(mid){
   updateSliderBg(slider,mid);
   updatePvSurplus();
   });
+  document.querySelectorAll('.device-tab').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      applyDeviceType(btn.getAttribute('data-device'));
+    });
+  });
+  refreshSliderRanges();
+  updateDetailModals();
+  applyDeviceVisibility();
+  updateCardText('R2');
   autoFlow();
 })();</script>
 </body>
