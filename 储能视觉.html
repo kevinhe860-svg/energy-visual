@@ -164,7 +164,7 @@ html,body{padding:20px 0}
 </g>
 <g class="card" data-card="L3">
 <rect class="mod-bg" data-module="L3" x="36" y="386" width="258" height="104" rx="8" fill="var(--color-white-01)" pointer-events="none"/>
-<rect x="55" y="394" width="52" height="20" rx="4" fill="var(--color-danger-01)"/><text x="60" y="409" font-family="Poppins,sans-serif" font-size="var(--svg-font-footnote-small)" fill="var(--color-danger-04)">AC Off</text>
+<rect x="51" y="394" width="52" height="20" rx="4" fill="var(--color-danger-01)"/><text x="56" y="409" font-family="Poppins,sans-serif" font-size="var(--svg-font-footnote-small)" fill="var(--color-danger-04)">AC Off</text>
 <text x="180" y="410" text-anchor="end" font-family="Poppins,sans-serif" font-size="var(--svg-font-body-regular)" fill="var(--color-brand-06)">Vehicle</text>
     <text x="180" y="448" text-anchor="end" font-family="Poppins,sans-serif" font-size="var(--svg-font-h5-medium)" font-weight="500" fill="var(--color-title-85)">3.9kW</text>
 <text x="180" y="474" text-anchor="end" font-family="Poppins,sans-serif" font-size="var(--svg-font-footnote-small)" fill="var(--color-black-03)">Real: 4.1kW</text>
@@ -199,8 +199,8 @@ html,body{padding:20px 0}
 <circle class="icon-ring-overlay" data-ring="R3" cx="773" cy="438" r="42" fill="none" stroke="transparent" stroke-width="9"/>
 <image x="739.9" y="409.5" width="66.2" height="58" preserveAspectRatio="xMidYMid meet" xlink:href="icon/KeepON Load.png"/>
 <text x="827" y="410" font-family="Poppins,sans-serif" font-size="var(--svg-font-body-regular)" fill="var(--color-brand-06)">KeepON Load</text>
-<rect x="954" y="394" width="52" height="20" rx="4" fill="var(--color-danger-01)"/>
-<text x="959" y="409" font-family="Poppins,sans-serif" font-size="var(--svg-font-footnote-small)" fill="var(--color-danger-04)">AC Off</text>
+<rect x="962" y="394" width="52" height="20" rx="4" fill="var(--color-danger-01)"/>
+<text x="967" y="409" font-family="Poppins,sans-serif" font-size="var(--svg-font-footnote-small)" fill="var(--color-danger-04)">AC Off</text>
     <text x="827" y="448" font-family="Poppins,sans-serif" font-size="var(--svg-font-h5-medium)" font-weight="500" fill="var(--color-title-85)">3.9kW</text>
 <text x="827" y="474" font-family="Poppins,sans-serif" font-size="var(--svg-font-footnote-small)" fill="var(--color-black-03)">Real: 4.1kW</text>
 </g>
@@ -275,6 +275,7 @@ html,body{padding:20px 0}
   <button class="device-tab is-active" type="button" data-device="core">Power Core</button>
   <button class="device-tab" type="button" data-device="store">Power Store</button>
   <button class="device-tab" type="button" data-device="sense">Power Sense</button>
+  <button class="device-tab" type="button" data-device="pulse">Power Pulse</button>
 </div>
 <div class="panel-title">数据控制</div>
 <div class="s-row" id="srow-L1"><span class="s-label">Solar</span><div class="slider-wrap"><div class="center-mark"></div><input class="s-slider" type="range" id="sl-L1" min="-216" max="216" value="0" step="1"></div><span class="s-val" id="sv-L1"><input class="s-input" type="number" id="si-L1" value="0.0" step="0.1">kW <small class="s-real-meta">/ <span id="sr-L1">0.0</span></small></span></div>
@@ -399,6 +400,13 @@ var deviceConfigs={
     r2Positive:true,
     solarItems:['MPPT 1','MPPT 2'],
     inverterItems:['L1']
+  },
+  pulse:{
+    label:'Power Pulse',
+    supported:['L2','R1'],
+    r2Positive:false,
+    solarItems:[],
+    inverterItems:['L1','L2','L3']
   }
 };
 
@@ -408,6 +416,10 @@ function currentDeviceConfig(){
 
 function isModuleSupported(mid){
   return currentDeviceConfig().supported.indexOf(mid)>-1;
+}
+
+function isPowerPulse(){
+  return activeDevice==='pulse';
 }
 
 function isPathAllowed(groupId){
@@ -567,6 +579,74 @@ function setImageCenter(image,cx,cy){
   image.setAttribute('y',fmtPathNum(n(cy)-h/2));
 }
 
+function setImageCenterSvg(image,cx,cy){
+  if(!image) return;
+  var w=parseFloat(image.getAttribute('width'));
+  var h=parseFloat(image.getAttribute('height'));
+  image.setAttribute('x',fmtPathNum(cx-w/2));
+  image.setAttribute('y',fmtPathNum(cy-h/2));
+}
+
+function setL2PulseBatteryLabel(textEl,centerX,narrow){
+  if(!textEl) return;
+  while(textEl.firstChild) textEl.removeChild(textEl.firstChild);
+  textEl.textContent='Battery';
+  if(narrow){
+    textEl.setAttribute('x',fmtPathNum(n(centerX)));
+    textEl.setAttribute('y',fmtPathNum(n(531)));
+    textEl.setAttribute('text-anchor','middle');
+  }else{
+    textEl.setAttribute('x','180');
+    textEl.setAttribute('y','262');
+    textEl.setAttribute('text-anchor','end');
+  }
+}
+
+function applyPulseBatteryVisual(){
+  var rowLabel=document.querySelector('#srow-L2 .s-label');
+  if(rowLabel) rowLabel.textContent='Battery';
+  var parts=getCardParts('L2');
+  if(!parts||!parts.texts[0]||!parts.image) return;
+  if(!isPowerPulse()){
+    if(responsiveLayout.narrow) return;
+    parts.texts[0].textContent='Battery';
+    parts.texts[0].setAttribute('x','180');
+    parts.texts[0].setAttribute('y','262');
+    parts.texts[0].setAttribute('text-anchor','end');
+    parts.image.setAttribute('xlink:href','icon/Battery.png');
+    parts.image.setAttribute('href','icon/Battery.png');
+    parts.image.setAttribute('width','40.5');
+    parts.image.setAttribute('height','63.5');
+    setImageCenterSvg(parts.image,244,286);
+    return;
+  }
+  var narrow=!!responsiveLayout.narrow;
+  var cx=narrow?((responsiveLayout.narrowModuleCenters&&responsiveLayout.narrowModuleCenters.L2)||NARROW_CSS_W/2):244;
+  var cy=narrow?477:286;
+  setL2PulseBatteryLabel(parts.texts[0],cx,narrow);
+  parts.image.setAttribute('xlink:href','icon/Battery.png');
+  parts.image.setAttribute('href','icon/Battery.png');
+  parts.image.setAttribute('width','40.5');
+  parts.image.setAttribute('height','63.5');
+  if(narrow){
+    setImageCenter(parts.image,cx,cy);
+    setTextPos(parts.texts[1],cx,553,'middle');
+    setTextPos(parts.texts[2],cx,572,'middle');
+  }else{
+    parts.bg.setAttribute('x','74');
+    parts.bg.setAttribute('width','220');
+    parts.texts[1].setAttribute('x','180');
+    parts.texts[2].setAttribute('x','180');
+    [parts.ring,parts.ringOverlay].forEach(function(circle){
+      if(circle){
+        circle.setAttribute('cx','244');
+        circle.setAttribute('cy','286');
+      }
+    });
+    setImageCenterSvg(parts.image,244,286);
+  }
+}
+
 function setRingCenter(parts,cx,cy){
   [parts.ring,parts.ringOverlay].forEach(function(circle){
     if(circle){
@@ -626,6 +706,10 @@ function setNarrowModule(mid,cfg){
     var isDualR2=r2Label==='Dual Power';
     setTextPos(parts.texts[0],centerX,531,'middle');
     setR2CardLabel(r2Label);
+  }else if(mid==='L2'&&isPowerPulse()){
+    setTextPos(parts.texts[0],centerX,531,'middle');
+    setTextPos(parts.texts[1],centerX,569,'middle');
+    setTextPos(parts.texts[2],centerX,588,'middle');
   }else{
     setTextPos(parts.texts[0],mid==='L1'?centerX-6:centerX,90,'middle');
     if(mid==='L1'){
@@ -668,22 +752,26 @@ function alignSolarDetailButtonToLabel(){
 function updateNarrowLayout(){
   restoreLayoutOriginals();
   var cssW=Math.max(NARROW_CSS_W,Math.min(BREAKPOINT_W-1,wrapEl.getBoundingClientRect().width||window.innerWidth||NARROW_CSS_W));
+  var cssH=NARROW_CSS_H;
   var viewBoxW=cssW*NARROW_UNIT;
+  var viewBoxH=cssH*NARROW_UNIT;
   var c1=cssW/6,c2=cssW/2,c3=cssW*5/6;
   var midCol=activeDevice==='store'?c1:c2;
   var r2Col=(activeDevice==='store'||activeDevice==='sense'||dualPowerMode)?c1:c2;
   var cardXSvg=n(c2)-74;
   var cardCssX=cardXSvg/NARROW_UNIT;
   responsiveLayout={viewBoxW:viewBoxW,deltaSvg:0,centerShift:0,rightShift:0,narrow:true,narrowCssW:cssW,narrowCols:{c1:c1,c2:c2,c3:c3},narrowCardCssX:cardCssX,narrowModuleCenters:{}};
-  svgEl.setAttribute('viewBox','0 0 '+fmtPathNum(viewBoxW)+' '+fmtPathNum(NARROW_VIEWBOX_H));
+  wrapEl.style.height=cssH+'px';
+  if(solarDetailOverlay) solarDetailOverlay.style.height=cssH+'px';
+  svgEl.setAttribute('viewBox','0 0 '+fmtPathNum(viewBoxW)+' '+fmtPathNum(viewBoxH));
   svgEl.setAttribute('width',Math.round(cssW));
-  svgEl.setAttribute('height',NARROW_CSS_H);
+  svgEl.setAttribute('height',cssH);
   if(flowCanvas){
-    flowCanvas.style.height=NARROW_CSS_H+'px';
+    flowCanvas.style.height=cssH+'px';
   }
   if(powerCardBg){
     powerCardBg.setAttribute('width',fmtPathNum(viewBoxW));
-    powerCardBg.setAttribute('height',fmtPathNum(NARROW_VIEWBOX_H));
+    powerCardBg.setAttribute('height',fmtPathNum(viewBoxH));
   }
   var titleText=null;
   svgEl.querySelectorAll('text').forEach(function(text){
@@ -700,9 +788,9 @@ function updateNarrowLayout(){
   }
 
   setNarrowModule('L1',{bg:[c1-50,50,100,168],icon:[c1,174],textX:c1,hit:[c1-50,50,100,168]});
-  setNarrowModule('L2',{bg:[midCol-50,50,100,168],icon:[midCol,174],textX:midCol,hit:[midCol-50,50,100,168]});
+  setNarrowModule('L2',isPowerPulse()?{bg:[c2-50,431,100,174],icon:[c2,477],textX:c2,hit:[c2-50,431,100,174]}:{bg:[midCol-50,50,100,168],icon:[midCol,174],textX:midCol,hit:[midCol-50,50,100,168]});
   setNarrowModule('L3',{bg:[c1-50,431,100,174],icon:[c1,477],textX:c1,hit:[c1-50,431,100,174]});
-  setNarrowModule('R1',{bg:[c3-50,50,100,168],icon:[c3,174],hit:[c3-50,50,100,168]});
+  setNarrowModule('R1',isPowerPulse()?{bg:[c2-50,50,100,168],icon:[c2,174],hit:[c2-50,50,100,168]}:{bg:[c3-50,50,100,168],icon:[c3,174],hit:[c3-50,50,100,168]});
   setNarrowModule('R2',{bg:[r2Col-50,431,100,174],icon:[r2Col,477],hit:[r2Col-50,431,100,174]});
   setNarrowModule('R3',{bg:[c3-50,431,100,174],icon:[c3,477],hit:[c3-50,431,100,174]});
 
@@ -780,8 +868,8 @@ function updateNarrowLayout(){
   var topMidLane=activeDevice==='store'?laneL:laneM;
   var bottomMidLane=(activeDevice==='store'||activeDevice==='sense')?laneL:laneM;
   var dTopL=topPath(c1,laneL);
-  var dTopM=useSideCenterPaths?sidePathFromTop(midCol,leftSide,sideTopY):topPath(midCol,topMidLane);
-  var dTopR=useSideCenterPaths?sidePathFromTop(c3,rightSide,sideTopY):topPath(c3,laneR);
+  var dTopM=isPowerPulse()?bottomPath(c2,laneM):(useSideCenterPaths?sidePathFromTop(midCol,leftSide,sideTopY):topPath(midCol,topMidLane));
+  var dTopR=isPowerPulse()?topPath(c2,laneM):(useSideCenterPaths?sidePathFromTop(c3,rightSide,sideTopY):topPath(c3,laneR));
   var dBotL=bottomPath(c1,laneL);
   var dBotM=useSideCenterPaths?sidePathFromBottom(r2Col,leftSide,sideBottomY):bottomPath(r2Col,bottomMidLane);
   var dBotR=useSideCenterPaths?sidePathFromBottom(c3,rightSide,sideBottomY):bottomPath(c3,laneR);
@@ -799,6 +887,7 @@ function updateNarrowLayout(){
   setPathD('narrow-track-top-r',dTopR);
   setPathD('narrow-track-mid-r',dBotM);
   setPathD('narrow-track-bot-r',dBotR);
+  applyPulseBatteryVisual();
   applyDeviceVisibility();
   restoreSelectedCapsule();
 }
@@ -846,10 +935,12 @@ function setInverterX(centerShift){
   }
 }
 
-function applyWideDeviceLayoutAdjustments(leftEdge,leftBend){
+function applyWideDeviceLayoutAdjustments(leftEdge,leftBend,rightShift,rightStart,rightEdge){
   var moveBatteryToBottom=activeDevice==='sense';
   var batteryCard=document.querySelector('.card[data-card="L2"]');
   var batteryHit=document.querySelector('.mod-hit[data-module="L2"]');
+  var gridCard=document.querySelector('.card[data-card="R1"]');
+  var gridHit=document.querySelector('.mod-hit[data-module="R1"]');
   if(moveBatteryToBottom){
     if(batteryCard) batteryCard.setAttribute('transform','translate(0 152)');
     if(batteryHit) batteryHit.setAttribute('transform','translate(0 152)');
@@ -860,6 +951,14 @@ function applyWideDeviceLayoutAdjustments(leftEdge,leftBend){
     if(batteryCard) batteryCard.removeAttribute('transform');
     if(batteryHit) batteryHit.removeAttribute('transform');
   }
+  if(isPowerPulse()){
+    var gridTransform='translate('+fmtPathNum(rightShift||0)+' 152)';
+    if(gridCard) gridCard.setAttribute('transform',gridTransform);
+    if(gridHit) gridHit.setAttribute('transform',gridTransform);
+    var pulsePath=rightMidD(rightStart,rightEdge);
+    setPathD('track-top-r',pulsePath);
+    setPathD('fg-top-r',pulsePath);
+  }
 }
 
 function updateResponsiveLayout(){
@@ -868,6 +967,8 @@ function updateResponsiveLayout(){
     updateNarrowLayout();
     return;
   }
+  wrapEl.style.height='';
+  if(solarDetailOverlay) solarDetailOverlay.style.height='';
   restoreLayoutOriginals();
   var narrowOverlay=document.getElementById('narrow-track-overlay');
   if(narrowOverlay) narrowOverlay.setAttribute('display','none');
@@ -915,7 +1016,8 @@ function updateResponsiveLayout(){
   setPathD('fg-top-r',rightTopD(rightStart,rightEdge,rightBend));
   setPathD('fg-mid-r',rightMidD(rightStart,rightEdge));
   setPathD('fg-bot-r',rightBotD(rightStart,rightEdge,rightBend));
-  applyWideDeviceLayoutAdjustments(leftEdge,leftBend);
+  applyWideDeviceLayoutAdjustments(leftEdge,leftBend,rightShift,rightStart,rightEdge);
+  applyPulseBatteryVisual();
   applyDeviceVisibility();
   restoreSelectedCapsule();
 }
@@ -1536,6 +1638,112 @@ function runCycle(paths,lens){
   pendingTimers.push(tid);
 }
 
+function runPulseSingleNodeCycle(mid){
+  if(!isPowerPulse()) return;
+  stopAllFlows();
+  restoreOpacity();
+  grpIds.forEach(function(id){groups[id].setAttribute('opacity','0');});
+  var value=moduleData[mid];
+  if(value===0){
+    hint.textContent='点击设备模块查看电流流向';
+    return;
+  }
+  var groupId=modulePathGroup[mid];
+  var grp=groups[groupId];
+  if(!grp) return;
+  var path=grp.querySelector('.fl');
+  if(!path) return;
+  var color=providerColors[mid]||designColors.brand06;
+  grp.setAttribute('opacity','1');
+  setCenterBreath(true);
+  var ringMap={};
+  ringMap[mid]=color;
+  setRingBreath([mid],ringMap);
+  dimInactive([mid]);
+
+  var timelineStart=performance.now();
+  var arrival;
+  var travel;
+  if(value>0){
+    var len=path.getTotalLength();
+    arrival=Math.round(len/SPD);
+    travel=arrival+EXIT_TIME;
+    startFlowTrail(path,color,travel,0,timelineStart,arrival);
+  }else{
+    var range=getOutflowRange(path);
+    arrival=Math.round(range.visibleLen/SPD);
+    travel=arrival+EXIT_TIME;
+    startOutflowTrail(path,color,travel,0,timelineStart,arrival,range);
+  }
+  hint.textContent='电流流动中';
+  var tid=setTimeout(function(){runPulseSingleNodeCycle(mid);},travel+RESTART_GAP);
+  pendingTimers.push(tid);
+}
+
+function runPulsePairCycle(){
+  if(!isPowerPulse()) return false;
+  var providers=allModules.filter(function(mid){return isModuleSupported(mid)&&moduleData[mid]>0&&flowMap[mid]&&flowMap[mid].length;});
+  var consumers=allModules.filter(function(mid){return isModuleSupported(mid)&&moduleData[mid]<0&&consumerFlows[mid];});
+  if(!providers.length||!consumers.length) return false;
+
+  stopAllFlows();
+  restoreOpacity();
+  grpIds.forEach(function(id){groups[id].setAttribute('opacity','0');});
+  setCenterBreath(true);
+
+  var providerRuns=[];
+  providers.forEach(function(mid){
+    var groupId=modulePathGroup[mid];
+    if(!groupId||!isPathAllowed(groupId)) return;
+    var grp=groups[groupId];
+    if(!grp) return;
+    var path=grp.querySelector('.fl');
+    if(!path) return;
+    providerRuns.push({mid:mid,grp:grp,path:path,len:path.getTotalLength(),color:providerColors[mid]||designColors.brand06});
+  });
+
+  var consumerRuns=[];
+  consumers.forEach(function(mid){
+    var groupId=modulePathGroup[mid];
+    if(!groupId||!isPathAllowed(groupId)) return;
+    var grp=groups[groupId];
+    if(!grp) return;
+    var path=grp.querySelector('.fl');
+    if(!path) return;
+    consumerRuns.push({mid:mid,grp:grp,path:path,range:getOutflowRange(path)});
+  });
+
+  if(!providerRuns.length||!consumerRuns.length) return false;
+  var providerArrival=getSyncedArrival(providerRuns.map(function(run){return run.len;}));
+  var consumerArrival=getSyncedArrival(consumerRuns.map(function(run){return run.range.visibleLen;}));
+  var timelineStart=performance.now();
+  var pulseOverlap=Math.round(EXIT_TIME*0.32);
+  var consumerDelay=Math.max(0,providerArrival-pulseOverlap);
+  var consumerColor=providers.length===1?(providerColors[providers[0]]||designColors.brand06):designColors.consumerMixed;
+  var activeIds=providers.concat(consumers);
+  dimInactive(activeIds);
+  setRingBreath(activeIds,buildRingColors(activeIds,consumerColor,consumers));
+
+  var maxEnd=0;
+  providerRuns.forEach(function(run){
+    run.grp.setAttribute('opacity','1');
+    var travel=providerArrival+EXIT_TIME;
+    startFlowTrail(run.path,run.color,travel,0,timelineStart,providerArrival);
+    if(travel>maxEnd) maxEnd=travel;
+  });
+  var consumerTravel=consumerArrival+EXIT_TIME;
+  consumerRuns.forEach(function(run){
+    run.grp.setAttribute('opacity','1');
+    startOutflowTrail(run.path,consumerColor,consumerTravel,consumerDelay,timelineStart,consumerArrival,run.range);
+    if(consumerDelay+consumerTravel>maxEnd) maxEnd=consumerDelay+consumerTravel;
+  });
+
+  hint.textContent='电流流动中';
+  var tid=setTimeout(function(){runPulsePairCycle();},maxEnd+RESTART_GAP);
+  pendingTimers.push(tid);
+  return true;
+}
+
 function selectModule(mid){
   if(!isModuleSupported(mid)) return;
   if(selected===mid){deselect();return;}
@@ -1558,6 +1766,15 @@ function restartFlow(){
   if(!isModuleSupported(selected)){deselect();return;}
   stopAllFlows();
   var mid=selected;
+
+  if(isPowerPulse()){
+    var hasOpposite=allModules.some(function(other){
+      return other!==mid&&isModuleSupported(other)&&moduleData[other]!==0&&moduleData[other]*moduleData[mid]<0;
+    });
+    if(hasOpposite&&runPulsePairCycle()) return;
+    runPulseSingleNodeCycle(mid);
+    return;
+  }
 
   if(isConsumerMode(mid)){
     var flows=consumerFlows[mid];
@@ -1601,6 +1818,16 @@ function autoFlow(){
   stopAllFlows();
   restoreOpacity();
   grpIds.forEach(function(id){groups[id].setAttribute('opacity','0');});
+
+  if(isPowerPulse()){
+    var pulseActive=allModules.filter(function(mid){return isModuleSupported(mid)&&moduleData[mid]!==0;});
+    var pulseProviders=pulseActive.filter(function(mid){return moduleData[mid]>0;});
+    var pulseConsumers=pulseActive.filter(function(mid){return moduleData[mid]<0;});
+    if(pulseProviders.length&&pulseConsumers.length&&runPulsePairCycle()) return;
+    if(pulseActive.length) runPulseSingleNodeCycle(pulseActive[0]);
+    else hint.textContent='点击设备模块查看电流流向';
+    return;
+  }
 
   // 找出所有供电方（正数）和用电方（负数）
   var providers=[],consumers=[];
@@ -1856,6 +2083,7 @@ function applyDeviceType(deviceKey){
   updateDetailModals();
   updateCardText('R2');
   applyDeviceVisibility();
+  normalizePowerPulsePair();
   updateResponsiveLayout();
   resizeFlowCanvas();
   if(selected) restartFlow();
@@ -1918,6 +2146,40 @@ function updateSliderBg(sl,mid){
   sl.style.background='linear-gradient(to right,'+p.join(',')+')';
 }
 
+function syncControlFromModule(mid){
+  var slider=document.getElementById('sl-'+mid);
+  var numInput=document.getElementById('si-'+mid);
+  var realSpan=document.getElementById('sr-'+mid);
+  var real=moduleData[mid]||0;
+  if(slider){
+    slider.value=Math.round(real*10);
+    updateSliderBg(slider,mid);
+  }
+  if(numInput){
+    numInput.value=parseFloat((real*EFF).toFixed(1));
+  }
+  if(realSpan){
+    realSpan.textContent=parseFloat(real.toFixed(1));
+  }
+  updateCardText(mid);
+}
+
+function syncPowerPulsePair(sourceMid){
+  if(!isPowerPulse()) return false;
+  if(sourceMid!=='L2'&&sourceMid!=='R1') return false;
+  var targetMid=sourceMid==='L2'?'R1':'L2';
+  var targetReal=parseFloat((-(moduleData[sourceMid]||0)).toFixed(1));
+  if(moduleData[targetMid]===targetReal) return false;
+  moduleData[targetMid]=targetReal;
+  syncControlFromModule(targetMid);
+  return true;
+}
+
+function normalizePowerPulsePair(){
+  if(!isPowerPulse()) return;
+  syncPowerPulsePair(moduleData.R1!==0?'R1':'L2');
+}
+
 allModules.forEach(function(mid){
   var slider=document.getElementById('sl-'+mid);
   var numInput=document.getElementById('si-'+mid);
@@ -1925,16 +2187,15 @@ allModules.forEach(function(mid){
   if(!slider||!numInput) return;
   function syncFromReal(real,prevReal){
     moduleData[mid]=real;
+    syncPowerPulsePair(mid);
     var disp=parseFloat((real*EFF).toFixed(1));
     numInput.value=disp;
     if(realSpan) realSpan.textContent=parseFloat(real.toFixed(1));
     updateCardText(mid);
     updateSliderBg(slider,mid);
     updatePvSurplus();
-    if(prevReal*real<=0&&prevReal!==real){
-      if(selected) restartFlow();
-      else autoFlow();
-    }
+    if(selected) restartFlow();
+    else autoFlow();
   }
   slider.addEventListener('input',function(){
     var range=sliderRanges[mid];
